@@ -1,4 +1,4 @@
-#virtualPollen
+# virtualPollen
 
 This package is part of an upcoming paper. It provides a set of functions to:
 
