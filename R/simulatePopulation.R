@@ -154,7 +154,7 @@ simulatePopulation = function(parameters=NULL,
     if(length(driver.A)==0 & length(driver.B==0)){stop("Drivers not available, at least driver.A is required.")}
 
     #checking if driver B is available
-    if(length(driver.A)>0 & length(driver.B)>0 & (is.null(driver.B)==FALSE)){
+    if(length(driver.A)>0 & sum(is.na(driver.B)==length(driver.B)) & (is.null(driver.B)==FALSE)){
       driver.B.available=TRUE
     } else {
       driver.B.available=FALSE
