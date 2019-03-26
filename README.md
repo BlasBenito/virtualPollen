@@ -10,4 +10,4 @@ This package is part of an upcoming paper. It provides a set of functions to:
 +   Interpolate virtual pollen curves sampled at different depth intervals into regular time to allow direct comparison between pollen curves generated at different resolutions.
 
 
-If you want to fully understand how it works, please, check the vignette, which is available both as pdf file and interactive Rmarkdown file.
+If you want to fully understand how it works, please, check the vignette, which is available both as a pdf file and a interactive Rmarkdown file.
