@@ -1,6 +1,6 @@
 #virtualPollen#
 
-This package is part of an upcoming paper. It provides a set of functions to:
+This package is part of a paper that will soon be submitted. It provides a set of functions to:
 
 
 +   Generate virtual drivers with given temporal autocorrelation.
