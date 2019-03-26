@@ -1,0 +1,26 @@
+\usepackage{fontspec}
+\setmainfont[Scale=1.2]{FreeSerif}
+\setmonofont[Scale=1.2]{FreeMono}
+\linespread{1.5}
+\usepackage{listings}
+\lstset{breaklines=true}
+
+\usepackage{float}
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+    \expandafter\origfigure\expandafter[H]
+} {
+    \endorigfigure
+}
+
+\usepackage{pdflscape}
+\newcommand{\blandscape}{\begin{landscape}}
+\newcommand{\elandscape}{\end{landscape}}
+
+\usepackage{caption} 
+\captionsetup[table]{skip=10pt}
+\usepackage[tableposition=above]{caption}
+
+\definecolor{colorendo}{RGB}{68,1,84}
+\definecolor{colorexo}{RGB}{33,144,140}

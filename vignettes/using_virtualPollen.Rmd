@@ -48,16 +48,19 @@ citation_package: natbib
 <!-- $\left(\frac{a}{b}\right)$ -->
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
-
-#setting working folder to the one where this file is
-# setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
 #checking if required packages are installed, and installing them if not
-list.of.packages <- c("ggplot2", "cowplot", "knitr", "viridis", "tidyr", "formatR", "grid")
+list.of.packages <- c("ggplot2", "cowplot", "knitr", "viridis", "tidyr", "formatR", "grid", "devtools")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, dep=TRUE)
 
+#install virtualPollen if not installed
+if(!("virtualPollen" %in% installed.packages())){
+  library(devtools)
+  install_github("blasbenito/virtualPollen")
+}
+
 # source("ecological_memory_functions.R")
+library(virtualPollen) #to simulate pollen curves
 library(ggplot2) #plotting library
 library(cowplot) #plotting library
 library(knitr)   #report generation in R
@@ -67,14 +70,8 @@ library(tidyr)
 library(formatR)
 library(kableExtra) #to fit tables to pdf page size
 library(magrittr) #kableExtra requires pipes
-options(scipen=999)
 
-#setting code font size in output pdf, from https://stackoverflow.com/a/46526740
-# def.chunk.hook <- knitr::knit_hooks$get("chunk")
-# knitr::knit_hooks$set(chunk = function(x, options) {
-#   x <- def.chunk.hook(x, options)
-#   ifelse(options$size != "normalsize", paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
-# })
+options(scipen=999)
 
 #trying to line-wrap code in pdf output
 #from https://github.com/yihui/knitr-examples/blob/master/077-wrap-output.Rmd
@@ -229,6 +226,7 @@ p7 <- ggplot(data=acfToDf(moves.100, 200, 50), aes(x=lag, y=acf)) +
   theme(plot.margin=unit(c(0,0,0,0), "cm"))
 
 plot_grid(p4, p5, p6, p7, labels = c("a", "b", "c", "d"), align = "v", nrow=2)
+
 ```
 
 A major limitation is that this method does not work well when the required length of the temporal autocorrelation is a large fraction of the overall length of the time series. The code below and **Figure 4** show an example with a filter of length 5000 (note that the *time* variable has 10000 elements).
@@ -256,6 +254,7 @@ p9 <- ggplot(data=acfToDf(moves.5000, 5000, 50), aes(x=lag, y=acf)) +
   theme(plot.margin=unit(c(0,0,0,0), "cm"))
 
 plot_grid(p8, p9, labels = c("a", "b"), align = "h")
+
 ```
 
 All the ideas presented above are implemented in a function named **simulateDriver()**, with the following arguments:
@@ -1025,321 +1024,3 @@ names(temp.list) <- c("Annual", "1 cm", "2 cm", "6 cm", "10 cm")
 compareSimulations(simulation.output=temp.list, columns = c("Suitability","Pollen"), time.zoom=c(5800, 6200))
 
 ```
-
-
-```{r, echo=FALSE}
-#REMOVING STUFF WE DON'T NEED ANYMORE
-rm(list=setdiff(ls(), "drivers.10k"))
-#loading functions again
-source("ecological_memory_functions.R")
-```
-
-
-#Generating the virtual taxa used in the paper#
-
-To assess how species traits might influence ecological memory patterns we simulated 16 virtual taxa with different features (see **Table 5**).
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE, width=12, height=28}
-#PARAMETERS
-i=1
-parameters <- parametersDataframe(rows=1)
-parameters[i,] <- c("S10A50-5_f10", 10, 4, 10, 1.5, 0, 100, 10000, 1, 0, 50, 10, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S10A50-20_f10", 10, 4, 10, 1.5, 0, 100, 10000, 1, 0, 50, 20, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S10A75-5_f10", 10, 4, 10, 1.5, 0, 100, 10000, 1, 0, 75, 10, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S10A75-20_f10", 10, 4, 10, 1.5, 0, 100, 10000, 1, 0, 75, 20, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S1000A50-5_f10", 1000, 100, 10, 0.01, 0, 100, 10000, 1, 0, 50, 10, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S1000A50-20_f10", 1000, 100, 10, 0.01, 0, 100, 10000, 1, 0, 50, 20, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S1000A75-5_f10", 1000, 100, 10, 0.01, 0, 100, 10000, 1, 0, 75, 10, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S1000A75-20_f10", 1000, 100, 10, 0.01, 0, 100, 10000, 1, 0, 75, 20, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S10A50-5_f1", 10, 4, 1, 1.5, 0, 100, 10000, 1, 0, 50, 10, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S10A50-20_f1", 10, 4, 1, 1.5, 0, 100, 10000, 1, 0, 50, 20, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S10A75-5_f1", 10, 4, 1, 1.5, 0, 100, 10000, 1, 0, 75, 10, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S10A75-20_f1", 10, 4, 1, 1.5, 0, 100, 10000, 1, 0, 75, 20, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S1000A50-5_f1", 1000, 100, 1, 0.01, 0, 100, 10000, 1, 0, 50, 10, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S1000A50-20_f1", 1000, 100, 1, 0.01, 0, 100, 10000, 1, 0, 50, 20, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S1000A75-5_f1", 1000, 100, 1, 0.01, 0, 100, 10000, 1, 0, 75, 10, 50, 5, 600, 600)
-i=i+1
-parameters[i,] <- c("S1000A75-20_f1", 1000, 100, 1, 0.01, 0, 100, 10000, 1, 0, 75, 20, 50, 5, 600, 600)
-i=i+1
-
-#some columns to numeric
-parameters[, 2:ncol(parameters)] = sapply(parameters[, 2:ncol(parameters)], as.numeric)
-
-kable(parameters[, c("label", "maximum.age", "reproductive.age", "fecundity", "growth.rate", "niche.A.mean", "niche.A.sd")], col.names = c("Taxa", "Max. age", "Reprod. age", "Fecundity", "Groth rate", "Niche mean", "Niche breadth"), caption="Parameters of the 16 virtual taxa used in the analyses.", booktabs = T, format="latex") %>% kable_styling(latex_options = c("scale_down", "hold_position", "striped"))
-
-```
-
-\newpage
-
-We simulated virtual pollen curves for each one of these virtual taxa as explained above, using the following code.
-
-```{r, warning=FALSE, message=FALSE, error=FALSE, size="small", cache=TRUE, eval=TRUE}
-#simulating virtual taxa
-simulation <- simulatePopulation(
-  parameters=parameters,
-  drivers=drivers.10k
-  )
-
-#accumulation rate
-accumulation.rate <- simulateAccumulationRate(
-  seed=140,
-  time=1:10000,
-  output.min=1,
-  output.max=50,
-  plot=FALSE
-  )
-
-#aggregation and sampling
-simulation <- aggregateSimulation(
-  simulation.output=simulation,
-  accumulation.rate=accumulation.rate,
-  sampling.intervals=c(2, 6, 10)
-  )
-
-#resampling data
-simulation <- toRegularTime(
-  x=simulation,
-  time.column="Time",
-  interpolation.interval=20,
-  columns.to.interpolate=c("Pollen",
-                           "Driver.A",
-                           "Suitability"))
-```
-
-Plots below show the pollen curves produced by the different virtual taxa at annual resolution.
-
-\newpage
-\blandscape
-
-```{r , fig.width=27, fig.height=17, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-panels=c("Population", "Pollen", "Suitability", "Driver A")
-text.size=30
-i<-1
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-2
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-3
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-4
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-5
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-6
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-7
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-8
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-9
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-10
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-11
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-12
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-13
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-14
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-15
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-```{r , fig.width=27, fig.height=17, fight.height=16, units="cm", echo=FALSE, cache=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-i<-16
-plotSimulation(simulation.output = simulation[[i,1]], 
-               plot.title=dimnames(simulation)[[1]][i],
-               panels=panels,
-               text.size=text.size)
-
-```
-
-\vfill
-\raisebox{0.1cm}{\makebox[\linewidth]{\thepage}}
-\newpage
-
-
-\elandscape
-
-```{r, echo=FALSE, eval=FALSE}
-#saving output
-save(simulation, parameters, file = "Appendix_I_output.RData")
-```
-
