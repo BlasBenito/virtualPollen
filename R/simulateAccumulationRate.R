@@ -3,7 +3,14 @@
 #' @description Generates a virtual sediment accumulation rate to be applied to the results of \code{\link{simulatePopulation}}
 #'
 #'
-#' @usage simulateAccumulationRate(seed=50, time=1:1000, output.min=10, output.max=40, direction=1, plot=TRUE)
+#' @usage simulateAccumulationRate(
+#'   seed=50,
+#'   time=1:1000,
+#'   output.min=10,
+#'   output.max=40,
+#'   direction=1,
+#'   plot=TRUE
+#'   )
 #'
 #' @param seed integer, seed to be used by \code{\link{set.seed}} to configure the state of the pseudo-random number generator. It defines the shape of the curve.
 #' @param time vector of time values (ideally the same used to generate the simulations).
@@ -27,7 +34,15 @@
 #'
 #' @examples
 #'
-#'acc.rate <- simulateAccumulationRate(seed=50, time=1:1000, output.min=10, output.max=40, direction=1, plot=TRUE)
+#'acc.rate <- simulateAccumulationRate(
+#'  seed=50,
+#'  time=1:1000,
+#'  output.min=10,
+#'  output.max=40,
+#'  direction=1,
+#'  plot=TRUE
+#'  )
+#'
 #'str(acc.rate)
 #'
 #' @export

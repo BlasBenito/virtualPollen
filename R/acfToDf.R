@@ -2,7 +2,11 @@
 #'
 #' @description It reads a vector representing a time series, applies \code{\link{acf}} for a given number of lags
 #'
-#' @usage acfToDf(x = NULL, lag.max = 100, length.out = 10)
+#' @usage acfToDf(
+#'   x = NULL,
+#'   lag.max = 100,
+#'   length.out = 10
+#'   )
 #'
 #' @param x numeric vector.
 #' @param lag.max integer, number of lags over which to compute temporal autocorrelation.
@@ -25,9 +29,25 @@
 #'
 #' @examples
 #'
-#' x <- simulateDriver(random.seed = 10, time = 1:1000, autocorrelation.length = 200, output.min = -10, output.max = 20, rescale = TRUE)
-#' x.df <- acfToDf(x = x, lag.max = 300, length.out = 100)
+#' #simulating driver
+#' x <- simulateDriver(
+#'   random.seed = 10,
+#'   time = 1:1000,
+#'   autocorrelation.length = 200,
+#'   output.min = -10,
+#'   output.max = 20,
+#'   rescale = TRUE
+#'   )
+#'
+#' #computing temporal autocorrelations
+#' x.df <- acfToDf(
+#'   x = x,
+#'   lag.max = 300,
+#'   length.out = 100
+#'   )
 #' str(x.df)
+#'
+#' #plotting output
 #' plotAcf(x.df)
 #'
 #' @export

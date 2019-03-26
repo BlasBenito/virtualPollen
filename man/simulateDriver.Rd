@@ -4,7 +4,14 @@
 \alias{simulateDriver}
 \title{Generates a random time series with temporal autocorrelation.}
 \usage{
-simulateDriver(random.seed = 50, time = 1:1000, autocorrelation.length = 100, output.min = 0, output.max = 100, rescale = TRUE)
+simulateDriver(
+  random.seed = 50,
+  time = 1:1000,
+  autocorrelation.length = 100,
+  output.min = 0,
+  output.max = 100,
+  rescale = TRUE
+  )
 }
 \arguments{
 \item{random.seed}{integer, seed to be used by \code{set.seed()}. Default is 50.}
@@ -30,9 +37,20 @@ It is recommended to use \code{time} vectors with a time step of 1 between conse
 }
 \examples{
 
-x <- simulateDriver(random.seed = 10, time = 1:1000, autocorrelation.length = 200, output.min = -10, output.max = 20, rescale = TRUE)
-plot(x, type="l") #plots output
-acf(x, lag.max = 300) #checks temporal autocorrelation
+x <- simulateDriver(
+  random.seed = 10,
+  time = 1:1000,
+  autocorrelation.length = 200,
+  output.min = -10,
+  output.max = 20,
+  rescale = TRUE
+  )
+
+#plots output
+plot(x, type="l")
+
+#checks temporal autocorrelation
+acf(x, lag.max = 300)
 
 }
 \seealso{

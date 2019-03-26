@@ -2,7 +2,14 @@
 #'
 #' @description Generates a vector of the same legnth as the \code{time} argument, with a temporal autocorrelation length close to the defined by \code{autocorrelation.length}, and a range within \code{output.min} and \code{output.max}. The output of this function is intended to be used as an input to the function \code{\link{rescaleVector}}.
 #'
-#' @usage simulateDriver(random.seed = 50, time = 1:1000, autocorrelation.length = 100, output.min = 0, output.max = 100, rescale = TRUE)
+#' @usage simulateDriver(
+#'   random.seed = 50,
+#'   time = 1:1000,
+#'   autocorrelation.length = 100,
+#'   output.min = 0,
+#'   output.max = 100,
+#'   rescale = TRUE
+#'   )
 #'
 #' @param random.seed integer, seed to be used by \code{set.seed()}. Default is 50.
 #' @param time integer, or numeric vector of integers with constant intervals. If a single integer is provided, a time sequence is generated from 0 to the given integer as \emph{seq(0, time, by = 1)}. Default is 1:1000.
@@ -21,9 +28,20 @@
 #'
 #' @examples
 #'
-#' x <- simulateDriver(random.seed = 10, time = 1:1000, autocorrelation.length = 200, output.min = -10, output.max = 20, rescale = TRUE)
-#' plot(x, type="l") #plots output
-#' acf(x, lag.max = 300) #checks temporal autocorrelation
+#' x <- simulateDriver(
+#'   random.seed = 10,
+#'   time = 1:1000,
+#'   autocorrelation.length = 200,
+#'   output.min = -10,
+#'   output.max = 20,
+#'   rescale = TRUE
+#'   )
+#'
+#' #plots output
+#' plot(x, type="l")
+#'
+#' #checks temporal autocorrelation
+#' acf(x, lag.max = 300)
 #'
 #' @export
 simulateDriver = function(random.seed = 50,

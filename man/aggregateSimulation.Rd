@@ -4,7 +4,11 @@
 \alias{aggregateSimulation}
 \title{Aggregates the output of \code{\link{simulatePopulation}}.}
 \usage{
-aggregateSimulationn(simulation.output=NULL, accumulation.rate=NULL, sampling.intervals=1)
+aggregateSimulationn(
+  simulation.output=NULL,
+  accumulation.rate=NULL,
+  sampling.intervals=1
+  )
 }
 \arguments{
 \item{simulation.output}{list, output of \code{\link{simulatePopulation}}.}
@@ -24,28 +28,64 @@ The function uses the values in the \code{grouping} column of the \code{\link{si
 }
 \examples{
 #generating driver
-driver <- simulateDriver(random.seed = 10, time = 1:1000, autocorrelation.length = 200, output.min = 0, output.max = 100, rescale = TRUE)
+driver <- simulateDriver(
+ random.seed = 10,
+ time = 1:1000,
+ autocorrelation.length = 200,
+ output.min = 0,
+ output.max = 100,
+ rescale = TRUE
+ )
 
 #preparing parameters
 parameters <- parametersDataframe(rows=2)
-parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, 600, 0)
+parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
 parameters <- fixParametersTypes(x=parameters)
 
 #simulating population dynamics
-sim.output <- simulatePopulation(parameters=parameters, driver.A=driver, driver.B=NULL)
+sim.output <- simulatePopulation(
+ parameters=parameters,
+ driver.A=driver,
+ driver.B=NULL
+ )
 
 #generating accumulation rate
-acc.rate <- simulateAccumulationRate(seed=50, time=1:1000, output.min=10, output.max=40, direction=1, plot=TRUE)
+acc.rate <- simulateAccumulationRate(
+ seed=50,
+ time=1:1000,
+ output.min=10,
+ output.max=40,
+ direction=1,
+ plot=TRUE
+ )
 
 #aggregating simulated data
-sim.output.aggregated <- aggregateSimulation(simulation.output=sim.output, accumulation.rate=acc.rate, sampling.intervals=3)
+sim.output.aggregated <- aggregateSimulation(
+ simulation.output=sim.output,
+ accumulation.rate=acc.rate,
+ sampling.intervals=3)
 
 #comparing simulations
 par(mfrow=c(3,1))
-#note that both lines only differentiate in the column taken from the input list
-plot(sim.output.aggregated[[1,1]]$Time, sim.output.aggregated[[1,1]]$Pollen, type="l", xlim = c(0, 1000), main="Annual")
-plot(sim.output.aggregated[[1,2]]$Time, sim.output.aggregated[[1,2]]$Pollen, type="l", xlim = c(0, 1000), main="1cm")
-plot(sim.output.aggregated[[1,3]]$Time, sim.output.aggregated[[1,3]]$Pollen, type="l", xlim = c(0, 1000), main="3cm")
+#notice the subsetting of the given column of the input list
+plot(sim.output.aggregated[[1,1]]$Time,
+ sim.output.aggregated[[1,1]]$Pollen,
+ type="l",
+ xlim = c(0, 1000),
+ main="Annual"
+ )
+plot(sim.output.aggregated[[1,2]]$Time,
+ sim.output.aggregated[[1,2]]$Pollen,
+ type="l",
+ xlim = c(0, 1000),
+ main="1cm"
+ )
+plot(sim.output.aggregated[[1,3]]$Time,
+ sim.output.aggregated[[1,3]]$Pollen,
+ type="l",
+ xlim = c(0, 1000),
+ main="3cm"
+ )
 
 #check differences in nrow
 nrow(sim.output.aggregated[[1,1]]) #original data

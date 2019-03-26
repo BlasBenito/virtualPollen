@@ -2,7 +2,10 @@
 #'
 #' @description Plots a dataframe resulting from \code{\link{acfToDf}} by using \code{\link{ggplot2}} (and \code{\link{cowplot}})
 #'
-#' @usage plotAcf(x = NULL, plot.title = "")
+#' @usage plotAcf(
+#'   x = NULL,
+#'   plot.title = ""
+#'   )
 #'
 #' @param x dataframe, output of \code{\link{acfToDf}}
 #' @param plot.title string, title for the plot.
@@ -15,8 +18,24 @@
 #'
 #' @examples
 #'
-#' x <- simulateDriver(random.seed = 10, time = 1:1000, autocorrelation.length = 200, output.min = -10, output.max = 20, rescale = TRUE)
-#' x.df <- acfToDf(x = x, lag.max = 300, length.out = 100)
+#'#simulating driver
+#' x <- simulateDriver(
+#'   random.seed = 10,
+#'   time = 1:1000,
+#'   autocorrelation.length = 200,
+#'   output.min = -10,
+#'   output.max = 20,
+#'   rescale = TRUE
+#'   )
+#'
+#'#computing temporal autocorrelation
+#' x.df <- acfToDf(
+#'   x = x,
+#'   lag.max = 300,
+#'   length.out = 100
+#'   )
+#'
+#'#plotting output
 #' plotAcf(x.df)
 #'
 #' @export

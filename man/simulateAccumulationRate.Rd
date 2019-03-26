@@ -4,7 +4,14 @@
 \alias{simulateAccumulationRate}
 \title{Simulates a virtual sediment accumulation rate.}
 \usage{
-simulateAccumulationRate(seed=50, time=1:1000, output.min=10, output.max=40, direction=1, plot=TRUE)
+simulateAccumulationRate(
+  seed=50,
+  time=1:1000,
+  output.min=10,
+  output.max=40,
+  direction=1,
+  plot=TRUE
+  )
 }
 \arguments{
 \item{seed}{integer, seed to be used by \code{\link{set.seed}} to configure the state of the pseudo-random number generator. It defines the shape of the curve.}
@@ -35,7 +42,15 @@ The accumulation rate curve is generated through a random walk smoothed by a GAM
 }
 \examples{
 
-acc.rate <- simulateAccumulationRate(seed=50, time=1:1000, output.min=10, output.max=40, direction=1, plot=TRUE)
+acc.rate <- simulateAccumulationRate(
+ seed=50,
+ time=1:1000,
+ output.min=10,
+ output.max=40,
+ direction=1,
+ plot=TRUE
+ )
+
 str(acc.rate)
 
 }

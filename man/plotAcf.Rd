@@ -4,7 +4,10 @@
 \alias{plotAcf}
 \title{Plots results of \code{\link{acfToDf}}.}
 \usage{
-plotAcf(x = NULL, plot.title = "")
+plotAcf(
+  x = NULL,
+  plot.title = ""
+  )
 }
 \arguments{
 \item{x}{dataframe, output of \code{\link{acfToDf}}}
@@ -19,8 +22,24 @@ Plots a dataframe resulting from \code{\link{acfToDf}} by using \code{\link{ggpl
 }
 \examples{
 
-x <- simulateDriver(random.seed = 10, time = 1:1000, autocorrelation.length = 200, output.min = -10, output.max = 20, rescale = TRUE)
-x.df <- acfToDf(x = x, lag.max = 300, length.out = 100)
+#simulating driver
+x <- simulateDriver(
+  random.seed = 10,
+  time = 1:1000,
+  autocorrelation.length = 200,
+  output.min = -10,
+  output.max = 20,
+  rescale = TRUE
+  )
+
+#computing temporal autocorrelation
+x.df <- acfToDf(
+  x = x,
+  lag.max = 300,
+  length.out = 100
+  )
+
+#plotting output
 plotAcf(x.df)
 
 }

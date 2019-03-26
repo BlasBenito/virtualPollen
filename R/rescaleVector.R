@@ -2,7 +2,12 @@
 #'
 #' @description Takes a numeric vector \code{x} and rescales it within the values given by \code{new.min} and \code{new.max}.
 #'
-#' @usage rescaleVector(x = rnorm(100), new.min = 0, new.max = 100, integer = FALSE)
+#' @usage rescaleVector(
+#'   x = rnorm(100),
+#'   new.min = 0,
+#'   new.max = 100,
+#'   integer = FALSE
+#'   )
 #'
 #' @param x numeric vector to be rescaled.
 #' @param new.min numeric, new minimum value for \code{x}. Default is 0.
@@ -16,9 +21,24 @@
 #'
 #'
 #' @examples
+#' #generating example data
 #' x = rnorm(100)
-#' x.float <- rescaleVector(x = x, new.min = 0, new.max = 100, integer = FALSE)
-#' x.integer <- rescaleVector(x = x, new.min = 0, new.max = 100, integer = TRUE)
+#'
+#' #as float
+#' x.float <- rescaleVector(
+#'   x = x,
+#'   new.min = 0,
+#'   new.max = 100,
+#'   integer = FALSE
+#'   )
+#'
+#' #as integer
+#' x.integer <- rescaleVector(
+#'   x = x,
+#'   new.min = 0,
+#'   new.max = 100,
+#'   integer = TRUE
+#'   )
 #'
 #' @export
 rescaleVector <- function(x = rnorm(100),

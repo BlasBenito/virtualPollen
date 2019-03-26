@@ -4,7 +4,17 @@
 \alias{compareSimulations}
 \title{Compares different simulations produced by \code{\link{simulatePopulation}}.}
 \usage{
-compareSimulations(simulation.output=NULL, species="all", filename=NULL, columns="Pollen", time.zoom=NULL, width=12, text.size=20, title.size=25, plot.title="")
+compareSimulations(
+  simulation.output=NULL,
+  species="all",
+  filename=NULL,
+  columns="Pollen",
+  time.zoom=NULL,
+  width=12,
+  text.size=20,
+  title.size=25,
+  plot.title=""
+  )
 }
 \arguments{
 \item{simulation.output}{output of \code{\link{simulatePopulation}}.}
@@ -35,15 +45,26 @@ The user can decide what virtual taxa to plot (argument \code{species}), and wha
 }
 \examples{
 
-driver <- simulateDriver(random.seed = 10, time = 1:1000, autocorrelation.length = 200, output.min = 0, output.max = 100, rescale = TRUE)
+driver <- simulateDriver(
+ random.seed = 10,
+ time = 1:1000,
+ autocorrelation.length = 200,
+ output.min = 0,
+ output.max = 100,
+ rescale = TRUE
+ )
+
 #preparing parameters
 parameters <- parametersDataframe(rows=2)
-parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 10000, 1, 0, 50, 10, 0, 0, 600, 0)
-parameters[2,] <- c("Species 2", 500, 100, 10, 0.02, 0, 100, 10000, 1, 0, 50, 10, 0, 0, 600, 0)
+parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+parameters[2,] <- c("Species 1", 500, 100, 10, 0.02, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
 parameters <- fixParametersTypes(x=parameters)
 
 #simulating population dynamics
-sim.output <- simulatePopulation(parameters=parameters, driver.A=driver)
+sim.output <- simulatePopulation(
+ parameters=parameters,
+ driver.A=driver
+ )
 
 #plot simulation
 compareSimulations(simulation.output = sim.output)

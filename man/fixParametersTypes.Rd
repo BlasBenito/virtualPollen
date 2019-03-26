@@ -18,7 +18,7 @@ It converts all columns (but the \code{label} one) of a parameters dataframe cre
 \examples{
 
 parameters <- parametersDataframe(rows=1)
-parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 10000, 1, 0, 50, 10, 0, 0, 600, 0)
+parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
 parameters <- fixParametersTypes(x=parameters)
 
 }

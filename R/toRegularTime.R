@@ -3,7 +3,12 @@
 #' @description Takes the output of \code{\link{aggregateSimulation}}, and interpolates it into a regular time grid.
 #'
 #'
-#' @usage toRegularTime(x, time.column="Time", interpolation.interval, columns.to.interpolate=c("Suitability", "Driver.A", "Pollen"))
+#' @usage toRegularTime(
+#'   x,
+#'   time.column="Time",
+#'   interpolation.interval,
+#'   columns.to.interpolate=c("Suitability", "Driver.A", "Pollen")
+#'   )
 #'
 #' @param x list, output of \code{\link{aggregateSimulation}}.
 #' @param time.column character string, default value is "Time".
@@ -20,24 +25,51 @@
 #'
 #' @examples
 #'#generating driver
-#'driver <- simulateDriver(random.seed = 10, time = 1:1000, autocorrelation.length = 200, output.min = 0, output.max = 100, rescale = TRUE)
+#'driver <- simulateDriver(
+#'  random.seed = 10,
+#'  time = 1:1000,
+#'  autocorrelation.length = 200,
+#'  output.min = 0,
+#'  output.max = 100,
+#'  rescale = TRUE
+#'  )
 #'
 #'#preparing parameters
 #'parameters <- parametersDataframe(rows=2)
-#'parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, 600, 0)
+#'parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
 #'parameters <- fixParametersTypes(x=parameters)
 #'
 #'#simulating population dynamics
-#'sim.output <- simulatePopulation(parameters=parameters, driver.A=driver, driver.B=NULL)
+#'sim.output <- simulatePopulation(
+#'  parameters=parameters,
+#'  driver.A=driver,
+#'  driver.B=NULL
+#'  )
 #'
 #'#generating accumulation rate
-#'acc.rate <- simulateAccumulationRate(seed=50, time=1:1000, output.min=10, output.max=40, direction=1, plot=TRUE)
+#'acc.rate <- simulateAccumulationRate(
+#'  seed=50,
+#'  time=1:1000,
+#'  output.min=10,
+#'  output.max=40,
+#'  direction=1,
+#'  plot=TRUE
+#'  )
 #'
 #'#aggregating simulated data
-#'sim.output.aggregated <- aggregateSimulation(simulation.output=sim.output, accumulation.rate=acc.rate, sampling.intervals=3)
+#'sim.output.aggregated <- aggregateSimulation(
+#'  simulation.output=sim.output,
+#'  accumulation.rate=acc.rate,
+#'  sampling.intervals=3
+#'  )
 #'
 #'#comparing simulations
-#'sim.output.regular <- toRegularTime(x=sim.output.aggregated, time.column="Time", interpolation.interval=20, columns.to.interpolate=c("Driver.A", "Pollen"))
+#'sim.output.regular <- toRegularTime(
+#'  x=sim.output.aggregated,
+#'  time.column="Time",
+#'  interpolation.interval=20,
+#'  columns.to.interpolate=c("Driver.A", "Pollen")
+#'  )
 #'
 #' @export
 toRegularTime <- function(x, time.column="Time", interpolation.interval=10, columns.to.interpolate=c("Suitability", "Driver.A", "Pollen")){
