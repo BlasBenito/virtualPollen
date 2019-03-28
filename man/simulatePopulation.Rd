@@ -22,7 +22,7 @@ simulatePopulation(
 
 \item{driver.B}{numeric vector with driver values.}
 
-\item{drivers}{dataframe with drivers.}
+\item{drivers}{dataframe with drivers. It should have the columns: \emph{age}}
 
 \item{burnin}{boolean, generates a warming-up period for the population model of a length of five times the maximum age of the virtual taxa.}
 }

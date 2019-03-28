@@ -51,18 +51,23 @@
 #'  )
 #'
 #' @export
-parametersCheck = function(parameters, species="all", driver.A=NULL, driver.B=NULL, drivers=NULL, filename=NULL){
+parametersCheck = function(parameters,
+                           species="all",
+                           driver.A=NULL,
+                           driver.B=NULL,
+                           drivers=NULL,
+                           filename=NULL){
 
   require("ggplot2")
   require("cowplot")
   require("viridis")
 
   #CHECKING DATAFRAME
-  #if it's  not a dataframe
-  if(!is.data.frame(parameters)){stop("params.df is not a dataframe.")}
-
-  #if no rows
-  if(nrow(parameters)==0){stop("params.df has no rows.")}
+  if(is.data.frame(parameters)==FALSE){
+    stop("params.df is not a dataframe.")
+  } else {
+    if(nrow(parameters)==0){stop("parameters has no rows.")}
+    }
 
   #colnames
   if(sum(colnames(parameters) %in% c("maximum.age", "reproductive.age", "growth.rate", "maximum.biomass", "carrying.capacity", "fecundity", "driver.A.weight", "driver.B.weight", "niche.A.mean", "niche.A.sd", "niche.B.mean", "niche.B.sd" ))!=12){
