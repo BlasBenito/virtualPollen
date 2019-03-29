@@ -4,7 +4,7 @@
 \alias{fixParametersTypes}
 \title{Fix data types in parameters dataframe.}
 \usage{
-parametersDataframe(x)
+fixParametersTypes(x)
 }
 \arguments{
 \item{x}{dataframe resulting from \code{\link{parametersDataframe}}.}

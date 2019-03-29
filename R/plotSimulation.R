@@ -34,6 +34,7 @@
 #' @param width plot width in inches.
 #' @param text.size text size of the plot.
 #' @param title.size plot title size.
+#' @param line.size size of lines in plots.
 #'
 #' @details The user can decide what virtual taxa to plot (argument \code{species}), and what information to show throught the \code{panels} argument. Output is plotted on screen by default, and printed to pdf if the \code{filename} argument is filled.
 #'
@@ -69,7 +70,24 @@
 #'plotSimulation(simulation.output = sim.output)
 #'
 #' @export
-plotSimulation = function(simulation.output, species="all", burnin=FALSE, filename=NULL, time.zoom=NULL, panels=c("Driver A", "Driver B","Suitability", "Population", "Mortality", "Biomass", "Pollen"), plot.title=NULL, width=12, text.size=20, title.size=25, line.size=1){
+plotSimulation = function(
+  simulation.output,
+  species="all",
+  burnin=FALSE,
+  filename=NULL,
+  time.zoom=NULL,
+  panels=c("Driver A",
+           "Driver B",
+           "Suitability",
+           "Population",
+           "Mortality",
+           "Biomass",
+           "Pollen"),
+  plot.title=NULL,
+  width=12,
+  text.size=20,
+  title.size=25,
+  line.size=1){
 
   require(ggplot2)
   require(tidyr)

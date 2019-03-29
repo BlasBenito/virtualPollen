@@ -2,7 +2,7 @@
 % Please edit documentation in R/acfToDf.R
 \name{acfToDf}
 \alias{acfToDf}
-\title{Applies \code{\link{acf}} to a vector and returns a dataframe for pretty plotting in \code{\link{ggplot2}}.}
+\title{Applies \code{\link{acf}} to a vector and returns a dataframe for pretty plotting in \code{\link[ggplot2]{ggplot2}}.}
 \usage{
 acfToDf(
   x = NULL,

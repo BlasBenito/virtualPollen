@@ -4,7 +4,7 @@
 \alias{aggregateSimulation}
 \title{Aggregates the output of \code{\link{simulatePopulation}}.}
 \usage{
-aggregateSimulationn(
+aggregateSimulation(
   simulation.output=NULL,
   accumulation.rate=NULL,
   sampling.intervals=1

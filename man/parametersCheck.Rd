@@ -33,7 +33,7 @@ A \code{\link{ggplot2}} object.
 Plots the normal function/s, fecundity, growth curve, and maturity age, of each virtual taxa in \code{parameters}.
 }
 \details{
-The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\link{ggplot2}} object.
+The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\link[ggplot2]{ggplot2}} object.
 }
 \examples{
 #generating driver

@@ -9,8 +9,7 @@
 #'  output.min=c(0,0),
 #'  output.max=c(100, 100),
 #'  driver.names=c("A", "B"),
-#'  filename=NULL,
-#'  plot=TRUE)
+#'  filename=NULL)
 #'
 #' @param random.seeds vector of integers, seeds to be used by \code{set.seed}.
 #' @param time integer, or numeric vector of integers with constant intervals. If a single integer is provided, a time sequence is generated from 0 to the given integer as \emph{seq(0, time, by = 1)}. Default is 1:10000.
@@ -44,8 +43,7 @@
 #'  output.min=c(0,0),
 #'  output.max=c(100, 100),
 #'  driver.names=c("A", "B"),
-#'  filename=NULL,
-#'  plot=TRUE)
+#'  filename=NULL)
 #'
 #' @export
 simulateDriverS <- function(random.seeds=c(60, 120),
@@ -109,6 +107,7 @@ for(driver in driver.names){
   }
 }
 
+return(drivers)
 
 #PLOTTING OUTPUT
 p.drivers <- ggplot(data=drivers, aes(x=time, y=value, color=driver)) +

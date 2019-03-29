@@ -45,6 +45,8 @@ plotSimulation(
 \item{text.size}{text size of the plot.}
 
 \item{title.size}{plot title size.}
+
+\item{line.size}{size of lines in plots.}
 }
 \description{
 This function takes as input a list of dataframes or a single dataframe resulting from the execution of \code{\link{simulatePopulation}}, and plots the resulting time series of pollen abundance, number of individuals, biomass, driver, and environmnetal suitability.

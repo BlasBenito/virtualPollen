@@ -34,8 +34,6 @@ compareSimulations(
 \item{title.size}{plot title size.}
 
 \item{plot.title}{character string to use as plot title.}
-
-\item{burnin}{if \code{FALSE}, burn-in period is not considered in the model.}
 }
 \description{
 Plots together the results of different taxa produced by a single run of \code{\link{simulatePopulation}}.

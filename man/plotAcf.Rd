@@ -18,7 +18,7 @@ plotAcf(
 A ggplot object
 }
 \description{
-Plots a dataframe resulting from \code{\link{acfToDf}} by using \code{\link{ggplot2}} (and \code{\link{cowplot}})
+Plots a dataframe resulting from \code{\link{acfToDf}} by using \code{\link[ggplot2]{ggplot2}} (and \code{\link[cowplot]{cowplot}})
 }
 \examples{
 

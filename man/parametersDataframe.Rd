@@ -4,7 +4,7 @@
 \alias{parametersDataframe}
 \title{Generates a template dataframe to contain simulation parameters.}
 \usage{
-parametersDataframe(rows = 1)
+parametersDataframe(rows=1)
 }
 \arguments{
 \item{rows}{integer, number of rows in the output dataframe.}

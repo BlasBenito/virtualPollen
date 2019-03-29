@@ -39,7 +39,7 @@ It is recommended to use \code{time} vectors with a time step of 1 between conse
 
 x <- simulateDriver(
   random.seed = 10,
-  time = 1:1000,
+  time = 1:10000,
   autocorrelation.length = 200,
   output.min = -10,
   output.max = 20,

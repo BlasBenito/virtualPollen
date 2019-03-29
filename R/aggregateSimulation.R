@@ -3,7 +3,7 @@
 #' @description Takes the output of \code{\link{simulatePopulation}} and aggregates it into centimetres
 #'
 #'
-#' @usage aggregateSimulationn(
+#' @usage aggregateSimulation(
 #'   simulation.output=NULL,
 #'   accumulation.rate=NULL,
 #'   sampling.intervals=1

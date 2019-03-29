@@ -291,7 +291,7 @@ simulateDriver <- function(random.seed,
 ```
 
 
-we used this function to generate a driver with annual resolution in the range [0, 100], over a period of 10000 years (see **Figure 5**), with a temporal autocorrelation length of 600 years.
+With this function we can generate a driver with any arbitrary features. **Figure 5** shows one with annual resolution in the range [0, 100], over a period of 10000 years, with a temporal autocorrelation length of 600 years.
 
 
 ```{r , fig.height=2.5, echo=FALSE, cache=TRUE, fig.cap="Virtual driver used for the simulations in the paper."}
@@ -299,7 +299,7 @@ we used this function to generate a driver with annual resolution in the range [
 #time
 time <- 1:10000
 
-#IMPORTANT NOTE: this code chunk is ready to generate more than one driver. To do so, new values should be added to the two vectors below (autocorrelation.length.list and driver.list) and adding new rows to the dataframe data.ranges. Examples on how to do it are commented below each code line. Increase the argument fig.asp of this code chunk if additional drivers are generated.
+#IMPORTANT NOTE: this code is also available as a function named "simulateDriverS", please, check the help file of the function before to use it!
 
 #autocorrelation length
 autocorrelation.length.list = 600
@@ -396,6 +396,8 @@ p.acfs <- ggplot(data=autocorrelation.10k, aes(x=lag, y=acf)) +
 
 plot_grid(p.drivers, NULL, p.density, NULL, p.acfs, align="h", ncol = 5, rel_widths = c(1, 0, 0.2, 0, 1))
 ```
+
+Another alternative is
 
 #Simulating pollen curves from virtual taxa#
 

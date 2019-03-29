@@ -1,6 +1,6 @@
 #' Plots results of \code{\link{acfToDf}}.
 #'
-#' @description Plots a dataframe resulting from \code{\link{acfToDf}} by using \code{\link{ggplot2}} (and \code{\link{cowplot}})
+#' @description Plots a dataframe resulting from \code{\link{acfToDf}} by using \code{\link[ggplot2]{ggplot2}} (and \code{\link[cowplot]{cowplot}})
 #'
 #' @usage plotAcf(
 #'   x = NULL,

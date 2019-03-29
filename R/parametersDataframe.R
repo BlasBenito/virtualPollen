@@ -2,7 +2,7 @@
 #'
 #' @description Generates the dataframe structure needed to contain the parameters used as input for the \code{\link{simulatePopulation}} function.
 #'
-#' @usage parametersDataframe(rows = 1)
+#' @usage parametersDataframe(rows=1)
 #'
 #' @param rows integer, number of rows in the output dataframe.
 #'

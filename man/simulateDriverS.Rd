@@ -11,8 +11,7 @@ simulateDriverS(
  output.min=c(0,0),
  output.max=c(100, 100),
  driver.names=c("A", "B"),
- filename=NULL,
- plot=TRUE)
+ filename=NULL)
 }
 \arguments{
 \item{random.seeds}{vector of integers, seeds to be used by \code{set.seed}.}
@@ -54,8 +53,7 @@ drivers <- simulateDriverS(
  output.min=c(0,0),
  output.max=c(100, 100),
  driver.names=c("A", "B"),
- filename=NULL,
- plot=TRUE)
+ filename=NULL)
 
 }
 \seealso{
