@@ -1,4 +1,4 @@
-#' Applies \code{\link{acf}} to a vector and returns a dataframe for pretty plotting in \code{\link{ggplot2}}.
+#' Applies \code{\link{acf}} to a vector and returns a dataframe for pretty plotting in \code{\link[ggplot2]{ggplot2}}.
 #'
 #' @description It reads a vector representing a time series, applies \code{\link{acf}} for a given number of lags
 #'

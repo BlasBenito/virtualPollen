@@ -2,7 +2,7 @@
 #'
 #' @description It converts all columns (but the \code{label} one) of a parameters dataframe created by \code{\link{parametersDataframe}} into type numeric.
 #'
-#' @usage parametersDataframe(x)
+#' @usage fixParametersTypes(x)
 #'
 #' @param x dataframe resulting from \code{\link{parametersDataframe}}.
 #'

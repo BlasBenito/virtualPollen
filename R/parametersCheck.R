@@ -18,7 +18,7 @@
 #' @param drivers dataframe with drivers
 #' @param filename character string, filename of the output pdf.
 #'
-#' @details The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\link{ggplot2}} object.
+#' @details The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\link[ggplot2]{ggplot2}} object.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
