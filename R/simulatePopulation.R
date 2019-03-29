@@ -379,7 +379,7 @@ simulatePopulation = function(parameters=NULL,
       while(sum(biomass) > carrying.capacity){
 
         #removes random individual (curvilinear risk curve)
-        individual.to.remove = .Internal(sample(length(population), 2L, TRUE, 1 - sqrt(population)))
+        individual.to.remove = sample(x=length(population), size=1L, replace=TRUE, prob=1 - sqrt(population))
 
         #adds the removed individuals to the list
         individuals.removed = c(individuals.removed, population[individual.to.remove])

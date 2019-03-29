@@ -107,3 +107,6 @@
 #' @format numeric vector of length 10000.
 #' @seealso \code{\link{simulatePopulation}}, \code{\link{plotSimulation}}
 "simulation"
+
+#' @import ggplot2 cowplot viridis mgcv
+NULL

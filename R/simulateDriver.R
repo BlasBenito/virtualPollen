@@ -29,7 +29,7 @@
 #' @examples
 #'
 #' x <- simulateDriver(
-#'   random.seed = 10,
+#'   random.seed = 50,
 #'   time = 1:10000,
 #'   autocorrelation.length = 200,
 #'   output.min = -10,
@@ -45,7 +45,7 @@
 #'
 #' @export
 simulateDriver = function(random.seed = 50,
-                          time = 1:1000,
+                          time = 1:10000,
                           autocorrelation.length = 100,
                           output.min = 0,
                           output.max = 100,

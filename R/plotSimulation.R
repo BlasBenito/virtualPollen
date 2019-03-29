@@ -71,7 +71,7 @@
 #'
 #' @export
 plotSimulation = function(
-  simulation.output,
+  simulation.output=NULL,
   species="all",
   burnin=FALSE,
   filename=NULL,
