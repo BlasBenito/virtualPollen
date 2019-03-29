@@ -108,5 +108,8 @@
 #' @seealso \code{\link{simulatePopulation}}, \code{\link{plotSimulation}}
 "simulation"
 
-#' @import ggplot2 cowplot viridis mgcv
+#' @import ggplot2 cowplot viridis
+NULL
+
+#' @importfROM mgcv gam
 NULL
