@@ -1,0 +1,1343 @@
+\documentclass[letterpaper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\usepackage[utf8]{inputenc} % @SET ENCODING@
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\begin{document}
+\chapter*{}
+\begin{center}
+{\textbf{\huge virtualPollen}}
+\par\bigskip{\large \today}
+\end{center}
+\begin{description}
+\raggedright{}
+\inputencoding{utf8}
+\item[Type]\AsIs{Package}
+\item[Title]\AsIs{Generation of virtual pollen curves.}
+\item[Version]\AsIs{0.1.0}
+\item[Author]\AsIs{Blas M. Benito}
+\item[Maintainer]\AsIs{Blas M. Benito }\email{blasbenito@gmail.com}\AsIs{}
+\item[Description]\AsIs{Provides tools to simulate pollen curves of annual resolution based on virtual taxa with different traits (life-span, fecundity, growth-rate, niche position and niche breadth) by using a simple individual-based model. It also provides the mean to generate a virtual sediment accumulation rate to aggregate simulated pollen curves into centimetres, to represent taphonomical processes.}
+\item[License]\AsIs{What license is it under?}
+\item[Encoding]\AsIs{UTF-8}
+\item[LazyData]\AsIs{true}
+\item[RoxygenNote]\AsIs{6.1.1}
+\end{description}
+\Rdcontents{\R{} topics documented:}
+\inputencoding{utf8}
+\HeaderA{acfToDf}{Applies \code{\LinkA{acf}{acf}} to a vector and returns a dataframe for pretty plotting in \code{\LinkA{ggplot2}{ggplot2}}.}{acfToDf}
+%
+\begin{Description}\relax
+It reads a vector representing a time series, applies \code{\LinkA{acf}{acf}} for a given number of lags
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+acfToDf(
+  x = NULL,
+  lag.max = 100,
+  length.out = 10
+  )
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] numeric vector.
+
+\item[\code{lag.max}] integer, number of lags over which to compute temporal autocorrelation.
+
+\item[\code{length.out}] integer, total number of lags to consider for plotting. Should be a subset of \code{lag.max}.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+This function computes temporal autocorrelation in a given vector using \code{\LinkA{acf}{acf}}, and returns a dataframe ready for easy plotting in \code{\LinkA{ggplot2}{ggplot2}}.
+\end{Details}
+%
+\begin{Value}
+A dataframe with the columns:
+\#' \begin{itemize}
+
+\item \code{lag}: numeric, lag in the time units of \code{x} with a maximum determined by \code{lag.max}, and a number of unique values determined by \code{length.out}
+\item \code{acf}: Pearson correlation index returned by the \code{\LinkA{acf}{acf}} for a given number of lags for the given lag.
+\item \code{ci.max}: Maximum value of the confidence interval of \code{acf}.
+\item \code{ci.min}: Minimum value of the confidence interval of \code{acf}.
+
+\end{itemize}
+
+\end{Value}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{acf}{acf}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+#simulating driver
+x <- simulateDriver(
+  random.seed = 10,
+  time = 1:1000,
+  autocorrelation.length = 200,
+  output.min = -10,
+  output.max = 20,
+  rescale = TRUE
+  )
+
+#computing temporal autocorrelations
+x.df <- acfToDf(
+  x = x,
+  lag.max = 300,
+  length.out = 100
+  )
+str(x.df)
+
+#plotting output
+plotAcf(x.df)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{aggregateSimulation}{Aggregates the output of \code{\LinkA{simulatePopulation}{simulatePopulation}}.}{aggregateSimulation}
+%
+\begin{Description}\relax
+Takes the output of \code{\LinkA{simulatePopulation}{simulatePopulation}} and aggregates it into centimetres
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+aggregateSimulationn(
+  simulation.output=NULL,
+  accumulation.rate=NULL,
+  sampling.intervals=1
+  )
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{simulation.output}] list, output of \code{\LinkA{simulatePopulation}{simulatePopulation}}.
+
+\item[\code{accumulation.rate}] dataframe, output of \code{\LinkA{simulateAccumulationRate}{simulateAccumulationRate}}.
+
+\item[\code{sampling.intervals}] numeric or numeric vector, in centimetres, depth interval or intervals between consecutive samples. If 1, all samples are returned, if 2, returned samples are separated by 1 cm.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+The function uses the values in the \code{grouping} column of the \code{\LinkA{simulateAccumulationRate}{simulateAccumulationRate}} output to aggregate together (by computing the \code{mean}) as many samples as cases in \code{grouping} have the same identificator. Output samples are identified by the average age of the samples within the given centimetre.
+\end{Details}
+%
+\begin{Value}
+A list of dataframes with as many rows as virtual taxa were produced by \code{\LinkA{simulatePopulation}{simulatePopulation}}, and several columns. First column is the original data. Second column is the data aggregated into centimetres according to the result of \code{\LinkA{simulateAccumulationRate}{simulateAccumulationRate}}. Each additional column is the data of the second column resampled as given by the \code{sampling.intervals} argument. See example below for more clarity.
+\end{Value}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{simulateAccumulationRate}{simulateAccumulationRate}}, \code{\LinkA{simulatePopulation}{simulatePopulation}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+#generating driver
+driver <- simulateDriver(
+ random.seed = 10,
+ time = 1:1000,
+ autocorrelation.length = 200,
+ output.min = 0,
+ output.max = 100,
+ rescale = TRUE
+ )
+
+#preparing parameters
+parameters <- parametersDataframe(rows=2)
+parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+parameters <- fixParametersTypes(x=parameters)
+
+#simulating population dynamics
+sim.output <- simulatePopulation(
+ parameters=parameters,
+ driver.A=driver,
+ driver.B=NULL
+ )
+
+#generating accumulation rate
+acc.rate <- simulateAccumulationRate(
+ seed=50,
+ time=1:1000,
+ output.min=10,
+ output.max=40,
+ direction=1,
+ plot=TRUE
+ )
+
+#aggregating simulated data
+sim.output.aggregated <- aggregateSimulation(
+ simulation.output=sim.output,
+ accumulation.rate=acc.rate,
+ sampling.intervals=3)
+
+#comparing simulations
+par(mfrow=c(3,1))
+#notice the subsetting of the given column of the input list
+plot(sim.output.aggregated[[1,1]]$Time,
+ sim.output.aggregated[[1,1]]$Pollen,
+ type="l",
+ xlim = c(0, 1000),
+ main="Annual"
+ )
+plot(sim.output.aggregated[[1,2]]$Time,
+ sim.output.aggregated[[1,2]]$Pollen,
+ type="l",
+ xlim = c(0, 1000),
+ main="1cm"
+ )
+plot(sim.output.aggregated[[1,3]]$Time,
+ sim.output.aggregated[[1,3]]$Pollen,
+ type="l",
+ xlim = c(0, 1000),
+ main="3cm"
+ )
+
+#check differences in nrow
+nrow(sim.output.aggregated[[1,1]]) #original data
+nrow(sim.output.aggregated[[1,2]]) #1cm
+nrow(sim.output.aggregated[[1,3]]) #3cm intervals
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{compareSimulations}{Compares different simulations produced by \code{\LinkA{simulatePopulation}{simulatePopulation}}.}{compareSimulations}
+%
+\begin{Description}\relax
+Plots together the results of different taxa produced by a single run of \code{\LinkA{simulatePopulation}{simulatePopulation}}.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+compareSimulations(
+  simulation.output=NULL,
+  species="all",
+  filename=NULL,
+  columns="Pollen",
+  time.zoom=NULL,
+  width=12,
+  text.size=20,
+  title.size=25,
+  plot.title=""
+  )
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{simulation.output}] output of \code{\LinkA{simulatePopulation}{simulatePopulation}}.
+
+\item[\code{species}] a number or vector or numbers representing rows in the parameters dataframe, or a string or vector of strings referencing to the "label" column of the parameters dataframe.
+
+\item[\code{filename}] character string, name of output pdf file. If NULL or empty, no pdf is produced.
+
+\item[\code{columns}] character string or vector of character strings with these possible values: "Pollen", "Population.mature", "Population.immature", "Population.viable.seeds", "Suitability", "Biomass.total", "Biomass.mature", "Biomass.immature", "Mortality.mature", "Mortality.immature", "Driver.A", "Driver.B".
+
+\item[\code{time.zoom}] vector of two numbers indicating the beginnign and end of the time interval to be plotted (i.e. "c(5000, 10000)")
+
+\item[\code{width}] plot width in inches.
+
+\item[\code{text.size}] text size of the plot.
+
+\item[\code{title.size}] plot title size.
+
+\item[\code{plot.title}] character string to use as plot title.
+
+\item[\code{burnin}] if \code{FALSE}, burn-in period is not considered in the model.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+The user can decide what virtual taxa to plot (argument \code{species}), and what information to show throught the \code{columns} argument. Output is plotted on screen by default, and printed to pdf if the \code{filename} argument is filled.
+\end{Details}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{simulatePopulation}{simulatePopulation}}, \code{\LinkA{plotSimulation}{plotSimulation}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+driver <- simulateDriver(
+ random.seed = 10,
+ time = 1:1000,
+ autocorrelation.length = 200,
+ output.min = 0,
+ output.max = 100,
+ rescale = TRUE
+ )
+
+#preparing parameters
+parameters <- parametersDataframe(rows=2)
+parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+parameters[2,] <- c("Species 1", 500, 100, 10, 0.02, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+parameters <- fixParametersTypes(x=parameters)
+
+#simulating population dynamics
+sim.output <- simulatePopulation(
+ parameters=parameters,
+ driver.A=driver
+ )
+
+#plot simulation
+compareSimulations(simulation.output = sim.output)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{driverA}{Driver A}{driverA}
+\keyword{datasets}{driverA}
+%
+\begin{Description}\relax
+A vector of 10000 values (years) between 0 and 100 generated by \code{\LinkA{simulateDriver}{simulateDriver}} with a temporal autocorrelation significant for 600 years. It is meant to be used as input for \code{\LinkA{simulatePopulation}{simulatePopulation}}
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(driverA)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+numeric vector of length 10000.
+\end{Format}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{simulateDriver}{simulateDriver}}
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{driverB}{Driver B}{driverB}
+\keyword{datasets}{driverB}
+%
+\begin{Description}\relax
+A vector of 10000 values (years) between 0 and 100 generated by \code{\LinkA{simulateDriver}{simulateDriver}} with a temporal autocorrelation significant for 600 years. It is meant to be used as input for \code{\LinkA{simulatePopulation}{simulatePopulation}}
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(driverB)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+numeric vector of length 10000.
+\end{Format}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{simulateDriver}{simulateDriver}}
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{drivers}{Drivers with different temporal autocorrelations.}{drivers}
+\keyword{datasets}{drivers}
+%
+\begin{Description}\relax
+A dataframe with 60000 rows and 4 columns (years) containing two drivers (A and B) generated by \code{\LinkA{simulateDriver}{simulateDriver}} with different temporal autocorrelations (200, 600, and 1800). It is meant to be used as input for \code{\LinkA{simulatePopulation}{simulatePopulation}}
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(drivers)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+numeric vector of length 10000.
+\end{Format}
+%
+\begin{Details}\relax
+\begin{itemize}
+
+\item \emph{time} integer.
+\item \emph{driver} character, values are \code{A} and \code{B}
+\item \emph{autocorrelation.length} numeric, values are 200, 600, and 1800.
+\item \emph{value} numeric, value of the driver for the given \emph{time}.
+
+\end{itemize}
+
+\end{Details}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{simulateDriver}{simulateDriver}}
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{fixParametersTypes}{Fix data types in parameters dataframe.}{fixParametersTypes}
+%
+\begin{Description}\relax
+It converts all columns (but the \code{label} one) of a parameters dataframe created by \code{\LinkA{parametersDataframe}{parametersDataframe}} into type numeric.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+parametersDataframe(x)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] dataframe resulting from \code{\LinkA{parametersDataframe}{parametersDataframe}}.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+Same dataframe provided in argument \code{x} but with fixed data types.
+\end{Value}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{parametersDataframe}{parametersDataframe}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+parameters <- parametersDataframe(rows=1)
+parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+parameters <- fixParametersTypes(x=parameters)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{parameters}{Parameters of 2 virtual taxa.}{parameters}
+\keyword{datasets}{parameters}
+%
+\begin{Description}\relax
+A dataframe with 2 rows and 16 columns with the parameters of two virtual taxa. It was generated by \code{\LinkA{parametersDataframe}{parametersDataframe}} and \code{\LinkA{fixParametersTypes}{fixParametersTypes}}. It is meant to be used as input for \code{\LinkA{simulatePopulation}{simulatePopulation}}. It's columns are:
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(drivers)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+numeric vector of length 10000.
+\end{Format}
+%
+\begin{Details}\relax
+\begin{itemize}
+
+\item label: to store names (character string) of the virtual taxa.
+\item maximum.age: integer, maximum possible age of the individuals in years.
+\item reproductive.age: integer, age of sexual maturity in years.
+\item fecundity: integer, number of maximum viable seeds produced by a mature individual under fully suitable conditions.
+\item growth.rate: numeric, parameter of the logistic growth function.
+\item pollen.control: numeric in the interval [0, 1]. If 0, pollen productivity depends on environmental suitability only. The larger the number, biomass takes over environmental suitability in determining pollen productivity.
+\item maximum.biomass: integer, maximum biomass of the individuals.
+\item carrying.capacity: integer, maximum sum of biomass of the individuals. Very large carrying capacities plus a low maximum.biomass generates too many individuals for the simulation to remain efficient. Try to set carrying.capacity and maximum.biomass to carrying.capacity divided by biomass returns a number lower than 1000 (and even better if it is closer to 100).
+\item driver.A.weight: numeric in the interval [0, 1], represents the relative influence of the driver on environmental suitability.
+\item driver.B.weight: numeric in the interval [0, 1], represents the relative influence of the driver on environmental suitability. The sum of weights of drivers A and B should be 1.
+\item niche.A.mean: numeric, in the same units as driver A. It is the mean of the normal function defining the response of the virtual taxa to driver A.
+\item niche.A.sd: numeric, in the same units as driver A. It is the standard deviation of the normal function defining the response of the virtual taxa to driver A.
+\item niche.B.mean: as above, but for driver B.
+\item niche.B.sd: as above, but for driver B.
+\item autocorrelation.length.A: numeric, only useful if several drivers generated with different autocorrelation lengths are available (and identified by the column \code{autocorrelation.length}) in the \code{drivers} argument provided to the \code{\LinkA{simulatePopulation}{simulatePopulation}} function.
+\item autocorrelation.length.B: same as above.
+
+\end{itemize}
+
+\end{Details}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{parametersCheck}{parametersCheck}}, \code{\LinkA{parametersDataframe}{parametersDataframe}}, \code{\LinkA{simulatePopulation}{simulatePopulation}}
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{parametersCheck}{Plots main simulation parameters.}{parametersCheck}
+%
+\begin{Description}\relax
+Plots the normal function/s, fecundity, growth curve, and maturity age, of each virtual taxa in \code{parameters}.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+parametersCheck(
+  parameters,
+  species="all",
+  driver.A=NULL,
+  driver.B=NULL,
+  drivers=NULL,
+  filename=NULL
+  )
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{parameters}] the parameters dataframe.
+
+\item[\code{species}] if "all" or "ALL", all species in "parameters" are plotted. It also accepts a vector of numbers representing the rows of the selected species, or a vector of names of the selected species.
+
+\item[\code{driver.A}] numeric vector with driver values.
+
+\item[\code{driver.B}] numeric vector with driver values.
+
+\item[\code{drivers}] dataframe with drivers
+
+\item[\code{filename}] character string, filename of the output pdf.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\LinkA{ggplot2}{ggplot2}} object.
+\end{Details}
+%
+\begin{Value}
+A \code{\LinkA{ggplot2}{ggplot2}} object.
+\end{Value}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{parametersDataframe}{parametersDataframe}}, \code{\LinkA{fixParametersTypes}{fixParametersTypes}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+#generating driver
+driver <- simulateDriver(
+ random.seed = 10,
+ time = 1:1000,
+ autocorrelation.length = 200,
+ output.min = 0,
+ output.max = 100,
+ rescale = TRUE
+ )
+
+#preparing parameters
+parameters <- parametersDataframe(rows=2)
+parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+parameters[2,] <- c("Species 1", 500, 100, 10, 0.02, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+parameters <- fixParametersTypes(x=parameters)
+
+#plotting parameters
+parametersCheck(
+ parameters=parameters,
+ driver.A=driver,
+ filename="Parameters.pdf"
+ )
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{parametersDataframe}{Generates a template dataframe to contain simulation parameters.}{parametersDataframe}
+%
+\begin{Description}\relax
+Generates the dataframe structure needed to contain the parameters used as input for the \code{\LinkA{simulatePopulation}{simulatePopulation}} function.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+parametersDataframe(rows = 1)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{rows}] integer, number of rows in the output dataframe.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+The resulting dataframe can either be filled manually through vectors, as shown in the example (but this requires to use the function \code{\LinkA{fixParametersTypes}{fixParametersTypes}} once the dataframe is completed), or can be edited manually in Rstudio by installing the \Rhref{https://cran.r-project.org/web/packages/editData/README.html}{editData} package.
+\end{Details}
+%
+\begin{Value}
+A dataframe filled with \code{NA} values and the columns:
+\begin{itemize}
+
+\item label: to store names (character string) of the virtual taxa.
+\item maximum.age: integer, maximum possible age of the individuals in years.
+\item reproductive.age: integer, age of sexual maturity in years.
+\item fecundity: integer, number of maximum viable seeds produced by a mature individual under fully suitable conditions.
+\item growth.rate: numeric, parameter of the logistic growth function.
+\item pollen.control: numeric in the interval [0, 1]. If 0, pollen productivity depends on environmental suitability only. The larger the number, biomass takes over environmental suitability in determining pollen productivity.
+\item maximum.biomass: integer, maximum biomass of the individuals.
+\item carrying.capacity: integer, maximum sum of biomass of the individuals. Very large carrying capacities plus a low maximum.biomass generates too many individuals for the simulation to remain efficient. Try to set carrying.capacity and maximum.biomass to carrying.capacity divided by biomass returns a number lower than 1000 (and even better if it is closer to 100).
+\item driver.A.weight: numeric in the interval [0, 1], represents the relative influence of the driver on environmental suitability.
+\item driver.B.weight: numeric in the interval [0, 1], represents the relative influence of the driver on environmental suitability. The sum of weights of drivers A and B should be 1.
+\item niche.A.mean: numeric, in the same units as driver A. It is the mean of the normal function defining the response of the virtual taxa to driver A.
+\item niche.A.sd: numeric, in the same units as driver A. It is the standard deviation of the normal function defining the response of the virtual taxa to driver A.
+\item niche.B.mean: as above, but for driver B.
+\item niche.B.sd: as above, but for driver B.
+\item autocorrelation.length.A: numeric, only useful if several drivers generated with different autocorrelation lengths are available (and identified by the column \code{autocorrelation.length}) in the \code{drivers} argument provided to the \code{\LinkA{simulatePopulation}{simulatePopulation}} function.
+\item autocorrelation.length.B: same as above.
+
+\end{itemize}
+
+\end{Value}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{simulatePopulation}{simulatePopulation}}, \code{\LinkA{fixParametersTypes}{fixParametersTypes}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+parameters <- parametersDataframe(rows=1)
+parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{plotAcf}{Plots results of \code{\LinkA{acfToDf}{acfToDf}}.}{plotAcf}
+%
+\begin{Description}\relax
+Plots a dataframe resulting from \code{\LinkA{acfToDf}{acfToDf}} by using \code{\LinkA{ggplot2}{ggplot2}} (and \code{\LinkA{cowplot}{cowplot}})
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+plotAcf(
+  x = NULL,
+  plot.title = ""
+  )
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] dataframe, output of \code{\LinkA{acfToDf}{acfToDf}}
+
+\item[\code{plot.title}] string, title for the plot.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+A ggplot object
+\end{Value}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{acfToDf}{acfToDf}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+#simulating driver
+x <- simulateDriver(
+  random.seed = 10,
+  time = 1:1000,
+  autocorrelation.length = 200,
+  output.min = -10,
+  output.max = 20,
+  rescale = TRUE
+  )
+
+#computing temporal autocorrelation
+x.df <- acfToDf(
+  x = x,
+  lag.max = 300,
+  length.out = 100
+  )
+
+#plotting output
+plotAcf(x.df)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{plotSimulation}{Plots results of \code{\LinkA{simulatePopulation}{simulatePopulation}}.}{plotSimulation}
+%
+\begin{Description}\relax
+This function takes as input a list of dataframes or a single dataframe resulting from the execution of \code{\LinkA{simulatePopulation}{simulatePopulation}}, and plots the resulting time series of pollen abundance, number of individuals, biomass, driver, and environmnetal suitability.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+plotSimulation(
+  simulation.output=NULL,
+  species="all",
+  burnin=FALSE,
+  filename=NULL,
+  time.zoom=NULL,
+  panels=c("Driver A",
+           "Driver B",
+           "Suitability",
+           "Population",
+           "Mortality",
+           "Biomass",
+           "Pollen"
+           ),
+ plot.title=NULL,
+ width=12,
+ text.size=20,
+ title.size=25,
+ line.size=1
+ )
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{simulation.output}] output of \code{\LinkA{simulatePopulation}{simulatePopulation}}.
+
+\item[\code{species}] a number or vector or numbers representing rows in the parameters dataframe, or a string or vector of strings referencing to the "label" column of the parameters dataframe.
+
+\item[\code{burnin}] if \code{FALSE}, burn-in period is not considered in the model.
+
+\item[\code{filename}] character string, name of output pdf file. If NULL or empty, no pdf is produced.
+
+\item[\code{time.zoom}] vector of two numbers indicating the beginnign and end of the time interval to be plotted (i.e. "c(5000, 10000)")
+
+\item[\code{panels}] character string or vector of character strings with these possible values: "Driver A", "Driver B","Suitability", "Population", "Mortality", "Biomass", "Pollen".
+
+\item[\code{plot.title}] character string to use as plot title.
+
+\item[\code{width}] plot width in inches.
+
+\item[\code{text.size}] text size of the plot.
+
+\item[\code{title.size}] plot title size.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+The user can decide what virtual taxa to plot (argument \code{species}), and what information to show throught the \code{panels} argument. Output is plotted on screen by default, and printed to pdf if the \code{filename} argument is filled.
+\end{Details}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{simulatePopulation}{simulatePopulation}}, \code{\LinkA{compareSimulations}{compareSimulations}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+driver <- simulateDriver(
+ random.seed = 10,
+ time = 1:1000,
+ autocorrelation.length = 200,
+ output.min = 0,
+ output.max = 100,
+ rescale = TRUE
+ )
+
+#preparing parameters
+parameters <- parametersDataframe(rows=2)
+parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+parameters[2,] <- c("Species 1", 500, 100, 10, 0.02, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+parameters <- fixParametersTypes(x=parameters)
+
+#simulating population dynamics
+sim.output <- simulatePopulation(
+ parameters=parameters,
+ driver.A=driver
+ )
+
+#plot simulation
+plotSimulation(simulation.output = sim.output)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{rescaleVector}{Rescales a vector within given bounds.}{rescaleVector}
+%
+\begin{Description}\relax
+Takes a numeric vector \code{x} and rescales it within the values given by \code{new.min} and \code{new.max}.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+rescaleVector(
+  x = rnorm(100),
+  new.min = 0,
+  new.max = 100,
+  integer = FALSE
+  )
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] numeric vector to be rescaled.
+
+\item[\code{new.min}] numeric, new minimum value for \code{x}. Default is 0.
+
+\item[\code{new.max}] numeric, new maximum value for \code{x}. Default is 100.
+
+\item[\code{integer}] boolean, if TRUE, output vector is returned as vector of integers. Default is FALSE.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+A vector of the same length as \code{x} rescaled between \code{output.min} and \code{output.max}.
+\end{Value}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{Examples}
+\begin{ExampleCode}
+#generating example data
+x = rnorm(100)
+
+#as float
+x.float <- rescaleVector(
+  x = x,
+  new.min = 0,
+  new.max = 100,
+  integer = FALSE
+  )
+
+#as integer
+x.integer <- rescaleVector(
+  x = x,
+  new.min = 0,
+  new.max = 100,
+  integer = TRUE
+  )
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{simulateAccumulationRate}{Simulates a virtual sediment accumulation rate.}{simulateAccumulationRate}
+%
+\begin{Description}\relax
+Generates a virtual sediment accumulation rate to be applied to the results of \code{\LinkA{simulatePopulation}{simulatePopulation}}
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+simulateAccumulationRate(
+  seed=50,
+  time=1:1000,
+  output.min=10,
+  output.max=40,
+  direction=1,
+  plot=TRUE
+  )
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{seed}] integer, seed to be used by \code{\LinkA{set.seed}{set.seed}} to configure the state of the pseudo-random number generator. It defines the shape of the curve.
+
+\item[\code{time}] vector of time values (ideally the same used to generate the simulations).
+
+\item[\code{output.min}] numeric, in years per centimetre, minimum sediment accumulation rate (10 by default).
+
+\item[\code{output.max}] numeric, in years per centimetre, maximum sediment accumulation rate (40 bu default).
+
+\item[\code{direction}] integer, values 1 or -1, to invert the resulting accumulation rate.
+
+\item[\code{plot}] boolean, plots output accumulation rate if \code{TRUE}.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+The accumulation rate curve is generated through a random walk smoothed by a GAM model. The value of the \code{seed} argument changes the shape of the curve, but the user has no more control than trying different values to achieve a curve closer to the desired one. If \code{plot} is set to \code{TRUE}, the accumulation rate curve is printed on screen, but not exported to pdf.
+\end{Details}
+%
+\begin{Value}
+A dataframe with the following columns.
+\begin{itemize}
+
+\item \emph{time} numeric, time or age of the given case.
+\item \emph{accumulation.rate} numeric, in years per centimetre, simulated accumulation rate.
+\item \emph{grouping} integer, grouping variable to aggregate together with \code{\LinkA{aggregateSimulation}{aggregateSimulation}} samples deposited in the same centimetre according \emph{accumulation.rate}.
+
+\end{itemize}
+
+\end{Value}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{aggregateSimulation}{aggregateSimulation}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+acc.rate <- simulateAccumulationRate(
+ seed=50,
+ time=1:1000,
+ output.min=10,
+ output.max=40,
+ direction=1,
+ plot=TRUE
+ )
+
+str(acc.rate)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{simulateDriver}{Generates a random time series with temporal autocorrelation.}{simulateDriver}
+%
+\begin{Description}\relax
+Generates a vector of the same legnth as the \code{time} argument, with a temporal autocorrelation length close to the defined by \code{autocorrelation.length}, and a range within \code{output.min} and \code{output.max}. The output of this function is intended to be used as an input to the function \code{\LinkA{rescaleVector}{rescaleVector}}.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+simulateDriver(
+  random.seed = 50,
+  time = 1:10000,
+  autocorrelation.length = 100,
+  output.min = 0,
+  output.max = 100,
+  rescale = TRUE
+  )
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{random.seed}] integer, seed to be used by \code{set.seed()}. Default is 50.
+
+\item[\code{time}] integer, or numeric vector of integers with constant intervals. If a single integer is provided, a time sequence is generated from 1 to the given integer as \emph{seq(1, time, by = 1)}. Default is 1:10000.
+
+\item[\code{autocorrelation.length}] integer, represents the length of the convolution filter to be used to impose a particular temporal structure on the time series. Default is 100, equivalent to a filter composed by a hundred of ones.
+
+\item[\code{output.min}] numeric, minimum value of the output time series. Used as input for \strong{rescaleVector}. Default is 0.
+
+\item[\code{output.max}] numeric, maximum value of the output time series. Used as input for \strong{rescaleVector}. Default is 100.
+
+\item[\code{rescale}] boolean. If FALSE, \code{output.min} and \code{output.max} are ignored, and the original data range provided by \code{rnorm} is preserved. Default is TRUE.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+It is recommended to use \code{time} vectors with a time step of 1 between consecutive values when the output is to be used as input for \code{\LinkA{simulatePopulation}{simulatePopulation}}, which considers annual time-steps while simulating virtual pollen curves. Initial random sequence is generated by \code{rnorm}. Desired temporal autocorrelation are approximate, but deviation becomes higher if \code{autocorrelation.length} is larger than half the length of \code{time}. Consequently, the function limits \code{autocorrelation.length} to \code{length(time)/2}.
+\end{Details}
+%
+\begin{Value}
+A vector of the same length as \code{time}.
+\end{Value}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{rescaleVector}{rescaleVector}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+x <- simulateDriver(
+  random.seed = 10,
+  time = 1:1000,
+  autocorrelation.length = 200,
+  output.min = -10,
+  output.max = 20,
+  rescale = TRUE
+  )
+
+#plots output
+plot(x, type="l")
+
+#checks temporal autocorrelation
+acf(x, lag.max = 300)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{simulateDriverS}{Generates a long table with several drivers for \code{\LinkA{simulatePopulation}{simulatePopulation}}.}{simulateDriverS}
+%
+\begin{Description}\relax
+Wrapper of \code{simulateDriver} to generate several drivers with different autocorrelation lengths, and return a long format table to be used as input for \code{\LinkA{simulatePopulation}{simulatePopulation}}.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+simulateDriverS(
+ random.seeds=c(60, 120),
+ time=1:10000,
+ autocorrelation.lengths=c(200, 600, 1800),
+ output.min=c(0,0),
+ output.max=c(100, 100),
+ driver.names=c("A", "B"),
+ filename=NULL,
+ plot=TRUE)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{random.seeds}] vector of integers, seeds to be used by \code{set.seed}.
+
+\item[\code{time}] integer, or numeric vector of integers with constant intervals. If a single integer is provided, a time sequence is generated from 0 to the given integer as \emph{seq(0, time, by = 1)}. Default is 1:10000.
+
+\item[\code{autocorrelation.lengths}] vector of integers, represents the lengths of the convolution filters to be used to impose a particular temporal structure on each driver. Default is 100, equivalent to a filter composed by a hundred of ones.
+
+\item[\code{output.min}] numeric vector, minimum values of the output time series. Used as input for \strong{rescaleVector}. Default is 0.
+
+\item[\code{output.max}] numeric vector, maximum values of the output time series. Used as input for \strong{rescaleVector}. Default is 100.
+
+\item[\code{driver.names}] character vector, with labels to be used to identify the drivers.
+
+\item[\code{filename}] character string, name of output pdf file. If NULL or empty, no pdf is produced.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+It is recommended to use \code{time} vectors with a time step of 1 between consecutive values when the output is to be used as input for \code{\LinkA{simulatePopulation}{simulatePopulation}}, which considers annual time-steps while simulating virtual pollen curves. Initial random sequence is generated by \code{rnorm}. Desired temporal autocorrelation are approximate, but deviation becomes higher if \code{autocorrelation.length} is larger than half the length of \code{time}. Consequently, the function limits \code{autocorrelation.length} to \code{length(time)/2}.
+\end{Details}
+%
+\begin{Value}
+A long format dataframe (see dataset \code{\LinkA{drivers}{drivers}}) with the following columns:
+
+\begin{itemize}
+
+\item \emph{time} integer.
+\item \emph{driver} character, values are \code{A} and \code{B}
+\item \emph{autocorrelation.length} numeric, values are 200, 600, and 1800.
+\item \emph{value} numeric, value of the driver for the given \emph{time}.
+
+\end{itemize}
+
+\end{Value}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{simulateDriver}{simulateDriver}}, \code{\LinkA{simulatePopulation}{simulatePopulation}}, \code{\LinkA{drivers}{drivers}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+drivers <- simulateDriverS(
+ random.seeds=c(60, 120),
+ time=1:10000,
+ autocorrelation.lengths=c(200, 600, 1800),
+ output.min=c(0,0),
+ output.max=c(100, 100),
+ driver.names=c("A", "B"),
+ filename=NULL,
+ plot=TRUE)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{simulatePopulation}{Simulates population dynamics for virtual species with different traits.}{simulatePopulation}
+%
+\begin{Description}\relax
+This function takes as input a dataframe of parameters defining virtual taxa produced by \code{\LinkA{parametersDataframe}{parametersDataframe}} and \code{\LinkA{fixParametersTypes}{fixParametersTypes}}, a driver or drivers generated with \code{\LinkA{simulateDriver}{simulateDriver}}, and simulates population dynamics at yearly resolution for the time-length defined by the driver or drivers. The model relies on the following set of assumptions.
+
+\begin{itemize}
+
+\item  The spatial structure of the population is not important to explain its pollen productivity. This is an operative assumption, to speed-up model execution.
+\item  The environmental niche of the species follows a Gaussian distribution, characterized by a mean (niche optimum, also niche position) and a standard deviation (niche breadth or tolerance).
+\item  Different drivers can have a different influence on the species dynamics, and that influence can be defined by the user by tuning the weights of each driver.
+\item  Environmental suitability, expressed in the range [0, 1], is the result of an additive function of the species niches (normal function defined by the species' mean and standard deviation for each driver), the drivers' values, and the relative influence of each driver (driver weights).
+\item  Pollen productivity is a function of the individual's biomass and environmental suitability, so under a hypothetical constant individual's biomass, its pollen production depends linearly on environmental suitability values.
+\item  Effective fecundity is limited by environmental suitability. Low environmental suitability values limit recruitment, acting as an environmental filter. Therefore, even though the fecundity of the individuals is fixed by the fecundity parameter, the overall population fecundity is limited by environmental suitability.
+
+\end{itemize}
+
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+simulatePopulation(
+  parameters=NULL,
+  species="all",
+  driver.A=NULL,
+  driver.B=NULL,
+  drivers=NULL,
+  burnin=TRUE
+  )
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{parameters}] dataframe with parameters.
+
+\item[\code{species}] if "all" or "ALL", all species in "parameters" are simulated It also accepts a vector of numbers representing the rows of the selected species, or a vector of names of the selected species.
+
+\item[\code{driver.A}] numeric vector with driver values.
+
+\item[\code{driver.B}] numeric vector with driver values.
+
+\item[\code{drivers}] dataframe with drivers. It should have the columns: \emph{age}
+
+\item[\code{burnin}] boolean, generates a warming-up period for the population model of a length of five times the maximum age of the virtual taxa.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+The model starts with a population of 100 individuals with random ages, in the range [1, maximum age], taken from a uniform distribution (all ages are equiprobable). For each environmental suitability value, including the burn-in period, the model performs the following operations:
+
+\begin{itemize}
+
+\item Aging: adds one year to the age of the individuals.
+\item Mortality due to senescence: individuals reaching the maximum age are removed from the simulation.
+\item Local extinction and immigration If the number of individuals drops to zero, the population is replaced by a "seed bank" of \#' 100 individuals with age zero, and the simulation jumps to step 7.. This is intended to simulate the arrival of seeds from nearby regions, and will only lead to population growth if environmental suitability is higher than zero.
+\item Plant growth: Applies a plant growth equation to compute the biomass of every individual.
+\item Carrying capacity: If maximum population biomass is reached, individuals are iteratively selected for removal according to a mortality risk curve computed by the equation \eqn{P_{m} = 1 - sqrt(a/A)}{}, were \emph{Pm} is the probability of mortality, \emph{a} is the age of the given individual, and \emph{A} is the maximum age reached by the virtual taxa. This curve gives removal preference to younger individuals, matching observed patterns in natural populations.
+\item Pollen productivity: In each time step the model computes the pollen productivity (in relative values) of the population using the equation \eqn{P_{t} = \sum x_{it} \times max(S_{t}, B)}{}, where \emph{t} is time (a given simulation time step), \emph{P} is the pollen productivity of the population at a given time, \emph{x\_i} represents the biomass of every adult individual, \emph{S} is the environmental suitability at the given time, \emph{B} is the contribution of biomass to pollen productivity regardless of environmental suitability (\emph{pollen.control} parameter in the simulation, 0 by default). If \emph{B} equals 1, \emph{P} is equal to the total biomass sum of the adult population, regardless of the environmental suitability. If \emph{B} equals 0, pollen productivity depends entirely on environmental suitability values.
+\item Reproduction: Generates as many seeds as reproductive individuals are available multiplied by the maximum fecundity and the environmental suitability of the given time.
+
+\end{itemize}
+
+The model returns a table with climatic suitability, pollen production, and population size (reproductive individuals only) per simulation year. Figure 10 shows the results of the population model when applied to the example virtual species.
+\end{Details}
+%
+\begin{Value}
+A list of dataframes, each one of them with the results of one simulation. Each dataframe has the columns:
+\begin{itemize}
+
+\item \emph{Time} integer, ages in years. Negative ages indicate the burn-in period.
+\item \emph{Pollen} numeric, pollen counts
+\item \emph{Population.mature} numeric, number of mature individuals.
+\item \emph{Population.immatre} numeric, number of immature individuals.
+\item \emph{Population.viable.seeds} numeric, number of viable seeds generated each year.
+\item \emph{Suitability} numeric, environmental suitability computed from the driver by the normal function/s defining the taxon niche.
+\item \emph{Biomass.total} numeric, overall biomass of the population.
+\item \emph{Biomass.mature} numeric, sum of biomass of mature individuals.
+\item \emph{Biomass.immature} numeric, sum of biomass of immature individuals.
+\item \emph{Mortality.mature} numeric, number of mature individuals dead each year.
+\item \emph{Mortality.immature} numeric, same as above for immature individuals.
+\item \emph{Driver.A} numeric, values of driver A.
+\item \emph{Driver.B} numeric, values of driver B, if available, and NA otherwise.
+\item \emph{Period} qualitative, with value "Burn-in" for burn-in period, and "Simulation" otherwise.
+
+\end{itemize}
+
+\end{Value}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{parametersDataframe}{parametersDataframe}}, \code{\LinkA{fixParametersTypes}{fixParametersTypes}}, \code{\LinkA{plotSimulation}{plotSimulation}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+driver <- simulateDriver(
+ random.seed = 10,
+ time = 1:1000,
+ autocorrelation.length = 200,
+ output.min = 0,
+ output.max = 100,
+ rescale = TRUE
+ )
+
+#preparing parameters
+parameters <- parametersDataframe(rows=2)
+parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+parameters[2,] <- c("Species 1", 500, 100, 10, 0.02, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+parameters <- fixParametersTypes(x=parameters)
+
+#simulating population dynamics
+sim.output <- simulatePopulation(
+ parameters=parameters,
+ driver.A=driver
+ )
+
+#checking output for Species 1
+str(sim.output[[1]])
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{simulation}{List with two simulation outputs.}{simulation}
+\keyword{datasets}{simulation}
+%
+\begin{Description}\relax
+A list of dataframes with two slots, output of \code{\LinkA{simulatePopulation}{simulatePopulation}}. Each slot corresponds to a virtual taxon from the \code{\LinkA{parameters}{parameters}} dataframe. Each dataframe has the following columns:
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(simulation)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+numeric vector of length 10000.
+\end{Format}
+%
+\begin{Details}\relax
+\begin{itemize}
+
+\item \emph{Time} integer, ages in years. Negative ages indicate the burn-in period.
+\item \emph{Pollen} numeric, pollen counts
+\item \emph{Population.mature} numeric, number of mature individuals.
+\item \emph{Population.immatre} numeric, number of immature individuals.
+\item \emph{Population.viable.seeds} numeric, number of viable seeds generated each year.
+\item \emph{Suitability} numeric, environmental suitability computed from the driver by the normal function/s defining the taxon niche.
+\item \emph{Biomass.total} numeric, overall biomass of the population.
+\item \emph{Biomass.mature} numeric, sum of biomass of mature individuals.
+\item \emph{Biomass.immature} numeric, sum of biomass of immature individuals.
+\item \emph{Mortality.mature} numeric, number of mature individuals dead each year.
+\item \emph{Mortality.immature} numeric, same as above for immature individuals.
+\item \emph{Driver.A} numeric, values of driver A.
+\item \emph{Driver.B} numeric, values of driver B, if available, and NA otherwise.
+\item \emph{Period} qualitative, with value "Burn-in" for burn-in period, and "Simulation" otherwise.
+
+\end{itemize}
+
+\end{Details}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{simulatePopulation}{simulatePopulation}}, \code{\LinkA{plotSimulation}{plotSimulation}}
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{toRegularTime}{Reinterpolates aggregated simulations into regular time.}{toRegularTime}
+%
+\begin{Description}\relax
+Takes the output of \code{\LinkA{aggregateSimulation}{aggregateSimulation}}, and interpolates it into a regular time grid.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+toRegularTime(
+  x,
+  time.column="Time",
+  interpolation.interval,
+  columns.to.interpolate=c("Suitability", "Driver.A", "Pollen")
+  )
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] list, output of \code{\LinkA{aggregateSimulation}{aggregateSimulation}}.
+
+\item[\code{time.column}] character string, default value is "Time".
+
+\item[\code{interpolation.interval}] integer, in years, time length encompassed by each sample.
+
+\item[\code{columns.to.interpolate}] character string or character vector, columns of simulation output to be interpolated. Any subset of: "Pollen", "Population.mature", "Population.immature", "Population.viable.seeds", "Suitability", "Biomass.total", "Biomass.mature", "Biomass.immature", "Mortality.mature", "Mortality.immature", "Driver.A", "Driver.B".
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+The function takes the input list, and on each dataframe it fits a \code{\LinkA{loess}{loess}} model of the form \code{y \textasciitilde{} x}, where \code{y} is any column given by \code{columns.to.interpolate} and \code{x} is the column given by the \code{time.column} argument. The model is used to interpolate column \code{y} on a regular time series of intervals equal to \code{interpolation.interval}.
+\end{Details}
+%
+\begin{Value}
+A list of dataframes with the same structure as the input list. Each dataframe has the columns "Time" (now regular), and any column listed in \code{columns.to.interpolate}.
+\end{Value}
+%
+\begin{Author}\relax
+Blas M. Benito  <blasbenito@gmail.com>
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{simulateAccumulationRate}{simulateAccumulationRate}}, \code{\LinkA{aggregateSimulation}{aggregateSimulation}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+#generating driver
+driver <- simulateDriver(
+ random.seed = 10,
+ time = 1:1000,
+ autocorrelation.length = 200,
+ output.min = 0,
+ output.max = 100,
+ rescale = TRUE
+ )
+
+#preparing parameters
+parameters <- parametersDataframe(rows=2)
+parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+parameters <- fixParametersTypes(x=parameters)
+
+#simulating population dynamics
+sim.output <- simulatePopulation(
+ parameters=parameters,
+ driver.A=driver,
+ driver.B=NULL
+ )
+
+#generating accumulation rate
+acc.rate <- simulateAccumulationRate(
+ seed=50,
+ time=1:1000,
+ output.min=10,
+ output.max=40,
+ direction=1,
+ plot=TRUE
+ )
+
+#aggregating simulated data
+sim.output.aggregated <- aggregateSimulation(
+ simulation.output=sim.output,
+ accumulation.rate=acc.rate,
+ sampling.intervals=3
+ )
+
+#comparing simulations
+sim.output.regular <- toRegularTime(
+ x=sim.output.aggregated,
+ time.column="Time",
+ interpolation.interval=20,
+ columns.to.interpolate=c("Driver.A", "Pollen")
+ )
+
+\end{ExampleCode}
+\end{Examples}
+\printindex{}
+\end{document}

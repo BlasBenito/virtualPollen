@@ -1,0 +1,88 @@
+\begin{theindex}
+
+  \item $*$Topic{\relax \fontsize  {12}{14}\selectfont  \ \textbf  {datasets}}
+    \subitem \texttt  {driverA}, \hyperpage{7}
+    \subitem \texttt  {driverB}, \hyperpage{8}
+    \subitem \texttt  {drivers}, \hyperpage{8}
+    \subitem \texttt  {parameters}, \hyperpage{10}
+    \subitem \texttt  {simulation}, \hyperpage{24}
+  \item \texttt  {\Rpercent {}not-in\Rpercent {}}, \hyperpage{27}
+
+  \indexspace
+
+  \item \texttt  {acf}, \hyperindexformat{\textit}{2, 3}
+  \item \texttt  {acfToDf}, \hyperpage{2}, 
+		\hyperindexformat{\textit}{14}
+  \item \texttt  {aggregateSimulation}, \hyperpage{3}, 
+		\hyperindexformat{\textit}{19}, 
+		\hyperindexformat{\textit}{25, 26}
+
+  \indexspace
+
+  \item \texttt  {compareSimulations}, \hyperpage{5}, 
+		\hyperindexformat{\textit}{16}
+  \item \texttt  {cowplot}, \hyperindexformat{\textit}{14}
+
+  \indexspace
+
+  \item \texttt  {driverA}, \hyperpage{7}
+  \item \texttt  {driverB}, \hyperpage{8}
+  \item \texttt  {drivers}, \hyperpage{8}
+
+  \indexspace
+
+  \item \texttt  {fixParametersTypes}, \hyperpage{9}, 
+		\hyperindexformat{\textit}{10}, 
+		\hyperindexformat{\textit}{12--14}, 
+		\hyperindexformat{\textit}{21}, 
+		\hyperindexformat{\textit}{24}
+
+  \indexspace
+
+  \item \texttt  {ggplot2}, \hyperindexformat{\textit}{2}, 
+		\hyperindexformat{\textit}{11, 12}, 
+		\hyperindexformat{\textit}{14}
+
+  \indexspace
+
+  \item \texttt  {loess}, \hyperindexformat{\textit}{26}
+
+  \indexspace
+
+  \item \texttt  {parameters}, \hyperpage{10}, 
+		\hyperindexformat{\textit}{24}
+  \item \texttt  {parametersCheck}, \hyperindexformat{\textit}{11}, 
+		\hyperpage{11}
+  \item \texttt  {parametersDataframe}, 
+		\hyperindexformat{\textit}{9--12}, \hyperpage{12}, 
+		\hyperindexformat{\textit}{21}, 
+		\hyperindexformat{\textit}{24}
+  \item \texttt  {plotAcf}, \hyperpage{14}
+  \item \texttt  {plotSimulation}, \hyperindexformat{\textit}{6}, 
+		\hyperpage{15}, \hyperindexformat{\textit}{24, 25}
+
+  \indexspace
+
+  \item \texttt  {rescaleVector}, \hyperpage{17}, 
+		\hyperindexformat{\textit}{20, 21}
+
+  \indexspace
+
+  \item \texttt  {set.seed}, \hyperindexformat{\textit}{18}
+  \item \texttt  {simulateAccumulationRate}, 
+		\hyperindexformat{\textit}{3, 4}, \hyperpage{18}, 
+		\hyperindexformat{\textit}{26}
+  \item \texttt  {simulateDriver}, \hyperindexformat{\textit}{7--9}, 
+		\hyperpage{20}, \hyperindexformat{\textit}{21}
+  \item \texttt  {simulatePopulation}, \hyperindexformat{\textit}{3--8}, 
+		\hyperindexformat{\textit}{10--16}, 
+		\hyperindexformat{\textit}{18}, 
+		\hyperindexformat{\textit}{20}, \hyperpage{21}, 
+		\hyperindexformat{\textit}{24, 25}
+  \item \texttt  {simulation}, \hyperpage{24}
+
+  \indexspace
+
+  \item \texttt  {toRegularTime}, \hyperpage{25}
+
+\end{theindex}
