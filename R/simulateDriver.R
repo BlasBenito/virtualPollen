@@ -4,7 +4,7 @@
 #'
 #' @usage simulateDriver(
 #'   random.seed = 50,
-#'   time = 1:1000,
+#'   time = 1:10000,
 #'   autocorrelation.length = 100,
 #'   output.min = 0,
 #'   output.max = 100,
@@ -12,7 +12,7 @@
 #'   )
 #'
 #' @param random.seed integer, seed to be used by \code{set.seed()}. Default is 50.
-#' @param time integer, or numeric vector of integers with constant intervals. If a single integer is provided, a time sequence is generated from 0 to the given integer as \emph{seq(0, time, by = 1)}. Default is 1:1000.
+#' @param time integer, or numeric vector of integers with constant intervals. If a single integer is provided, a time sequence is generated from 1 to the given integer as \emph{seq(1, time, by = 1)}. Default is 1:10000.
 #' @param autocorrelation.length integer, represents the length of the convolution filter to be used to impose a particular temporal structure on the time series. Default is 100, equivalent to a filter composed by a hundred of ones.
 #' @param output.min numeric, minimum value of the output time series. Used as input for \strong{rescaleVector}. Default is 0.
 #' @param output.max numeric, maximum value of the output time series. Used as input for \strong{rescaleVector}. Default is 100.
@@ -68,7 +68,7 @@ simulateDriver = function(random.seed = 50,
 
   #if not a vector, forces "time" as integer and creates vector starting at 0
   if(!is.vector(time)){
-    time = seq(0, floor(time), by=1)
+    time = seq(1, floor(time), by=1)
     if(length(time)==0){
       error("Time needs to be an integer higher than 1, or a vector of integers.")
     }

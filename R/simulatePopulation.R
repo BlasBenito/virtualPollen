@@ -107,12 +107,12 @@ simulatePopulation = function(parameters=NULL,
 
   } else {
 
-    if(sum(colnames(parameters) %not-in% c("label", "maximum.age", "reproductive.age", "fecundity", "growth.rate", "pollen.control", "maximum.biomass", "carrying.capacity", "driver.A.weight", "driver.B.weight", "niche.A.mean", "niche.A.sd", "niche.B.mean", "niche.B.sd", "autocorrelation.length.A", "autocorrelation.length.B")) != 0){
+    if(sum(!(colnames(parameters) %in% c("label", "maximum.age", "reproductive.age", "fecundity", "growth.rate", "pollen.control", "maximum.biomass", "carrying.capacity", "driver.A.weight", "driver.B.weight", "niche.A.mean", "niche.A.sd", "niche.B.mean", "niche.B.sd", "autocorrelation.length.A", "autocorrelation.length.B"))) != 0){
       stop(paste("The following column/s of 'parameters' seem to be missing: ", colnames(parameters)[colnames(parameters) %not-in% c("label", "maximum.age", "reproductive.age", "fecundity", "growth.rate", "pollen.control", "maximum.biomass", "carrying.capacity", "driver.A.weight", "driver.B.weight", "niche.A.mean", "niche.A.sd", "niche.B.mean", "niche.B.sd", "autocorrelation.length.A", "autocorrelation.length.B")], sep=""))
 
     }
-
   }
+
 
   #function to check if driver B is available
   is.driver.B.available <- function(driver.B){
@@ -141,13 +141,18 @@ simulatePopulation = function(parameters=NULL,
 
         drivers.input="vector"
 
+        #create fake driver.B if absent
+        if(driver.B.available==FALSE){
+          driver.B = rep(1, length(driver.A))
+        }
+
       }
 
     } else {
       #CHECKING drivers dataframe
 
       #checking columns
-      if(sum(colnames(drivers) %not-in% c("time", "driver", "autocorrelation.length", "value")) != 0){
+      if(sum(!(colnames(drivers) %in% c("time", "driver", "autocorrelation.length", "value"))) != 0){
         stop(paste("The following column/s of 'drivers' seem to be missing: ", colnames(parameters)[colnames(parameters) %not-in% c("time", "driver", "autocorrelation.length", "value")], sep=""))
       } else {
 
@@ -157,7 +162,7 @@ simulatePopulation = function(parameters=NULL,
           #giving preference to dataframe format
           driver.A = NULL
           driver.B = NULL
-          driver.B.available = FALSE
+          driver.B.available = TRUE
         }
     }
 
@@ -213,14 +218,17 @@ simulatePopulation = function(parameters=NULL,
 
     message(paste("Simulating taxon: ", parameters[i, "label"], sep=""), "\n")
 
+
     #dataframe rows into list
     parameters.list = list()
     for(j in 1:ncol(parameters)){
       parameters.list[[paste0(colnames(parameters)[j])]] = parameters[i,j]
     }
 
+
     #parameters from list to environment
     list2env(parameters.list, envir=environment())
+
 
     #GETTING DRIVER VALUES
     #IF DRIVERS PROVIDED AS DATAFRAME
@@ -228,25 +236,49 @@ simulatePopulation = function(parameters=NULL,
 
       #if the autocorrelation.lengt available in parameters for species i is not in drivers, the first autocorrelation length available in drivers is assigned
       if(!(autocorrelation.length.A %in% unique(drivers$autocorrelation.length)) & !(autocorrelation.length.B %in% unique(drivers$autocorrelation.length))){
-        message("Autocorrelation lengths in parameters do not match autocorrelation lengths in drivers.")
+        message(paste("Autocorrelation lengths in parameters do not match autocorrelation lengths in drivers, I am getting the first value of autocorrelation.length available in drivers: ", unique(drivers$autocorrelation.length)[1], sep=""))
         autocorrelation.length.A = autocorrelation.length.B = unique(drivers$autocorrelation.length)[1]
 
       }
 
       #getting driver values
-      driver.A = drivers[drivers$driver=="A" & drivers$autocorrelation.length==autocorrelation.length.A, "value"]
-      driver.B = drivers[drivers$driver=="B" & drivers$autocorrelation.length==autocorrelation.length.B, "value"]
+      driver.A.ready = drivers[drivers$driver=="A" & drivers$autocorrelation.length==autocorrelation.length.A, "value"]
+      driver.B.ready = drivers[drivers$driver=="B" & drivers$autocorrelation.length==autocorrelation.length.B, "value"]
+
+      #checking if drivers are NA
+      if(sum(is.na(driver.A.ready))==length(driver.A.ready)){
+        stop("Driver A is made of NA, something is wrong with the drivers argument.")
+      }
+
+      if(sum(is.na(driver.B.ready))==length(driver.B.ready)){
+        driver.B.ready = rep(1, length(driver.A.ready))
+        driver.B.weight=0
+        message("Driver B is missing, setting driver.B.weight to 0.")
+      }
 
     }
 
 
-    #replacing by ones if they are NA in dataframe
-    if (sum(is.na(driver.A))==length(driver.A)){driver.A = rep(1, length(driver.A))}
-    if(driver.B.available==TRUE){
-      if (sum(is.na(driver.B))==length(driver.B)){driver.B = rep(1, length(driver.B))}
-    } else {
-      driver.B = rep(1, length(driver.A))
+    #if input drivers are vectors
+    if(drivers.input=="vector"){
+      driver.A.ready = driver.A
+
+      #setting driver.B.weight to 0 if driver.B was missing
+      if(driver.B.available==FALSE){
+        driver.B.ready = rep(1, length(driver.A.ready))
+        driver.B.weight=0
+        message("Driver B is missing, setting driver.B.weight to 0.")
+      } else {
+        driver.B.ready = driver.B
+      }
     }
+
+
+    #checking niche parameters
+    if(is.na(niche.A.sd)==TRUE | niche.A.sd == 0){niche.A.sd = 1}
+    if(is.na(niche.B.sd)==TRUE | niche.B.sd == 0){niche.B.sd = 1}
+    if(is.na(niche.A.mean)==TRUE){niche.A.mean = 0}
+    if(is.na(niche.B.mean)==TRUE){niche.B.mean = 0}
 
 
     #COMPUTING MAXIMUM DENSITY (output of normal function) OF EACH DRIVER
@@ -254,11 +286,11 @@ simulatePopulation = function(parameters=NULL,
     max.possible.density.driver.B = dnorm(niche.B.mean, mean=niche.B.mean, sd=niche.B.sd)
 
 
-    #1 computes suitability over driver.A using dnorm, niche.A.mean, and niche.A.sd, and multiplies it by driver.A.weight
-    suitability.A = rescaleSuitability(dnorm(driver.A, mean=niche.A.mean, sd=niche.A.sd), max.possible.density.driver.A) * driver.A.weight
+    #computes suitability over driver.A using dnorm, niche.A.mean, and niche.A.sd, and multiplies it by driver.A.weight
+    suitability.A = rescaleSuitability(dnorm(driver.A.ready, mean=niche.A.mean, sd=niche.A.sd), max.possible.density.driver.A) * driver.A.weight
 
-    #2 same over driver.B
-    suitability.B = rescaleSuitability(dnorm(driver.B, mean=niche.B.mean, sd=niche.B.sd), max.possible.density.driver.B) * driver.B.weight
+    #same over driver.B
+    suitability.B = rescaleSuitability(dnorm(driver.B.ready, mean=niche.B.mean, sd=niche.B.sd), max.possible.density.driver.B) * driver.B.weight
 
     #sums the results of both is driver.B is available
     suitability = suitability.A + suitability.B
@@ -381,6 +413,20 @@ simulatePopulation = function(parameters=NULL,
 
     } #end of loop through suitability values
 
+
+    #removing drivers that were not used
+    if(driver.A.weight == 0){
+      driver.A.write=rep(NA, length(driver.A.ready))
+    } else {
+      driver.A.write=driver.A.ready
+    }
+
+    if(driver.B.weight == 0 | driver.B.available == FALSE){
+      driver.B.write=rep(NA, length(driver.B.ready))
+    } else {
+      driver.B.write=driver.B.ready
+    }
+
     #data frame
     output.df = data.frame(Time=c(-length.burnin.suitability:-1, 1:(length(suitability))),
                            Pollen=pollen.count,
@@ -393,8 +439,8 @@ simulatePopulation = function(parameters=NULL,
                            Biomass.immature=population.biomass.immature,
                            Mortality.mature=mortality.mature,
                            Mortality.immature=mortality.immature,
-                           Driver.A=c(rep(NA, length.burnin.suitability), driver.A),
-                           Driver.B=c(rep(NA, length.burnin.suitability), driver.B),
+                           Driver.A=c(rep(NA, length.burnin.suitability), driver.A.write),
+                           Driver.B=c(rep(NA, length.burnin.suitability), driver.B.write),
                            Period=c(rep("Burn-in", length.burnin.suitability), rep("Simulation", length(suitability))))
 
 
@@ -403,8 +449,6 @@ simulatePopulation = function(parameters=NULL,
 
   } #end of iteration through selected species
 
-  #names(output.list) = parameters[selected.species, "label"]
-
   return(output.list)
 
-} #end of function
+}
