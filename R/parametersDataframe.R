@@ -38,28 +38,28 @@
 #'parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
 #'
 #' @export
-parametersDataframe = function(rows=1){
+parametersDataframe <- function(rows = 1){
 
-  if(is.integer(rows)==FALSE){rows = ceiling(rows)}
-  if(rows==0){rows = 1}
+  if(is.integer(rows) == FALSE){rows = ceiling(rows)}
+  if(rows == 0){rows = 1}
 
-  output.df = data.frame(label=rep(NA, rows),
-                         maximum.age=rep(NA, rows),
-                         reproductive.age=rep(NA, rows),
-                         fecundity=rep(NA, rows),
-                         growth.rate=rep(NA, rows),
-                         pollen.control=rep(NA, rows),
-                         maximum.biomass=rep(NA, rows),
-                         carrying.capacity=rep(NA, rows),
-                         driver.A.weight=rep(NA, rows),
-                         driver.B.weight=rep(NA, rows),
-                         niche.A.mean=rep(NA, rows),
-                         niche.A.sd=rep(NA, rows),
-                         niche.B.mean=rep(NA, rows),
-                         niche.B.sd=rep(NA, rows),
-                         autocorrelation.length.A=rep(NA, rows),
-                         autocorrelation.length.B=rep(NA, rows),
-                         stringsAsFactors = FALSE)
+  output.df <- data.frame(label = rep(NA, rows),
+                         maximum.age = rep(NA, rows),
+                         reproductive.age = rep(NA, rows),
+                         fecundity = rep(NA, rows),
+                         growth.rate = rep(NA, rows),
+                         pollen.control = rep(NA, rows),
+                         maximum.biomass = rep(NA, rows),
+                         carrying.capacity = rep(NA, rows),
+                         driver.A.weight = rep(NA, rows),
+                         driver.B.weight = rep(NA, rows),
+                         niche.A.mean = rep(NA, rows),
+                         niche.A.sd = rep(NA, rows),
+                         niche.B.mean = rep(NA, rows),
+                         niche.B.sd = rep(NA, rows),
+                         autocorrelation.length.A = rep(NA, rows),
+                         autocorrelation.length.B = rep(NA, rows),
+                         stringsAsFactors  =  FALSE)
   return(output.df)
 
 }

@@ -22,9 +22,15 @@
 #'
 #' @param parameters dataframe with parameters.
 #' @param species if "all" or "ALL", all species in "parameters" are simulated It also accepts a vector of numbers representing the rows of the selected species, or a vector of names of the selected species.
-#' @param driver.A numeric vector with driver values.
-#' @param driver.B numeric vector with driver values.
-#' @param drivers dataframe with drivers. It should have the columns: \emph{age}
+#' @param driver.A numeric vector with driver values. Typically produced by \code{\link{simulateDriver}}.
+#' @param driver.B numeric vector with driver values.  Typically produced by \code{\link{simulateDriver}}. Must have same length as \code{driver.A}.
+#' @param drivers dataframe with drivers produced by \code{\link{simulateDriverS}}. It should have the columns:
+#' \itemize{
+#'   \item \emph{time} integer.
+#'   \item \emph{driver} character, values are \code{A} and \code{B}
+#'   \item \emph{autocorrelation.length} numeric, values are 200, 600, and 1800.
+#'   \item \emph{value} numeric, value of the driver for the given \emph{time}.
+#' }
 #' @param burnin boolean, generates a warming-up period for the population model of a length of five times the maximum age of the virtual taxa.
 #'
 #' @details The model starts with a population of 100 individuals with random ages, in the range [1, maximum age], taken from a uniform distribution (all ages are equiprobable). For each environmental suitability value, including the burn-in period, the model performs the following operations:
@@ -89,7 +95,7 @@
 #'str(sim.output[[1]])
 #'
 #' @export
-simulatePopulation = function(parameters=NULL,
+simulatePopulation <- function(parameters=NULL,
                               species="all",
                               driver.A=NULL,
                               driver.B=NULL,
@@ -128,7 +134,7 @@ simulatePopulation = function(parameters=NULL,
   if(is.null(drivers)==TRUE | is.data.frame(drivers)==FALSE){
 
     #checking driver B
-    driver.B.available = is.driver.B.available(driver.B)
+    driver.B.available <- is.driver.B.available(driver.B)
 
     #checking driver.A
     if(is.null(driver.A)==TRUE | is.vector(driver.A)==FALSE){
@@ -139,11 +145,11 @@ simulatePopulation = function(parameters=NULL,
 
       } else {
 
-        drivers.input="vector"
+        drivers.input<-"vector"
 
         #create fake driver.B if absent
         if(driver.B.available==FALSE){
-          driver.B = rep(1, length(driver.A))
+          driver.B <- rep(1, length(driver.A))
         }
 
       }
@@ -157,12 +163,12 @@ simulatePopulation = function(parameters=NULL,
       } else {
 
           #switch to dataframe input
-          drivers.input="data.frame"
+          drivers.input<-"data.frame"
 
           #giving preference to dataframe format
-          driver.A = NULL
-          driver.B = NULL
-          driver.B.available = TRUE
+          driver.A <- NULL
+          driver.B <- NULL
+          driver.B.available <- TRUE
         }
     }
 
@@ -170,12 +176,12 @@ simulatePopulation = function(parameters=NULL,
   #CHECKING AND SELECTING species
   #----------------
   #creating dictionary of species names and indexes
-  names.dictionary = data.frame(name=parameters$label, index=1:nrow(parameters))
+  names.dictionary <- data.frame(name=parameters$label, index=1:nrow(parameters))
 
   #if null or "all", selects all species
   if(is.null(species) | species %in% c("all", "All", "ALL")){
 
-    selected.species = names.dictionary$index
+    selected.species <- names.dictionary$index
 
   } else {
 
@@ -186,10 +192,10 @@ simulatePopulation = function(parameters=NULL,
 
     #correct species names or indexes
     if(species %in% names.dictionary$names){
-      selected.species = names.dictionary[names.dictionary$name %in% species, "index"]
+      selected.species <- names.dictionary[names.dictionary$name %in% species, "index"]
     }
     if(species %in% names.dictionary$index){
-      selected.species = species
+      selected.species <- species
 
     }
   }
@@ -197,17 +203,17 @@ simulatePopulation = function(parameters=NULL,
 
   #generating output list
   #----------------
-  output.list = list()
+  output.list <- list()
 
 
   #function to rescale suitability
   #----------------
-  rescaleSuitability=function(predicted.density, max.observed.density){
-    new.min=0
-    new.max=1
-    old.min=0
-    old.max=max.observed.density
-    scaled.density=((predicted.density - old.min) / (old.max - old.min)) * (new.max - new.min) + new.min
+  rescaleSuitability <- function(predicted.density, max.observed.density){
+    new.min <- 0
+    new.max <- 1
+    old.min <- 0
+    old.max <- max.observed.density
+    scaled.density<-((predicted.density - old.min) / (old.max - old.min)) * (new.max - new.min) + new.min
     return(scaled.density)
   }
 
@@ -220,9 +226,9 @@ simulatePopulation = function(parameters=NULL,
 
 
     #dataframe rows into list
-    parameters.list = list()
+    parameters.list <- list()
     for(j in 1:ncol(parameters)){
-      parameters.list[[paste0(colnames(parameters)[j])]] = parameters[i,j]
+      parameters.list[[paste0(colnames(parameters)[j])]] <- parameters[i,j]
     }
 
 
@@ -237,12 +243,12 @@ simulatePopulation = function(parameters=NULL,
       #if the autocorrelation.lengt available in parameters for species i is not in drivers, the first autocorrelation length available in drivers is assigned
       if(!(autocorrelation.length.A %in% unique(drivers$autocorrelation.length)) & !(autocorrelation.length.B %in% unique(drivers$autocorrelation.length))){
         message(paste("Autocorrelation lengths in parameters do not match autocorrelation lengths in drivers, I am getting the first value of autocorrelation.length available in drivers: ", unique(drivers$autocorrelation.length)[1], sep=""))
-        autocorrelation.length.A = autocorrelation.length.B = unique(drivers$autocorrelation.length)[1]
+        autocorrelation.length.A <- autocorrelation.length.B <- unique(drivers$autocorrelation.length)[1]
 
       }
 
       #getting driver values
-      driver.A.ready = drivers[drivers$driver=="A" & drivers$autocorrelation.length==autocorrelation.length.A, "value"]
+      driver.A.ready <- drivers[drivers$driver=="A" & drivers$autocorrelation.length==autocorrelation.length.A, "value"]
       driver.B.ready = drivers[drivers$driver=="B" & drivers$autocorrelation.length==autocorrelation.length.B, "value"]
 
       #checking if drivers are NA
@@ -251,8 +257,8 @@ simulatePopulation = function(parameters=NULL,
       }
 
       if(sum(is.na(driver.B.ready))==length(driver.B.ready)){
-        driver.B.ready = rep(1, length(driver.A.ready))
-        driver.B.weight=0
+        driver.B.ready <- rep(1, length(driver.A.ready))
+        driver.B.weight <- 0
         message("Driver B is missing, setting driver.B.weight to 0.")
       }
 
@@ -261,81 +267,81 @@ simulatePopulation = function(parameters=NULL,
 
     #if input drivers are vectors
     if(drivers.input=="vector"){
-      driver.A.ready = driver.A
+      driver.A.ready <- driver.A
 
       #setting driver.B.weight to 0 if driver.B was missing
       if(driver.B.available==FALSE){
-        driver.B.ready = rep(1, length(driver.A.ready))
-        driver.B.weight=0
+        driver.B.ready <- rep(1, length(driver.A.ready))
+        driver.B.weight <- 0
         message("Driver B is missing, setting driver.B.weight to 0.")
       } else {
-        driver.B.ready = driver.B
+        driver.B.ready <- driver.B
       }
     }
 
 
     #checking niche parameters
-    if(is.na(niche.A.sd)==TRUE | niche.A.sd == 0){niche.A.sd = 1}
-    if(is.na(niche.B.sd)==TRUE | niche.B.sd == 0){niche.B.sd = 1}
-    if(is.na(niche.A.mean)==TRUE){niche.A.mean = 0}
-    if(is.na(niche.B.mean)==TRUE){niche.B.mean = 0}
+    if(is.na(niche.A.sd)==TRUE | niche.A.sd == 0){niche.A.sd <- 1}
+    if(is.na(niche.B.sd)==TRUE | niche.B.sd == 0){niche.B.sd <- 1}
+    if(is.na(niche.A.mean)==TRUE){niche.A.mean <- 0}
+    if(is.na(niche.B.mean)==TRUE){niche.B.mean <- 0}
 
 
     #COMPUTING MAXIMUM DENSITY (output of normal function) OF EACH DRIVER
-    max.possible.density.driver.A = dnorm(niche.A.mean, mean=niche.A.mean, sd=niche.A.sd)
-    max.possible.density.driver.B = dnorm(niche.B.mean, mean=niche.B.mean, sd=niche.B.sd)
+    max.possible.density.driver.A <- dnorm(niche.A.mean, mean=niche.A.mean, sd=niche.A.sd)
+    max.possible.density.driver.B <- dnorm(niche.B.mean, mean=niche.B.mean, sd=niche.B.sd)
 
 
     #computes suitability over driver.A using dnorm, niche.A.mean, and niche.A.sd, and multiplies it by driver.A.weight
-    suitability.A = rescaleSuitability(dnorm(driver.A.ready, mean=niche.A.mean, sd=niche.A.sd), max.possible.density.driver.A) * driver.A.weight
+    suitability.A <- rescaleSuitability(dnorm(driver.A.ready, mean=niche.A.mean, sd=niche.A.sd), max.possible.density.driver.A) * driver.A.weight
 
     #same over driver.B
-    suitability.B = rescaleSuitability(dnorm(driver.B.ready, mean=niche.B.mean, sd=niche.B.sd), max.possible.density.driver.B) * driver.B.weight
+    suitability.B <- rescaleSuitability(dnorm(driver.B.ready, mean=niche.B.mean, sd=niche.B.sd), max.possible.density.driver.B) * driver.B.weight
 
     #sums the results of both is driver.B is available
-    suitability = suitability.A + suitability.B
+    suitability <- suitability.A + suitability.B
 
     #rounding to three decimal places
-    suitability = round(suitability, 3)
+    suitability <- round(suitability, 3)
 
 
     #BURN-IN PERIOD ADDED TO SUITABILITY
     if(burnin==TRUE){
 
-      burnin.suitability = jitter(c(rep(1, maximum.age*5), seq(1, suitability[1], length.out = maximum.age*5)), amount=0.01)
-      burnin.suitability[burnin.suitability < 0]=0
-      burnin.suitability[burnin.suitability > 1]=1
-      length.burnin.suitability=length(burnin.suitability)
-      burnin.suitability = c(burnin.suitability, suitability)
+      burnin.suitability <- jitter(c(rep(1, maximum.age*5), seq(1, suitability[1], length.out = maximum.age*5)), amount=0.01)
+      burnin.suitability[burnin.suitability < 0]<-0
+      burnin.suitability[burnin.suitability > 1]<-1
+      length.burnin.suitability <- length(burnin.suitability)
+      burnin.suitability <- c(burnin.suitability, suitability)
 
     } else {
 
-      burnin.suitability = suitability
+      burnin.suitability <- suitability
 
     }
 
 
     #VECTORS TO SAVE RESULTS
-    pollen.count = vector()
-    population.mature = vector()
-    population.immature = vector()
-    population.seeds = vector()
-    population.biomass = vector()
-    population.biomass.mature = vector()
-    population.biomass.immature = vector()
-    mortality.mature = vector()
-    mortality.immature = vector()
+    pollen.count <- vector()
+    population.mature <- vector()
+    population.immature <- vector()
+    population.seeds <- vector()
+    population.biomass <- vector()
+    population.biomass.mature <- vector()
+    population.biomass.immature <- vector()
+    mortality.mature <- vector()
+    mortality.immature <- vector()
 
 
     #SCALING AGE
-    reproductive.age = reproductive.age / maximum.age
-    scaled.year = 1/maximum.age
-    maximum.age.original = maximum.age
-    maximum.age = 1
+    reproductive.age <- reproductive.age / maximum.age
+    scaled.year <- 1/maximum.age
+    maximum.age.original <- maximum.age
+    maximum.age <- 1
 
 
     #STARTING POPULATION
-    population = sample(seq(0, 1, by=scaled.year), 100, replace=TRUE)
+    population <- sample(seq(0, 1, by=scaled.year), 100, replace=TRUE)
 
 
     #EXECUTING SIMULATION, one iteration per suitaiblity value
@@ -343,109 +349,109 @@ simulatePopulation = function(parameters=NULL,
     for(suitability.i in burnin.suitability){
 
       #aging
-      population = population + scaled.year
+      population <- population + scaled.year
 
       #death due to senescence
-      population = population[population < maximum.age]
+      population <- population[population < maximum.age]
 
       #population drops to 0
       if (length(population) == 0){
 
         #local extinction, replaces population with a seedbank
-        population = rep(0, floor(100 * suitability.i))
+        population <- rep(0, floor(100 * suitability.i))
 
         #adds 0 to the output vectors
-        pollen.count = c(pollen.count, 0)
-        population.mature = c(population.mature, 0)
-        population.immature = c(population.immature, 0)
-        population.seeds = c(population.seeds, 0)
-        population.biomass = c(population.biomass, 0)
-        population.biomass.mature = c(population.biomass.mature, 0)
-        population.biomass.immature = c(population.biomass.immature, 0)
-        mortality.mature = c(mortality.mature, 0)
-        mortality.immature = c(mortality.immature, 0)
+        pollen.count <- c(pollen.count, 0)
+        population.mature <- c(population.mature, 0)
+        population.immature <- c(population.immature, 0)
+        population.seeds <- c(population.seeds, 0)
+        population.biomass <- c(population.biomass, 0)
+        population.biomass.mature <- c(population.biomass.mature, 0)
+        population.biomass.immature <- c(population.biomass.immature, 0)
+        mortality.mature <- c(mortality.mature, 0)
+        mortality.immature <- c(mortality.immature, 0)
 
         #jumps to next iteration
         next
       }
 
       #PLANT GROWTH
-      biomass =  maximum.biomass / (1 + maximum.biomass * exp(- (growth.rate * suitability.i) * (population * maximum.age.original)))
+      biomass <-  maximum.biomass / (1 + maximum.biomass * exp(- (growth.rate * suitability.i) * (population * maximum.age.original)))
 
       #MORTALITY
-      individuals.removed = vector()
+      individuals.removed <- vector()
 
       #carrying capacity is reached
       while(sum(biomass) > carrying.capacity){
 
         #removes random individual (curvilinear risk curve)
-        individual.to.remove = sample(x=length(population), size=1L, replace=TRUE, prob=1 - sqrt(population))
+        individual.to.remove <- sample(x=length(population), size=1L, replace=TRUE, prob=1 - sqrt(population))
 
         #adds the removed individuals to the list
-        individuals.removed = c(individuals.removed, population[individual.to.remove])
+        individuals.removed <- c(individuals.removed, population[individual.to.remove])
 
         #removing individuals
-        population = population[-individual.to.remove]
-        biomass = biomass[-individual.to.remove]
+        population <- population[-individual.to.remove]
+        biomass <- biomass[-individual.to.remove]
 
       }#end of while
 
       #indexes of adult individuals
-      adults = population > reproductive.age
+      adults <- population > reproductive.age
 
       #producing seeds
-      seeds = rep(0, floor(sum((biomass[adults]/maximum.biomass) * fecundity) * suitability.i))
+      seeds <- rep(0, floor(sum((biomass[adults]/maximum.biomass) * fecundity) * suitability.i))
 
       #filling output vectors
       #pollen count
-      pollen.count = c(pollen.count, sum(biomass[adults]) * max(suitability.i, pollen.control))
-      population.mature = c(population.mature, sum(adults))
-      population.immature = c(population.immature, sum(population <= reproductive.age))
-      population.seeds = c(population.seeds, length(seeds))
-      population.biomass = c(population.biomass, sum(biomass))
-      population.biomass.mature = c(population.biomass.mature, sum(biomass[adults]))
-      population.biomass.immature = c(population.biomass.immature, sum(biomass[!adults]))
-      mortality.mature = c(mortality.mature, sum(individuals.removed > reproductive.age))
-      mortality.immature = c(mortality.immature, sum(individuals.removed <= reproductive.age))
+      pollen.count <- c(pollen.count, sum(biomass[adults]) * max(suitability.i, pollen.control))
+      population.mature <- c(population.mature, sum(adults))
+      population.immature <- c(population.immature, sum(population <= reproductive.age))
+      population.seeds <- c(population.seeds, length(seeds))
+      population.biomass <- c(population.biomass, sum(biomass))
+      population.biomass.mature <- c(population.biomass.mature, sum(biomass[adults]))
+      population.biomass.immature <- c(population.biomass.immature, sum(biomass[!adults]))
+      mortality.mature <- c(mortality.mature, sum(individuals.removed > reproductive.age))
+      mortality.immature <- c(mortality.immature, sum(individuals.removed <= reproductive.age))
 
       #joining seeds to the population
-      population=c(population, seeds)
+      population <- c(population, seeds)
 
     } #end of loop through suitability values
 
 
     #removing drivers that were not used
     if(driver.A.weight == 0){
-      driver.A.write=rep(NA, length(driver.A.ready))
+      driver.A.write <- rep(NA, length(driver.A.ready))
     } else {
-      driver.A.write=driver.A.ready
+      driver.A.write <- driver.A.ready
     }
 
     if(driver.B.weight == 0 | driver.B.available == FALSE){
-      driver.B.write=rep(NA, length(driver.B.ready))
+      driver.B.write <- rep(NA, length(driver.B.ready))
     } else {
-      driver.B.write=driver.B.ready
+      driver.B.write <- driver.B.ready
     }
 
     #data frame
-    output.df = data.frame(Time=c(-length.burnin.suitability:-1, 1:(length(suitability))),
-                           Pollen=pollen.count,
-                           Population.mature=population.mature,
-                           Population.immature=population.immature,
-                           Population.viable.seeds=population.seeds,
-                           Suitability=burnin.suitability,
-                           Biomass.total=population.biomass,
-                           Biomass.mature=population.biomass.mature,
-                           Biomass.immature=population.biomass.immature,
-                           Mortality.mature=mortality.mature,
-                           Mortality.immature=mortality.immature,
-                           Driver.A=c(rep(NA, length.burnin.suitability), driver.A.write),
-                           Driver.B=c(rep(NA, length.burnin.suitability), driver.B.write),
-                           Period=c(rep("Burn-in", length.burnin.suitability), rep("Simulation", length(suitability))))
+    output.df <- data.frame(Time = c(-length.burnin.suitability:-1, 1:(length(suitability))),
+                           Pollen = pollen.count,
+                           Population.mature = population.mature,
+                           Population.immature = population.immature,
+                           Population.viable.seeds = population.seeds,
+                           Suitability = burnin.suitability,
+                           Biomass.total = population.biomass,
+                           Biomass.mature = population.biomass.mature,
+                           Biomass.immature = population.biomass.immature,
+                           Mortality.mature = mortality.mature,
+                           Mortality.immature = mortality.immature,
+                           Driver.A = c(rep(NA, length.burnin.suitability), driver.A.write),
+                           Driver.B = c(rep(NA, length.burnin.suitability), driver.B.write),
+                           Period = c(rep("Burn-in", length.burnin.suitability), rep("Simulation", length(suitability))))
 
 
     #mergest with output.list
-    output.list[[parameters[i, "label"]]]=output.df
+    output.list[[parameters[i, "label"]]] <- output.df
 
   } #end of iteration through selected species
 

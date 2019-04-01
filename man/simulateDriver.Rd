@@ -47,7 +47,7 @@ x <- simulateDriver(
   )
 
 #plots output
-plot(x, type="l")
+plot(x, type = "l")
 
 #checks temporal autocorrelation
 acf(x, lag.max = 300)

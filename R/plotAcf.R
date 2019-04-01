@@ -39,19 +39,19 @@
 #' plotAcf(x.df)
 #'
 #' @export
-plotAcf = function(x = NULL,
+plotAcf <- function(x = NULL,
                    plot.title = ""){
 
   require(ggplot2)
   require(cowplot)
 
-  acf.plot <- ggplot(data=x, aes(x=lag, y=acf)) +
+  acf.plot = ggplot(data = x, aes(x = lag, y = acf)) +
     geom_hline(aes(yintercept = 0)) +
     geom_hline(aes(yintercept = ci.max), color="red", linetype="dashed") +
     geom_hline(aes(yintercept = ci.min), color="red", linetype="dashed") +
     geom_segment(mapping = aes(xend = lag, yend = 0)) +
     ggtitle(plot.title) +
-    theme(plot.margin=unit(c(0,0,0,0), "cm"))
+    theme(plot.margin = unit(c(0,0,0,0), "cm"))
 
 return(acf.plot)
 

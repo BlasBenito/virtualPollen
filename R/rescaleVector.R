@@ -81,7 +81,7 @@ rescaleVector <- function(x = rnorm(100),
   #FORCES VECTOR INTO INTEGER
   #----------------------
 
-  if(integer==TRUE){
+  if(integer == TRUE){
     x = floor(x)
   }
 

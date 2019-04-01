@@ -18,11 +18,17 @@ simulatePopulation(
 
 \item{species}{if "all" or "ALL", all species in "parameters" are simulated It also accepts a vector of numbers representing the rows of the selected species, or a vector of names of the selected species.}
 
-\item{driver.A}{numeric vector with driver values.}
+\item{driver.A}{numeric vector with driver values. Typically produced by \code{\link{simulateDriver}}.}
 
-\item{driver.B}{numeric vector with driver values.}
+\item{driver.B}{numeric vector with driver values.  Typically produced by \code{\link{simulateDriver}}. Must have same length as \code{driver.A}.}
 
-\item{drivers}{dataframe with drivers. It should have the columns: \emph{age}}
+\item{drivers}{dataframe with drivers produced by \code{\link{simulateDriverS}}. It should have the columns:
+\itemize{
+  \item \emph{time} integer.
+  \item \emph{driver} character, values are \code{A} and \code{B}
+  \item \emph{autocorrelation.length} numeric, values are 200, 600, and 1800.
+  \item \emph{value} numeric, value of the driver for the given \emph{time}.
+}}
 
 \item{burnin}{boolean, generates a warming-up period for the population model of a length of five times the maximum age of the virtual taxa.}
 }

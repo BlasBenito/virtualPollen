@@ -51,7 +51,7 @@
 #' plotAcf(x.df)
 #'
 #' @export
-acfToDf = function(x = NULL,
+acfToDf <- function(x = NULL,
                    lag.max = 100,
                    length.out = 10){
 
@@ -61,7 +61,7 @@ acfToDf = function(x = NULL,
 
   if(!is.vector(x) | length(x) == 0 | is.null(x)){
     x = as.vector(x)
-    if(is.vector(x)==FALSE){
+    if(is.vector(x) == FALSE){
       stop("acfToDf: the argument x is not a vector.")
     }
   }
@@ -71,7 +71,7 @@ acfToDf = function(x = NULL,
   #----------------------
 
   if(lag.max > length(x)){
-    lag.max = length(x) - 1 #default behavior of acf()
+    lag.max <- length(x) - 1 #default behavior of acf()
   }
 
 
@@ -79,7 +79,7 @@ acfToDf = function(x = NULL,
   #----------------------
 
   if(length.out > lag.max){
-    length.out = lag.max
+    length.out <- lag.max
   }
 
 
@@ -87,20 +87,20 @@ acfToDf = function(x = NULL,
   #----------------------
 
   #computing autocorrelation
-  acf.output = acf(x, lag.max=lag.max, plot=FALSE)
+  acf.output <- acf(x, lag.max=lag.max, plot=FALSE)
 
   #computes confidence interval (same equation as in plot.acf())
-  acf.ci = qnorm((1 + 0.95)/2)/sqrt(acf.output$n.used)
+  acf.ci <- qnorm((1 + 0.95)/2)/sqrt(acf.output$n.used)
 
 
   #PREPARING OUTPUT DATAFRAME
   #----------------------
 
   #generating dataframe with all lags
-  acf.df = data.frame(lag=acf.output$lag, acf=acf.output$acf, ci.max=acf.ci, ci.min=-acf.ci)
+  acf.df <- data.frame(lag=acf.output$lag, acf=acf.output$acf, ci.max=acf.ci, ci.min=-acf.ci)
 
   #resampling to reduce the number of lines to be plotted
-  acf.df = acf.df[floor(seq(1, nrow(acf.df), length.out = length.out)),]
+  acf.df <- acf.df[floor(seq(1, nrow(acf.df), length.out = length.out)),]
 
   return(acf.df)
 

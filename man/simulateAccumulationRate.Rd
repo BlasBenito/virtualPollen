@@ -43,12 +43,12 @@ The accumulation rate curve is generated through a random walk smoothed by a GAM
 \examples{
 
 acc.rate <- simulateAccumulationRate(
- seed=50,
- time=1:1000,
- output.min=10,
- output.max=40,
- direction=1,
- plot=TRUE
+ seed = 50,
+ time = 1:1000,
+ output.min = 10,
+ output.max = 40,
+ direction = 1,
+ plot = TRUE
  )
 
 str(acc.rate)

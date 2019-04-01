@@ -89,14 +89,14 @@ toRegularTime <- function(x, time.column="Time", interpolation.interval=10, colu
       temp <- temp[temp$Period=="Simulation", ]
 
       #computing age extremes
-      min.time = 0
-      max.time = max(temp[,time.column])
+      min.time <- 0
+      max.time <- max(temp[,time.column])
 
       #reference time to interpolate into
-      reference.time = round(seq(min.time, max.time, by=interpolation.interval), 0)
+      reference.time <- round(seq(min.time, max.time, by=interpolation.interval), 0)
 
       #empty dataset to store interpolation
-      temp.interpolated = data.frame(time=reference.time)
+      temp.interpolated <- data.frame(time=reference.time)
       names(temp.interpolated)<-time.column
 
       #iterating through columns
@@ -108,13 +108,13 @@ toRegularTime <- function(x, time.column="Time", interpolation.interval=10, colu
         }
 
         #interpolation
-        interpolation.formula = as.formula(paste(column.to.interpolate, "~", time.column, sep=" "))
+        interpolation.formula <- as.formula(paste(column.to.interpolate, "~", time.column, sep=" "))
 
         #iteration through span values untill R-squared equals 0.9985 (R-squared equal to 1 may throw errors)
-        span.values=seq(50/nrow(temp), 5/nrow(temp), by=-0.0005)
+        span.values <- seq(50/nrow(temp), 5/nrow(temp), by = -0.0005)
         for(span in span.values){
 
-          interpolation.function = loess(interpolation.formula, data=temp, span=span, control=loess.control(surface="direct"))
+          interpolation.function <- loess(interpolation.formula, data = temp, span = span, control = loess.control(surface = "direct"))
 
           #check fit
           if(cor(interpolation.function$fitted, temp[, column.to.interpolate]) >=  0.9985){break}
@@ -122,19 +122,19 @@ toRegularTime <- function(x, time.column="Time", interpolation.interval=10, colu
         }
 
         #interpolation
-        interpolation.result = predict(interpolation.function, newdata=reference.time, se=FALSE)
+        interpolation.result <- predict(interpolation.function, newdata = reference.time, se = FALSE)
 
         #constraining the range of the interpolation result to the range of the reference data
-        interpolation.range<-range(temp[, column.to.interpolate])
-        interpolation.result[interpolation.result < interpolation.range[1]] = interpolation.range[1]
-        interpolation.result[interpolation.result > interpolation.range[2]] = interpolation.range[2]
+        interpolation.range <- range(temp[, column.to.interpolate])
+        interpolation.result[interpolation.result < interpolation.range[1]] <- interpolation.range[1]
+        interpolation.result[interpolation.result > interpolation.range[2]] <- interpolation.range[2]
 
         #putting the interpolated data back in place
-        temp.interpolated[, column.to.interpolate] = interpolation.result
+        temp.interpolated[, column.to.interpolate] <- interpolation.result
 
       }#end of iteration through columns
 
-      temp.interpolated$Period = "Simulation"
+      temp.interpolated$Period <- "Simulation"
 
       x[[x.row, x.column]] <- temp.interpolated
     }

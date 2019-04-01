@@ -111,5 +111,5 @@
 #' @import ggplot2 cowplot viridis
 NULL
 
-#' @importfROM mgcv gam
+#' @importFrom mgcv gam
 NULL

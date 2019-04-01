@@ -59,8 +59,55 @@ require(cowplot)
 require(viridis)
 
 
+#TESTING INPUT DATA
+#number of driver names
+n.names <- length(driver.names)
+
+#driver.names
+if(!is.character(driver.names)){stop("The argument driver.names should be a character vector.")}
+
+#random.seeds
+if(!is.numeric(random.seeds)){
+  random.seeds  <-  1:n.names
+} else {
+  random.seeds <- as.integer(random.seeds)
+}
+if(length(random.seeds) < n.names){
+  random.seeds <- random.seeds[1]:(random.seeds[1]+n.names)
+}
+
+#output.min and output.max
+if(length(output.min) < n.names){
+  output.min <- rep(output.min[1], n.names)
+}
+if(length(output.min) > n.names){
+  output.min <- output.min[1:n.names]
+}
+if(length(output.max) < n.names){
+  output.max <- rep(output.min[1], n.names)
+}
+if(length(output.max) > n.names){
+  output.max <- output.max[1:n.names]
+}
+for(i in 1:n.names){
+  if(output.max[i] < output.min[i]){
+    temp.min <- output.max[i]
+    output.max[i]  <-  output.min[i]
+    output.min[i]  <-  temp.min
+  }
+}
+
+#time
+if(!is.numeric(time)){stop("time should be a numeric vector, try 1:1000.")}
+if(length(time)==1){time <- 1:floor(time)}
+
+#autocorrelation.length
+if(!is.numeric(autocorrelation.lengths)){stop("autocorrelation.length should be a numeric vector.")}
+
+
+
 #data ranges and random seed for each drivers.2k
-data.ranges<-data.frame(driver=driver.names, output.min, output.max, random.seeds)
+data.ranges <- data.frame(driver=driver.names, output.min, output.max, random.seeds)
 
 #dataframes to store drivers
 drivers <- drivers.temp <- data.frame(time=numeric(), driver=character(), autocorrelation.length=numeric(), value=numeric())
@@ -74,7 +121,7 @@ for(driver in driver.names){
     #FILLING drivers.temp
     #---------------------------------------
     #fill drivers.temp with time and grouping
-    drivers.temp[max(time), ] <- NA
+    drivers.temp[max(time), ]  <-  NA
     drivers.temp$time <- time
 
     #fill with parameter values
@@ -83,20 +130,20 @@ for(driver in driver.names){
 
     #fill values of the driver
     simulated.driver <- simulateDriver(
-      random.seed=data.ranges[data.ranges$driver==driver, "random.seeds"],
-      time=time,
-      autocorrelation.length=autocorrelation.length,
-      output.min=data.ranges[data.ranges$driver==driver, "output.min"],
-      output.max=data.ranges[data.ranges$driver==driver, "output.max"]
+      random.seed = data.ranges[data.ranges$driver==driver, "random.seeds"],
+      time = time,
+      autocorrelation.length = autocorrelation.length,
+      output.min = data.ranges[data.ranges$driver==driver, "output.min"],
+      output.max = data.ranges[data.ranges$driver==driver, "output.max"]
     )
 
     #getting the driver values
-    drivers.temp$value <- rescaleVector(x=simulated.driver, new.max = 100, new.min = 0)
+    drivers.temp$value <- rescaleVector(x = simulated.driver, new.max = 100, new.min = 0)
 
     #FILLING autocorrelation.temp
     #---------------------------------------
     #computing acf
-    autocorrelation.temp <- acfToDf(x=simulated.driver, lag.max=max(max(autocorrelation.lengths)), length.out=100)
+    autocorrelation.temp <- acfToDf(x = simulated.driver, lag.max = max(max(autocorrelation.lengths)), length.out = 100)
     autocorrelation.temp$driver <- rep(driver, nrow(autocorrelation.temp))
     autocorrelation.temp$autocorrelation.length <- rep(autocorrelation.length, nrow(autocorrelation.temp))
 
@@ -110,41 +157,41 @@ for(driver in driver.names){
 return(drivers)
 
 #PLOTTING OUTPUT
-p.drivers <- ggplot(data=drivers, aes(x=time, y=value, color=driver)) +
+p.drivers <- ggplot(data = drivers, aes(x = time, y = value, color = driver)) +
   geom_line() +
   scale_color_viridis(discrete = TRUE, begin = 0, end = 0.6) +
-  facet_wrap(driver ~ autocorrelation.length, ncol=1, scales="free_y") +
+  facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free_y") +
   xlab("Years") +
   ylab("") +
   ggtitle("Virtual drivers") +
-  theme(legend.position="none") +
+  theme(legend.position = "none") +
   theme(plot.margin = unit(c(0.5, -1, 0.5, 0.5), "cm"))
 
-p.density <- ggplot(data=drivers, aes(value, fill=driver, colour=driver)) +
-  geom_density(aes(y=..scaled..), alpha=0.5) +
+p.density <- ggplot(data = drivers, aes(value, fill = driver, colour = driver)) +
+  geom_density(aes(y = ..scaled..), alpha = 0.5) +
   scale_color_viridis(discrete = TRUE, begin = 0, end = 0.6) +
   scale_fill_viridis(discrete = TRUE, begin = 0, end = 0.6) +
-  facet_wrap(driver ~ autocorrelation.length, ncol=1, scales="free") + xlab("Years") +
-  theme(legend.position="none") +
+  facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free") + xlab("Years") +
+  theme(legend.position = "none") +
   ylab("") +
   xlab("") +
   coord_flip() +
-  theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0), "cm"), axis.line=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), strip.background = element_blank(), strip.text.x = element_blank())
+  theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0), "cm"), axis.line = element_blank(), axis.text = element_blank(), axis.ticks = element_blank(), strip.background = element_blank(), strip.text.x = element_blank())
 
-p.acfs <- ggplot(data=autocorrelation, aes(x=lag, y=acf, color=driver)) +
+p.acfs <- ggplot(data = autocorrelation, aes(x = lag, y = acf, color = driver)) +
   scale_color_viridis(discrete = TRUE, begin = 0, end = 0.6) +
   geom_hline(aes(yintercept = 0)) +
-  geom_hline(aes(yintercept = ci.max), color="red", linetype="dashed") +
-  geom_hline(aes(yintercept = ci.min), color="red", linetype="dashed") +
+  geom_hline(aes(yintercept = ci.max), color = "red", linetype = "dashed") +
+  geom_hline(aes(yintercept = ci.min), color = "red", linetype = "dashed") +
   geom_segment(mapping = aes(xend = lag, yend = 0)) +
   ylab("") +
-  facet_wrap(driver ~ autocorrelation.length, ncol=1, scales="free_y") +
+  facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free_y") +
   ggtitle("Temporal autocorrelation") +
-  theme(legend.position="none", plot.margin = unit(c(0.5, 0.5, 0.5, -1), "cm"))
+  theme(legend.position = "none", plot.margin = unit(c(0.5, 0.5, 0.5, -1), "cm"))
 
-plot_grid(p.drivers, NULL, p.density, NULL, p.acfs, align="h", ncol = 5, rel_widths = c(1, 0, 0.3, 0, 1))
+plot_grid(p.drivers, NULL, p.density, NULL, p.acfs, align = "h", ncol = 5, rel_widths = c(1, 0, 0.3, 0, 1))
 if(!is.null(filename) & is.character(filename)){
-ggsave(width = 12, height=(1.5*(length(driver.names) * length(autocorrelation.lengths))), filename=paste(filename, ".pdf", sep=""))
+ggsave(width = 12, height = (1.5*(length(driver.names) * length(autocorrelation.lengths))), filename = paste(filename, ".pdf", sep = ""))
 }
 
 }

@@ -38,7 +38,7 @@
 #'   )
 #'
 #' #plots output
-#' plot(x, type="l")
+#' plot(x, type = "l")
 #'
 #' #checks temporal autocorrelation
 #' acf(x, lag.max = 300)
@@ -56,7 +56,7 @@ simulateDriver = function(random.seed = 50,
 
   #is integer?
   if(!is.integer(random.seed)){
-    random.seed = floor(random.seed)
+    random.seed <- floor(random.seed)
     }
 
   #setting random seed to the specified one
@@ -68,8 +68,8 @@ simulateDriver = function(random.seed = 50,
 
   #if not a vector, forces "time" as integer and creates vector starting at 0
   if(!is.vector(time)){
-    time = seq(1, floor(time), by=1)
-    if(length(time)==0){
+    time <- seq(1, floor(time), by = 1)
+    if(length(time) == 0){
       error("Time needs to be an integer higher than 1, or a vector of integers.")
     }
   }
@@ -80,7 +80,7 @@ simulateDriver = function(random.seed = 50,
 
   #limits autocorrelation length to half the length of time if higher
   if (autocorrelation.length > length(time)/2){
-    autocorrelation.length = floor(length(time)/2)
+    autocorrelation.length <- floor(length(time)/2)
   }
 
 
@@ -88,18 +88,18 @@ simulateDriver = function(random.seed = 50,
   #----------------------
 
   #generates driver (returns time series)
-  driver = filter(rnorm(max(time)),
-                  filter=rep(1, autocorrelation.length),
-                  circular=TRUE)
+  driver <- filter(rnorm(max(time)),
+                  filter = rep(1, autocorrelation.length),
+                  circular = TRUE)
 
   #converts from time series to vector
-  driver = as.vector(driver)
+  driver <- as.vector(driver)
 
   #rescales time series to [output.min output.max]
   if(rescale == TRUE){
-    driver = rescaleVector(x=driver,
-                           new.min=output.min,
-                           new.max=output.max)
+    driver <- rescaleVector(x = driver,
+                           new.min = output.min,
+                           new.max = output.max)
   }
 
 

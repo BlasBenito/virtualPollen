@@ -18,7 +18,7 @@ x.float <- rescaleVector(x = x, new.min = 10, new.max = 0, integer = FALSE)
 plot(x.float, type="l")
 
 
-#TEST: simulateDriver
+#TEST: simulateDriver PASSED
 ##################################
 
 #help test
@@ -49,7 +49,7 @@ plot(x, type="l")
 plot(x.rescaled, type="l")
 
 
-#TEST simulateDriverS
+#TEST simulateDriverS PASSED
 #################################
 drivers.test <- simulateDriverS(random.seeds=c(60, 120),
                 time=1:10000,
@@ -60,8 +60,17 @@ drivers.test <- simulateDriverS(random.seeds=c(60, 120),
                 filename=NULL
                 )
 
+drivers.test <- simulateDriverS(random.seeds=60,
+                                time=1:10000,
+                                autocorrelation.lengths=c(200, 600, 1800),
+                                output.min=c(0,0),
+                                output.max=c(100, 100),
+                                driver.names=c("A", "B"),
+                                filename=NULL
+)
 
-#TEST: acfToDf and plotAcf
+
+#TEST: acfToDf and plotAcf PASSED
 ##################################
 
 x <- simulateDriver(random.seed = 10, time = 1:1000, autocorrelation.length = 200, output.min = -10, output.max = 20, rescale = TRUE)

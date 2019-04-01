@@ -55,47 +55,47 @@
 #'  )
 #'
 #'#preparing parameters
-#'parameters <- parametersDataframe(rows=2)
+#'parameters <- parametersDataframe(rows = 2)
 #'parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
 #'parameters[2,] <- c("Species 1", 500, 100, 10, 0.02, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
-#'parameters <- fixParametersTypes(x=parameters)
+#'parameters <- fixParametersTypes(x = parameters)
 #'
 #'#simulating population dynamics
 #'sim.output <- simulatePopulation(
-#'  parameters=parameters,
-#'  driver.A=driver
+#'  parameters = parameters,
+#'  driver.A = driver
 #'  )
 #'
 #'#plot simulation
 #'plotSimulation(simulation.output = sim.output)
 #'
 #' @export
-plotSimulation = function(
-  simulation.output=NULL,
-  species="all",
-  burnin=FALSE,
-  filename=NULL,
-  time.zoom=NULL,
-  panels=c("Driver A",
+plotSimulation <- function(
+  simulation.output = NULL,
+  species = "all",
+  burnin = FALSE,
+  filename = NULL,
+  time.zoom = NULL,
+  panels = c("Driver A",
            "Driver B",
            "Suitability",
            "Population",
            "Mortality",
            "Biomass",
            "Pollen"),
-  plot.title=NULL,
-  width=12,
-  text.size=20,
-  title.size=25,
-  line.size=1){
+  plot.title = NULL,
+  width = 12,
+  text.size = 20,
+  title.size = 25,
+  line.size = 1){
 
   require(ggplot2)
   require(tidyr)
   require(cowplot)
 
   #checking and setting panels
-  if(length(panels)==1){
-    if(panels=="all" | panels=="ALL" | panels=="All" | is.null(panels) | length(panels)==0 | !is.character(panels)){
+  if(length(panels) == 1){
+    if(panels == "all" | panels == "ALL" | panels == "All" | is.null(panels) | length(panels) == 0 | !is.character(panels)){
       panels=c("Driver A", "Driver B","Suitability", "Population", "Mortality", "Biomass", "Pollen")
     }
   } else {
@@ -123,7 +123,7 @@ plotSimulation = function(
   }
 
   #if null or "all"
-  if(species=="all" | species=="ALL" | species=="All"){
+  if(species == "all" | species == "ALL" | species == "All"){
     selected.species = names.dictionary$index
   } else {
 
@@ -160,8 +160,8 @@ plotSimulation = function(
     if("Period" %in% colnames(output)){
       output.long = gather(data=output, Variable, Value, 2:(ncol(output)-1))
 
-      #removing burn-in period if burnin==FALSE
-      if(burnin==FALSE){output.long = output.long[output.long$Period == "Simulation",]}
+      #removing burn-in period if burnin == FALSE
+      if(burnin == FALSE){output.long = output.long[output.long$Period == "Simulation",]}
 
     } else {
       output.long = gather(data=output, Variable, Value, 2:ncol(output))
@@ -181,15 +181,15 @@ plotSimulation = function(
 
     #preparing groups for facets
     output.long$Facets = "Population"
-    output.long[output.long$Variable=="Pollen", "Facets"] = "Pollen"
+    output.long[output.long$Variable == "Pollen", "Facets"] = "Pollen"
     output.long[grep("Biomass", output.long$Variable), "Facets"] = "Biomass"
     output.long[grep("Mortality", output.long$Variable), "Facets"] = "Mortality"
-    output.long[output.long$Variable=="Suitability", "Facets"] = "Suitability"
-    output.long[output.long$Variable=="Driver.A", "Facets"] = "Driver A"
+    output.long[output.long$Variable == "Suitability", "Facets"] = "Suitability"
+    output.long[output.long$Variable == "Driver.A", "Facets"] = "Driver A"
 
     #checking if driver B is empty
     if(sum(is.na(output$Driver.B))!=nrow(output)){
-      output.long[output.long$Variable=="Driver.B", "Facets"] = "Driver B"
+      output.long[output.long$Variable == "Driver.B", "Facets"] = "Driver B"
       #facets order
       output.long$Facets=factor(output.long$Facets, levels=c("Driver A", "Driver B","Suitability", "Population", "Mortality", "Biomass", "Pollen"))
     } else {
@@ -200,53 +200,55 @@ plotSimulation = function(
     output.long$Color = "Adults"
     output.long[grep("immature", output.long$Variable), "Color"] = "Saplings"
     output.long[grep("total", output.long$Variable), "Color"] = "Total biomass"
-    output.long[output.long$Variable=="Pollen", "Color"] = "Pollen"
-    output.long[output.long$Variable=="Population.viable.seeds", "Color"] = "Seedlings"
-    output.long[output.long$Variable=="Suitability", "Color"] = "Suitability"
-    output.long[output.long$Variable=="Driver.A", "Color"] = "Driver A"
+    output.long[output.long$Variable == "Pollen", "Color"] = "Pollen"
+    output.long[output.long$Variable == "Population.viable.seeds", "Color"] = "Seedlings"
+    output.long[output.long$Variable == "Suitability", "Color"] = "Suitability"
+    output.long[output.long$Variable == "Driver.A", "Color"] = "Driver A"
 
 
     #checking if driver B is empty
     if(sum(is.na(output$Driver.B))!=nrow(output)){
-      output.long[output.long$Variable=="Driver.B", "Color"] = "Driver B"
+      output.long[output.long$Variable == "Driver.B", "Color"] = "Driver B"
       #facets order
-      output.long$Color=factor(output.long$Color, levels=c("Driver A", "Driver B", "Suitability", "Total biomass", "Adults", "Saplings", "Seedlings", "Pollen"))
+      output.long$Color <- factor(output.long$Color, levels = c("Driver A", "Driver B", "Suitability", "Total biomass", "Adults", "Saplings", "Seedlings", "Pollen"))
       #palette
-      color.palette=c("#2F642A", "#57AD4F", "#000000", "#C45055", "#75E46A", "#4572A9", "gray40", "gray40")
-      names(color.palette)=c("Adults", "Saplings", "Total biomass", "Pollen", "Seedlings", "Suitability", "Driver A", "Driver B")
+      color.palette <- c("#2F642A", "#57AD4F", "#000000", "#C45055", "#75E46A", "#4572A9", "gray40", "gray40")
+      names(color.palette) <- c("Adults", "Saplings", "Total biomass", "Pollen", "Seedlings", "Suitability", "Driver A", "Driver B")
     } else {
-      output.long$Color=factor(output.long$Color, levels=c("Driver A", "Suitability", "Total biomass", "Adults", "Saplings", "Seedlings", "Pollen"))
+      output.long$Color <- factor(output.long$Color, levels = c("Driver A", "Suitability", "Total biomass", "Adults", "Saplings", "Seedlings", "Pollen"))
       #palette
-      color.palette=c("#2F642A", "#57AD4F", "#000000", "#C45055", "#75E46A", "#4572A9", "gray40")
-      names(color.palette)=c("Adults", "Saplings", "Total biomass", "Pollen", "Seedlings", "Suitability", "Driver A")
+      color.palette <- c("#2F642A", "#57AD4F", "#000000", "#C45055", "#75E46A", "#4572A9", "gray40")
+      names(color.palette) <- c("Adults", "Saplings", "Total biomass", "Pollen", "Seedlings", "Suitability", "Driver A")
     }
 
     #removing unwanted facets/panels
-    output.long = output.long[output.long$Facets %in% panels, ]
+    output.long <-output.long[output.long$Facets %in% panels, ]
 
     #setting up plot title
-    if(is.null(plot.title)){plot.title=paste("Taxon: ", names(simulation.output)[i], sep="")}
+    if(is.null(plot.title)){
+      plot.title <- paste("Taxon: ", names(simulation.output)[i], sep = "")
+      }
 
 
     #plot
-    p1 = ggplot(data=output.long, aes(x=Time, y=Value, color=Color)) +
-      geom_rect(data=output.long, aes(xmin=min(min(Time), 0), xmax=0, ymin=0, ymax=Inf), inherit.aes=FALSE, fill="gray90") +
-      geom_line(size=line.size) +
-      scale_colour_manual(values=color.palette) +
-      facet_wrap(facets="Facets", scales="free_y", ncol=1, drop=TRUE) +
+    p1 <- ggplot(data = output.long, aes(x = Time, y = Value, color = Color)) +
+      geom_rect(data = output.long, aes(xmin = min(min(Time), 0), xmax = 0, ymin = 0, ymax = Inf), inherit.aes = FALSE, fill = "gray90") +
+      geom_line(size = line.size) +
+      scale_colour_manual(values = color.palette) +
+      facet_wrap(facets = "Facets", scales = "free_y", ncol = 1, drop = TRUE) +
       ggtitle(plot.title) +
       xlab("Time (years)") +
       ylab("") +
-      geom_vline(xintercept=seq(0, max(output.long$Time), by=200), color="gray") +
-      scale_x_continuous(breaks=seq(age.min, age.max, by=age.max/10)) +
-      theme(text = element_text(size=text.size), axis.text = element_text(size=text.size), axis.title = element_text(size=text.size), legend.position="bottom", plot.title = element_text(size = title.size)) +
-      labs(color='Legend') +
+      geom_vline(xintercept = seq(0, max(output.long$Time), by = 200), color = "gray") +
+      scale_x_continuous(breaks = seq(age.min, age.max, by = age.max/10)) +
+      theme(text  =  element_text(size = text.size), axis.text  =  element_text(size = text.size), axis.title  =  element_text(size = text.size), legend.position = "bottom", plot.title  =  element_text(size  =  title.size)) +
+      labs(color = 'Legend') +
       guides(color = guide_legend(override.aes = list(size = 2))) +
-      coord_cartesian(xlim=c(age.min, age.max))
+      coord_cartesian(xlim = c(age.min, age.max))
     # guides(linetype = guide_legend(override.aes = list(size = 4)))
     # + theme(plot.margin=unit(c(1,3,1,1),"cm"))
 
-    plots.list[[i]] = p1
+    plots.list[[i]] <- p1
 
   } #end of iteration through species
 
@@ -255,7 +257,7 @@ plotSimulation = function(
 
   #plots to pdf
   if(!is.null(filename) & is.character(filename)){
-    pdf(paste(filename, ".pdf", sep=""), width=12, height=length(unique(output.long$Facets))*2)
+    pdf(paste(filename, ".pdf", sep = ""), width = 12, height = length(unique(output.long$Facets))*2)
     invisible(lapply(plots.list, print))
     dev.off()
   }
