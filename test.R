@@ -62,10 +62,10 @@ drivers.test <- simulateDriverS(random.seeds=c(60, 120),
 
 drivers.test <- simulateDriverS(random.seeds=60,
                                 time=1:10000,
-                                autocorrelation.lengths=c(200, 600, 1800),
-                                output.min=c(0,0),
-                                output.max=c(100, 100),
-                                driver.names=c("A", "B"),
+                                autocorrelation.lengths=600,
+                                output.min=0,
+                                output.max=100,
+                                driver.names="A",
                                 filename=NULL
 )
 
