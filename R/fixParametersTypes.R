@@ -21,7 +21,17 @@
 #'
 #' @export
 fixParametersTypes <- function(x){
+
   #sets all columns but the first one into numeric
   x[, 2:ncol(x)] <- sapply(x[, 2:ncol(x)], as.numeric)
+
+  #basic checks on each taxon
+  for(i in 1:nrow(x)){
+
+    #checking maximum age
+
+
+  }
+
   return(x)
 }

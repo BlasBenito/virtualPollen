@@ -147,16 +147,13 @@ parametersCheck <- function(parameters,
   #ITERATING THROUGH SPECIES
   for(i in selected.species){
 
-    #GETTING AUTOCORRELATION LENGTH
-    autocorrelation.length.A <- parameters[i, "autocorrelation.length.A"]
-    autocorrelation.length.B <- parameters[i, "autocorrelation.length.B"]
 
     #GETTING DRIVER VALUES
-    #IF DRIVERS PROVIDED AS DATAFRAME
+    #Drivers provided as dataframe
     if(is.data.frame(drivers) == TRUE){
 
       #if the autocorrelation.lengt available in parameters for species i is not in drivers, the first autocorrelation length available in drivers is assigned
-      if(!(autocorrelation.length.A %in% unique(drivers$autocorrelation.length)) & !(autocorrelation.length.B %in% unique(drivers$autocorrelation.length))){
+      if(!(parameters[i, "autocorrelation.length.A"] %in% unique(drivers$autocorrelation.length)) & !(parameters[i, "autocorrelation.length.B"] %in% unique(drivers$autocorrelation.length))){
         message(paste("Autocorrelation lengths in parameters do not match autocorrelation lengths in drivers, I am getting the first value of autocorrelation.length available in drivers: ", unique(drivers$autocorrelation.length)[1], sep=""))
         autocorrelation.length.A <- autocorrelation.length.B <- unique(drivers$autocorrelation.length)[1]
 
@@ -167,6 +164,7 @@ parametersCheck <- function(parameters,
       driver.B.ready <- drivers[drivers$driver == "B" & drivers$autocorrelation.length == autocorrelation.length.B, "value"]
 
     } else {
+      #getting values from vectors
       driver.A.ready <- driver.A
       driver.B.ready <- driver.B
     }
@@ -179,6 +177,12 @@ parametersCheck <- function(parameters,
 
     if(sum(is.na(driver.B.ready)) == length(driver.B.ready)){
       driver.B.ready <- NULL
+      driver.B.weight <- 0
+    }
+
+    #checking if drivers have the same length
+    if(!is.null(driver.B.ready) & length(driver.A.ready) != length(driver.B.ready)){
+      stop("driver.A and driver.B have different lengths.")
     }
 
 
