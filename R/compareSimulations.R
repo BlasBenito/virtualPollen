@@ -154,7 +154,7 @@ compareSimulations <- function(
 
   #plot
   p1 <- ggplot(data = output.df.long, aes(x = Time, y = Value, color = Species, group = Species)) +
-    geom_line(size = 0.5, alpha = 0.5) +
+    geom_path(size = 0.5, alpha = 0.5) +
     scale_colour_viridis(discrete = TRUE, direction = -1, begin = 0, end = 0.8) +
     facet_wrap(facets = "Variable", scales = "free_y", ncol = 1, drop = TRUE) +
     ggtitle(plot.title) +

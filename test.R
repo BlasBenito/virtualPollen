@@ -107,26 +107,9 @@ sim.output <- simulatePopulation(parameters=parameters, drivers=drivers)
 sim.output <- simulatePopulation(parameters=parameters, driver.A=driverA, driver.B=driverB, species=1)
 str(sim.output[[2]])
 
-x11()
-plotSimulation(simulation.output = sim.output, species=1)
-
-x11()
-plotSimulation(simulation.output = sim.output, species=2)
-
 
 #TEST plotSimulation and compareSimulations
 #############################
-driver <- simulateDriver(random.seed = 10, time = 1:1000, autocorrelation.length = 200, output.min = 0, output.max = 100, rescale = TRUE)
-
-#preparing parameters
-parameters <- parametersDataframe(rows=2)
-parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, 600, 0)
-parameters[2,] <- c("Species 2", 500, 100, 10, 0.02, 0, 100, 1000, 1, 0, 50, 10, 0, 0, 600, 0)
-parameters <- fixParametersTypes(x=parameters)
-
-#simulating population dynamics
-sim.output <- simulatePopulation(parameters=parameters, driver.A=driver, driver.B=NULL)
-str(sim.output[[1]])
 
 #plotting result
 plotSimulation(simulation.output = sim.output)
