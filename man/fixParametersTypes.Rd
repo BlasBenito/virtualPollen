@@ -13,7 +13,7 @@ fixParametersTypes(x)
 Same dataframe provided in argument \code{x} but with fixed data types.
 }
 \description{
-It converts all columns (but the \code{label} one) of a parameters dataframe created by \code{\link{parametersDataframe}} into type numeric.
+It converts all columns (but the \code{label} one) of a parameters dataframe created by \code{\link{parametersDataframe}} into type numeric, and checks the coherence of the parameters for each taxon. It provides feedback on the check results on screen for each taxon.
 }
 \examples{
 
