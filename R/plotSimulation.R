@@ -89,6 +89,7 @@ plotSimulation <- function(
   title.size = 25,
   line.size = 1){
 
+  require(tidyr)
   require(ggplot2)
   require(tidyr)
   require(cowplot)

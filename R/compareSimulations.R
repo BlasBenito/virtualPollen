@@ -70,6 +70,7 @@ compareSimulations <- function(
   title.size = 25,
   plot.title = ""){
 
+  require(tidyr)
   require(plyr)
   require(ggplot2)
   require(viridis)

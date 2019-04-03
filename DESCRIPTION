@@ -1,6 +1,6 @@
 Package: virtualPollen
 Type: Package
-Title: Generation of virtual pollen curves.
+Title: Generation of virtual pollen curves
 Version: 0.1.0
 Author: Blas M. Benito
 Maintainer: Blas M. Benito <blasbenito@gmail.com>
