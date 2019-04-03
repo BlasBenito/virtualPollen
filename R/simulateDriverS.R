@@ -1,6 +1,6 @@
 #' Generates a long table with several drivers for \code{\link{simulatePopulation}}.
 #'
-#' @description Wrapper of \code{simulateDriver} to generate several drivers with different autocorrelation lengths, and return a long format table to be used as input for \code{\link{simulatePopulation}}.
+#' @description Wrapper of \code{simulateDriver} to generate several drivers with different autocorrelation lengths, and return a long format table to be used as input for \code{\link{simulatePopulation}}. Note that the variable \code{time} runs from left to right, with lower values representing older samples.
 #'
 #'@usage simulateDriverS(
 #'  random.seeds=c(60, 120),

@@ -1,6 +1,6 @@
 #' Simulates population dynamics for virtual species with different traits.
 #'
-#' @description This function takes as input a dataframe of parameters defining virtual taxa produced by \code{\link{parametersDataframe}} and \code{\link{fixParametersTypes}}, a driver or drivers generated with \code{\link{simulateDriver}}, and simulates population dynamics at yearly resolution for the time-length defined by the driver or drivers. The model relies on the following set of assumptions.
+#' @description This function takes as input a dataframe of parameters defining virtual taxa produced by \code{\link{parametersDataframe}} and \code{\link{fixParametersTypes}}, a driver or drivers generated with \code{\link{simulateDriver}}, and simulates population dynamics at yearly resolution for the time-length defined by the driver or drivers. The model relies on the following set of assumptions. Note that the variable \code{time} runs from left to right, with lower values representing older samples.
 #'
 #' \itemize{
 #'   \item  The spatial structure of the population is not important to explain its pollen productivity. This is an operative assumption, to speed-up model execution.

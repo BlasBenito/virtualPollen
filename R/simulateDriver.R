@@ -1,6 +1,6 @@
 #' Generates a random time series with temporal autocorrelation.
 #'
-#' @description Generates a vector of the same legnth as the \code{time} argument, with a temporal autocorrelation length close to the defined by \code{autocorrelation.length}, and a range within \code{output.min} and \code{output.max}. The output of this function is intended to be used as an input to the function \code{\link{rescaleVector}}.
+#' @description Generates a vector of the same legnth as the \code{time} argument, with a temporal autocorrelation length close to the defined by \code{autocorrelation.length}, and a range within \code{output.min} and \code{output.max}. The output of this function is intended to be used as an input to the function \code{\link{rescaleVector}}. Note that the variable \code{time} runs from left to right, with lower values representing older samples.
 #'
 #' @usage simulateDriver(
 #'   random.seed = 50,
