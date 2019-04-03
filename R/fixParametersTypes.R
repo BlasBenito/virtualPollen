@@ -34,40 +34,40 @@ fixParametersTypes <- function(x){
 
     #checking for NA values
     if(sum(is.na(x[i,])) > 0){
-      warning("There are NA values in the parameters of this taxon, please, fix this and come back here!")
+      message("There are NA values in the parameters of this taxon, please, fix this and come back here!")
     }
 
     #checking reproductive and maximum age
     if(x[i, "reproductive.age"] >= x[i, "maximum.age"]){
-      warning("reproductive.age is >= than maximum.age, setting reproductive.age to half of maximum.age.")
+      message("reproductive.age is >= than maximum.age, setting reproductive.age to half of maximum.age.")
       x[i, "reproductive.age"] <- floor(x[i, "maximum.age"]/2)
     }
 
     #checking maximum biomass and carrying capacity
     if((x[i, "carrying.capacity"] / x[i, "maximum.biomass"]) < 20){
-      warning(paste("carrying.capacity for the taxon is too low, increasing it to",  x[i, "maximum.biomass"] * 20, sep=""))
+      message(paste("carrying.capacity for the taxon is too low, increasing it to",  x[i, "maximum.biomass"] * 20, sep=""))
       x[i, "carrying.capacity"] <- x[i, "maximum.biomass"] * 20
     }
 
     #checking pollen control
     if(x[i, "pollen.control"] > 1 | x[i, "pollen.control"] < 0){
-      warning("pollen.control must be between 0 and 1, setting it to 0")
+      message("pollen.control must be between 0 and 1, setting it to 0")
       x[i, "pollen.control"] <- 0
     }
 
     #checking driver weights
     if(x[i, "driver.A.weight"] + x[i, "driver.B.weight"] != 1){
-      warning("The sum of driver.A.weight and driver.B.weight must be 1.")
+      message("The sum of driver.A.weight and driver.B.weight must be 1.")
     }
 
     #checking standard deviation of niche functions
-    if(x[i, "niche.A.sd"] != 0){
-      warning("niche.A.sd was 0, changing it to 1.")
+    if(x[i, "niche.A.sd"] == 0){
+      message("niche.A.sd was 0, changing it to 1.")
       x[i, "niche.A.sd"] <- 1
     }
 
-    if(x[i, "niche.B.sd"] != 0){
-      warning("niche.B.sd was 0, changing it to 1.")
+    if(x[i, "niche.B.sd"] == 0){
+      message("niche.B.sd was 0, changing it to 1.")
       x[i, "niche.B.sd"] <- 1
     }
 
