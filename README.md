@@ -1,7 +1,6 @@
 
 [![DOI](https://zenodo.org/badge/177762046.svg)](https://zenodo.org/badge/latestdoi/177762046)
 
-
 virtualPollen
 ============
 
