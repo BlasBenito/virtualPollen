@@ -108,12 +108,29 @@
 #' @seealso \code{\link{simulatePopulation}}, \code{\link{plotSimulation}}
 "simulation"
 
-#' @import ggplot2 viridis
+
+#' Accumulation rate
+#'
+#' Dataframe, output of \code{\link{simulateAccumulationRate}}
+#' @author Blas M. Benito  <blasbenito@gmail.com>
+#' @docType data
+#' @keywords datasets
+#' @name accumulationRate
+#' @usage data(accumulationRate)
+#' @format dataframe with 10000 rows and the following columns:
+#' #' @return A dataframe with the following columns.
+#' \itemize{
+#'   \item \emph{time} numeric, time or age of the given case.
+#'   \item \emph{accumulation.rate} numeric, in years per centimetre, simulated accumulation rate.
+#'   \item \emph{grouping} integer, grouping variable to aggregate together (with \code{\link{aggregateSimulation}}) samples deposited in the same centimetre according \emph{accumulation.rate}.
+#' }
+#' @seealso \code{\link{simulateAccumulationRate}}, \code{\link{aggregateSimulation}}
+"accumulationRate"
+
+#' @import ggplot2 viridis cowplot tidyr plyr
 NULL
 
 #' @importFrom mgcv gam
 NULL
 
-#' @importFrom cowplot
-NULL
 

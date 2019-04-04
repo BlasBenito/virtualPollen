@@ -27,7 +27,7 @@ simulateDriver(
 \item{rescale}{boolean. If FALSE, \code{output.min} and \code{output.max} are ignored, and the original data range provided by \code{rnorm} is preserved. Default is TRUE.}
 }
 \value{
-A vector of the same length as \code{time}.
+A vector of the same length as \code{time}. Datasets \code{\link{driverA}} and \code{\link{driverB}} are outputs of this function.
 }
 \description{
 Generates a vector of the same legnth as the \code{time} argument, with a temporal autocorrelation length close to the defined by \code{autocorrelation.length}, and a range within \code{output.min} and \code{output.max}. The output of this function is intended to be used as an input to the function \code{\link{rescaleVector}}. Note that the variable \code{time} runs from left to right, with lower values representing older samples.
@@ -54,7 +54,7 @@ acf(x, lag.max = 300)
 
 }
 \seealso{
-\code{\link{rescaleVector}}
+\code{\link{rescaleVector}}, \code{\link{driverA}}, \code{\link{driverB}}
 }
 \author{
 Blas M. Benito  <blasbenito@gmail.com>

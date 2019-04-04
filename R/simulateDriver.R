@@ -22,9 +22,9 @@
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
-#' @return A vector of the same length as \code{time}.
+#' @return A vector of the same length as \code{time}. Datasets \code{\link{driverA}} and \code{\link{driverB}} are outputs of this function.
 #'
-#' @seealso \code{\link{rescaleVector}}
+#' @seealso \code{\link{rescaleVector}}, \code{\link{driverA}}, \code{\link{driverB}}
 #'
 #' @examples
 #'

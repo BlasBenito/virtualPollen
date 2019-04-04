@@ -23,14 +23,14 @@
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
-#' @return A dataframe with the following columns.
+#' @return A dataframe like \code{\link{accumulationRate}}, with the following columns:
 #' \itemize{
 #'   \item \emph{time} numeric, time or age of the given case.
 #'   \item \emph{accumulation.rate} numeric, in years per centimetre, simulated accumulation rate.
-#'   \item \emph{grouping} integer, grouping variable to aggregate together with \code{\link{aggregateSimulation}} samples deposited in the same centimetre according \emph{accumulation.rate}.
+#'   \item \emph{grouping} integer, grouping variable to aggregate together (with \code{\link{aggregateSimulation}}) samples deposited in the same centimetre according \emph{accumulation.rate}.
 #' }
 #'
-#' @seealso \code{\link{aggregateSimulation}}
+#' @seealso \code{\link{accumulationRate}}, \code{\link{aggregateSimulation}}
 #'
 #' @examples
 #'

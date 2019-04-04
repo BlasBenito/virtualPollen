@@ -32,7 +32,7 @@
 #'   \item \emph{value} numeric, value of the driver for the given \emph{time}.
 #' }
 #'
-#' @seealso \code{\link{simulateDriver}}, \code{\link{simulatePopulation}}, \code{\link{drivers}}
+#' @seealso \code{\link{drivers}}, \code{\link{simulateDriver}}, \code{\link{simulatePopulation}}, \code{\link{drivers}}
 #'
 #' @examples
 #'

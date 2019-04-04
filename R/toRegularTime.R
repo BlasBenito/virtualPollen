@@ -10,41 +10,22 @@
 #'   columns.to.interpolate=c("Suitability", "Driver.A", "Pollen")
 #'   )
 #'
-#' @param x list, output of \code{\link{aggregateSimulation}}.
+#' @param x list of dataframes (generally the output of \code{\link{aggregateSimulation}}) or single dataframe  with irregular time series.
 #' @param time.column character string, default value is "Time".
 #' @param interpolation.interval integer, in years, time length encompassed by each sample.
 #' @param columns.to.interpolate character string or character vector, columns of simulation output to be interpolated. Any subset of: "Pollen", "Population.mature", "Population.immature", "Population.viable.seeds", "Suitability", "Biomass.total", "Biomass.mature", "Biomass.immature", "Mortality.mature", "Mortality.immature", "Driver.A", "Driver.B".
 #'
-#' @details The function takes the input list, and on each dataframe it fits a \code{\link{loess}} model of the form \code{y ~ x}, where \code{y} is any column given by \code{columns.to.interpolate} and \code{x} is the column given by the \code{time.column} argument. The model is used to interpolate column \code{y} on a regular time series of intervals equal to \code{interpolation.interval}.
+#' @details This function fits a \code{\link{loess}} model of the form \code{y ~ x}, where \code{y} is any column given by \code{columns.to.interpolate} and \code{x} is the column given by the \code{time.column} argument. The model is used to interpolate column \code{y} on a regular time series of intervals equal to \code{interpolation.interval}. If \code{x} is a matrix-like list returned by \code{\link{aggregateSimulation}} (on results of \code{\link{simulateAccumulationRate}} and \code{\link{simulatePopulation}}), the first column of the matrix will already have a regular time column, and therefore nothing will be done with this column of the list.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
-#' @return A list of dataframes with the same structure as the input list. Each dataframe has the columns "Time" (now regular), and any column listed in \code{columns.to.interpolate}.
+#' @return If \code{x} is a list of dataframes, the function returns a list with the same structure as the input list. If \code{x} is a dataframe, the function returns a dataframe. In any case, output dataframes have the columns "Time" (now regular), and any column listed in \code{columns.to.interpolate}.
 #'
 #' @seealso \code{\link{simulateAccumulationRate}}, \code{\link{aggregateSimulation}}
 #'
 #' @examples
-#'#generating driver
-#'driver <- simulateDriver(
-#'  random.seed = 10,
-#'  time = 1:1000,
-#'  autocorrelation.length = 200,
-#'  output.min = 0,
-#'  output.max = 100,
-#'  rescale = TRUE
-#'  )
-#'
-#'#preparing parameters
-#'parameters <- parametersDataframe(rows=2)
-#'parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
-#'parameters <- fixParametersTypes(x=parameters)
-#'
-#'#simulating population dynamics
-#'sim.output <- simulatePopulation(
-#'  parameters=parameters,
-#'  driver.A=driver,
-#'  driver.B=NULL
-#'  )
+#'#loading data
+#'data(simulation)
 #'
 #'#generating accumulation rate
 #'acc.rate <- simulateAccumulationRate(
@@ -74,9 +55,16 @@
 #' @export
 toRegularTime <- function(x, time.column="Time", interpolation.interval=10, columns.to.interpolate=c("Suitability", "Driver.A", "Pollen")){
 
-  #list dimensions
-  x.rows <- 1:dim(x)[1]
-  x.columns <- 2:dim(x)[2] #from 2 to avoid changing the original sim
+  #list dimensions if x is list
+  if(inherits(x , "list")==TRUE){
+    x.rows <- 1:dim(x)[1]
+    x.columns <- 2:dim(x)[2] #from 2 to avoid changing the original sim
+  }
+
+  if(inherits(x , "dataframe")==TRUE){
+    x.rows <- 1
+    x.columns <- 1
+  }
 
   #iterating through list elements
   #virtual taxa
@@ -136,7 +124,13 @@ toRegularTime <- function(x, time.column="Time", interpolation.interval=10, colu
 
       temp.interpolated$Period <- "Simulation"
 
-      x[[x.row, x.column]] <- temp.interpolated
+      if(inherits(x , "list")==TRUE){
+        x[[x.row, x.column]] <- temp.interpolated
+      }
+
+      if(inherits(x , "data.frame")==TRUE){
+        x <- temp.interpolated
+      }
     }
   }
 

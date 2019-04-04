@@ -48,7 +48,7 @@
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
-#' @return A list of dataframes, each one of them with the results of one simulation. Each dataframe has the columns:
+#' @return A list of dataframes, each one of them with the results of one simulation. The dataset \code{\link{simulation}} exemplifies the output of this function. Each dataframe in the output list has the columns:
 #' \itemize{
 #'   \item \emph{Time} integer, ages in years. Negative ages indicate the burn-in period.
 #'   \item \emph{Pollen} numeric, pollen counts

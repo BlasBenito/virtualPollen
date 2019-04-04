@@ -57,7 +57,7 @@ drivers <- simulateDriverS(
 
 }
 \seealso{
-\code{\link{simulateDriver}}, \code{\link{simulatePopulation}}, \code{\link{drivers}}
+\code{\link{drivers}}, \code{\link{simulateDriver}}, \code{\link{simulatePopulation}}, \code{\link{drivers}}
 }
 \author{
 Blas M. Benito  <blasbenito@gmail.com>
