@@ -54,11 +54,6 @@ simulateAccumulationRate <- function(seed = 50,
                                      plot = TRUE
                                      ){
 
-require(mgcv)
-require(ggplot2)
-require(cowplot)
-require(viridis)
-
 #setting random seed for repeatibility
 set.seed(seed)
 

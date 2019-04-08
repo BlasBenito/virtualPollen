@@ -21,6 +21,7 @@
 #'
 #' @export
 fixParametersTypes <- function(x){
+
   #sets all columns but the first one into numeric
   x[, 2:ncol(x)] <- sapply(x[, 2:ncol(x)], as.numeric)
 

@@ -58,10 +58,6 @@ parametersCheck <- function(parameters,
                            drivers = NULL,
                            filename = NULL){
 
-  require("ggplot2")
-  require("cowplot")
-  require("viridis")
-
   #CHECKING INPUT DATA
   #-------------------
 
@@ -160,8 +156,8 @@ parametersCheck <- function(parameters,
       }
 
       #getting driver values
-      driver.A.ready <- drivers[drivers$driver == "A" & drivers$autocorrelation.length == autocorrelation.length.A, "value"]
-      driver.B.ready <- drivers[drivers$driver == "B" & drivers$autocorrelation.length == autocorrelation.length.B, "value"]
+      driver.A.ready <- drivers[drivers$driver == "A" & drivers$autocorrelation.length == parameters[i, "autocorrelation.length.A"], "value"]
+      driver.B.ready <- drivers[drivers$driver == "B" & drivers$autocorrelation.length == parameters[i, "autocorrelation.length.B"], "value"]
 
     } else {
       #getting values from vectors

@@ -54,10 +54,6 @@ simulateDriverS <- function(random.seeds=c(60, 120),
                             driver.names=c("A", "B"),
                             filename=NULL){
 
-require(ggplot2)
-require(cowplot)
-require(viridis)
-
 
 #TESTING INPUT DATA
 #number of driver names

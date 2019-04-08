@@ -70,12 +70,6 @@ compareSimulations <- function(
   title.size = 25,
   plot.title = ""){
 
-  require(tidyr)
-  require(plyr)
-  require(ggplot2)
-  require(viridis)
-  require(cowplot)
-
   #SELECTING SPECIES
   #----------------
   #creating dictionary of species names and indexes

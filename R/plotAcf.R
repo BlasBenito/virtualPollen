@@ -42,9 +42,6 @@
 plotAcf <- function(x = NULL,
                    plot.title = ""){
 
-  require(ggplot2)
-  require(cowplot)
-
   acf.plot = ggplot(data = x, aes(x = lag, y = acf)) +
     geom_hline(aes(yintercept = 0)) +
     geom_hline(aes(yintercept = ci.max), color="red", linetype="dashed") +

@@ -127,7 +127,7 @@
 #' @seealso \code{\link{simulateAccumulationRate}}, \code{\link{aggregateSimulation}}
 "accumulationRate"
 
-#' @import ggplot2 viridis cowplot tidyr plyr
+#' @import ggplot2 viridis tidyr plyr
 NULL
 
 #' @importFrom mgcv gam
