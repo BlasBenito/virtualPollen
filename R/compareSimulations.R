@@ -70,6 +70,8 @@ compareSimulations <- function(
   title.size = 25,
   plot.title = ""){
 
+  library(cowplot)
+
   #SELECTING SPECIES
   #----------------
   #creating dictionary of species names and indexes

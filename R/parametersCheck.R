@@ -58,6 +58,8 @@ parametersCheck <- function(parameters,
                            drivers = NULL,
                            filename = NULL){
 
+  library(cowplot)
+
   #CHECKING INPUT DATA
   #-------------------
 

@@ -27,7 +27,7 @@
 #' @param simulation.output output of \code{\link{simulatePopulation}}.
 #' @param species a number or vector or numbers representing rows in the parameters dataframe, or a string or vector of strings referencing to the "label" column of the parameters dataframe.
 #' @param burnin if \code{FALSE}, burn-in period is not considered in the model.
-#' @param filename character string, name of output pdf file. If NULL or empty, no pdf is produced.
+#' @param filename character string, name of output pdf file. If NULL or empty, no pdf is produced. It shouldn't include the extension of the output file.
 #' @param time.zoom vector of two numbers indicating the beginnign and end of the time interval to be plotted (i.e. "c(5000, 10000)")
 #' @param panels character string or vector of character strings with these possible values: "Driver A", "Driver B","Suitability", "Population", "Mortality", "Biomass", "Pollen".
 #' @param plot.title character string to use as plot title.
@@ -88,6 +88,8 @@ plotSimulation <- function(
   text.size = 20,
   title.size = 25,
   line.size = 1){
+
+  library(cowplot)
 
   #checking and setting panels
   if(length(panels) == 1){
