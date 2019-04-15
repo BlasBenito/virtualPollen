@@ -58,7 +58,7 @@ toRegularTime <- function(x, time.column="Time", interpolation.interval=10, colu
   #list dimensions if x is list
   if(inherits(x , "list")==TRUE){
     x.rows <- 1:dim(x)[1]
-    x.columns <- 2:dim(x)[2] #from 2 to avoid changing the original sim
+    x.columns <- 1:dim(x)[2]
   }
 
   if(inherits(x , "dataframe")==TRUE){
