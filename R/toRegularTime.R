@@ -24,36 +24,14 @@
 #' @seealso \code{\link{simulateAccumulationRate}}, \code{\link{aggregateSimulation}}
 #'
 #' @examples
-#'#loading data
-#'data(simulation)
 #'
-#'#generating accumulation rate
-#'acc.rate <- simulateAccumulationRate(
-#'  seed=50,
-#'  time=1:1000,
-#'  output.min=10,
-#'  output.max=40,
-#'  direction=1,
-#'  plot=TRUE
-#'  )
-#'
-#'#aggregating simulated data
-#'sim.output.aggregated <- aggregateSimulation(
-#'  simulation.output=sim.output,
-#'  accumulation.rate=acc.rate,
-#'  sampling.intervals=3
-#'  )
-#'
-#'#comparing simulations
-#'sim.output.regular <- toRegularTime(
-#'  x=sim.output.aggregated,
-#'  time.column="Time",
-#'  interpolation.interval=20,
-#'  columns.to.interpolate=c("Driver.A", "Pollen")
-#'  )
 #'
 #' @export
-toRegularTime <- function(x, time.column="Time", interpolation.interval=10, columns.to.interpolate=c("Suitability", "Driver.A", "Pollen")){
+toRegularTime <- function(x,
+                          time.column = "Time",
+                          interpolation.interval = NULL,
+                          columns.to.interpolate=c("Suitability", "Driver.A", "Pollen")
+                          ){
 
   #list dimensions if x is list
   if(inherits(x , "list")==TRUE){

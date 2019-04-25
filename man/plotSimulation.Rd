@@ -32,7 +32,7 @@ plotSimulation(
 
 \item{burnin}{if \code{FALSE}, burn-in period is not considered in the model.}
 
-\item{filename}{character string, name of output pdf file. If NULL or empty, no pdf is produced.}
+\item{filename}{character string, name of output pdf file. If NULL or empty, no pdf is produced. It shouldn't include the extension of the output file.}
 
 \item{time.zoom}{vector of two numbers indicating the beginnign and end of the time interval to be plotted (i.e. "c(5000, 10000)")}
 

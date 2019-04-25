@@ -3,13 +3,13 @@
 \docType{data}
 \name{simulation}
 \alias{simulation}
-\title{List with two simulation outputs.}
-\format{numeric vector of length 10000.}
+\title{List with simulation outputs for all virtual taxa in \code{\link{parameters}}.}
+\format{List with 16 dataframes with outputs of \code{\link{simulatePopulation}}.}
 \usage{
 data(simulation)
 }
 \description{
-A list of dataframes with two slots, output of \code{\link{simulatePopulation}}. Each slot corresponds to a virtual taxon from the \code{\link{parameters}} dataframe. Each dataframe has the following columns:
+A list of dataframes with 16 slots, output of \code{\link{simulatePopulation}}, taking \code{\link{parameters}} and \code{\link{drivers}} as input. Each dataframe has the following columns:
 }
 \details{
 \itemize{

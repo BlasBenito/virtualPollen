@@ -30,33 +30,7 @@ Takes the output of \code{\link{aggregateSimulation}}, and interpolates it into 
 This function fits a \code{\link{loess}} model of the form \code{y ~ x}, where \code{y} is any column given by \code{columns.to.interpolate} and \code{x} is the column given by the \code{time.column} argument. The model is used to interpolate column \code{y} on a regular time series of intervals equal to \code{interpolation.interval}. If \code{x} is a matrix-like list returned by \code{\link{aggregateSimulation}} (on results of \code{\link{simulateAccumulationRate}} and \code{\link{simulatePopulation}}), the first column of the matrix will already have a regular time column, and therefore nothing will be done with this column of the list.
 }
 \examples{
-#loading data
-data(simulation)
 
-#generating accumulation rate
-acc.rate <- simulateAccumulationRate(
- seed=50,
- time=1:1000,
- output.min=10,
- output.max=40,
- direction=1,
- plot=TRUE
- )
-
-#aggregating simulated data
-sim.output.aggregated <- aggregateSimulation(
- simulation.output=sim.output,
- accumulation.rate=acc.rate,
- sampling.intervals=3
- )
-
-#comparing simulations
-sim.output.regular <- toRegularTime(
- x=sim.output.aggregated,
- time.column="Time",
- interpolation.interval=20,
- columns.to.interpolate=c("Driver.A", "Pollen")
- )
 
 }
 \seealso{
