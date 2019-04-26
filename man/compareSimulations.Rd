@@ -44,10 +44,10 @@ The user can decide what virtual taxa to plot through the \code{species} argumen
 \examples{
 
 #getting example data
-data(simulations)
+data(simulation)
 
 #compare taxa 1, 2, and 3.
-compareSimulations(simulation.output = simulations,
+compareSimulations(simulation.output = simulation,
  species = c(1, 2, 3),
  columns = c("Pollen", "Suitability"),
  time.zoom = c(1000, 2000)

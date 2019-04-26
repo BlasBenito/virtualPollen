@@ -5,7 +5,7 @@
 \title{Reinterpolates aggregated simulations into regular time.}
 \usage{
 toRegularTime(
-  x = Null,
+  x = NULL,
   time.column = "Time",
   interpolation.interval = NULL,
   columns.to.interpolate = c("Suitability",

@@ -5,7 +5,7 @@
 \title{Generates a random time series with temporal autocorrelation.}
 \usage{
 simulateDriver(
-  random.seed = 50,
+  random.seed = 30,
   time = 1:10000,
   autocorrelation.length = 100,
   output.min = 0,

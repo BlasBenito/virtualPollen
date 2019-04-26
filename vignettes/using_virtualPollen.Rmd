@@ -2,6 +2,7 @@
 title: 'virtualPollen'
 subtitle: 'Generation of virtual pollen curves'
 author: "Blas M. Benito"
+fig_width: 6
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using virtualPollen}
@@ -9,7 +10,7 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-```{r setup, echo=TRUE, warning=FALSE, message=FALSE}
+```{r setup, warning=FALSE, message=FALSE}
 #checking if required packages are installed, and installing them if not
 list.of.packages <- c("ggplot2", "cowplot", "knitr", "viridis", "tidyr", "formatR", "grid", "devtools")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
@@ -82,7 +83,7 @@ random.walk <- cumsum(moves)
 
 ```
 
-```{r , fig.height=2.5, echo=TRUE, fig.cap="Random walk (a) and its temporal autocorrelation (b)."}
+```{r , fig.height=2.5, fig.width=9, fig.cap="Random walk (a) and its temporal autocorrelation (b)."}
 
 p1 <- ggplot(data=data.frame(Time=time, Value=random.walk), aes(x=Time, y=Value)) + 
   geom_line(color="gray40") + 
@@ -129,7 +130,7 @@ b <- filter(a, filter=c(1,1), method="convolution", circular=TRUE)
 
 
 
-```{r , fig.height=2.5, fig.width=6, echo=TRUE, fig.cap="Original sequence (dashed line) and filtered sequence with filter (solid line)."}
+```{r , fig.height=2.5, fig.width=9, fig.cap="Original sequence (dashed line) and filtered sequence with filter (solid line)."}
 
 ggplot(data=data.frame(Time=rep(1:length(a), 2), Value=c(a, b), Legend=c(rep("Original (a)", length(a)), rep("Filtered (b)", length(b)))), aes(x=Time, y=Value, group=Legend)) + 
   geom_line(aes(linetype=Legend), color="gray40", size=1) + 
@@ -139,7 +140,7 @@ ggplot(data=data.frame(Time=rep(1:length(a), 2), Value=c(a, b), Legend=c(rep("Or
 
 
 
-```{r, echo=TRUE, results="asis"}
+```{r, results="asis"}
 
 temp.table <- data.frame(row=1:5, a=round(a, 2), b=round(b, 2))
 temp.table$operation <- c("b1 = a1 x f2 + a2 x f1",  "b2 = a2 x f2 + a3 x f1", "b3 = a3 x f2 + a4 x f1" , "b4 = a4 x f2 + a5 x f1", "b5 = a5 x f2 + a6 x f1")
@@ -156,7 +157,7 @@ moves.100 <- filter(moves, filter=rep(1, 100), circular=TRUE)
 
 ```
 
-```{r, fig.height=5, echo=TRUE, warning=FALSE, fig.cap="Sequences filtered with different filter lengths: a) Sequence with autocorrelation length equal to 10; b) Temporal autocorrelation of a); c) Sequence with autocorrelation length equal to 100: d) Temporal autocorrelation of c)."}
+```{r, fig.height=5, fig.width=9, warning=FALSE, fig.cap="Sequences filtered with different filter lengths: a) Sequence with autocorrelation length equal to 10; b) Temporal autocorrelation of a); c) Sequence with autocorrelation length equal to 100: d) Temporal autocorrelation of c)."}
 
 p4 <- ggplot(data=data.frame(Time=time, Value=as.vector(moves.10)), aes(x=Time, y=Value)) + 
   geom_line(color="gray40", size=0.5) + 
@@ -200,7 +201,7 @@ moves.5000 <- filter(moves, filter=rep(1, 5000), circular=TRUE)
 ```
 
 
-```{r , fig.height=2.5, echo=TRUE, fig.cap="Sequence moves.5000 (a) and its temporal autocorrelation (b). In this case there is a large deviation between the required temporal autocorrelation (5000) and the outcome (2000)."}
+```{r , fig.height=2.5, fig.width=9, fig.cap="Sequence moves.5000 (a) and its temporal autocorrelation (b). In this case there is a large deviation between the required temporal autocorrelation (5000) and the outcome (2000)."}
 
 p8 <- ggplot(data=data.frame(Time=time, Value=as.vector(moves.5000)), aes(x=Time, y=Value)) + 
   geom_line(color="gray40", size=0.5) + 
@@ -219,7 +220,7 @@ plot_grid(p8, p9, labels = c("a", "b"), align = "h")
 
 ```
 
-All the ideas presented above are implemented in a function named **simulateDriver()**, with the following arguments:
+All the ideas presented above are implemented in the functions named **simulateDriver()** and **simulateDriverS**, with these main arguments:
 
 * **random.seed**: an integer for *set.seed()*, to use the same random seed in the generation of random numbers and make sure that results are reproducible.
 * **age**: a vector (i.e. 1:1000), representing the length of the output.
@@ -227,139 +228,22 @@ All the ideas presented above are implemented in a function named **simulateDriv
 * **output.min**: minimum value of the driver.
 * **output.max**: maximum value of the driver.
 
-```{r, eval=FALSE, size="small", cache=TRUE}
-simulateDriver <- function(random.seed, 
-                           time, 
-                           autocorrelation.length, 
-                           output.min, 
-                           output.max){
-  
-  #setting random seed
-  set.seed(random.seed)
-  
-  #generating driver
-  driver = filter(rnorm(max(time)), 
-                  filter=rep(1, autocorrelation.length), 
-                  circular=TRUE)
+**Figure 5** shows a driver generated with **simulateDriverS** with annual resolution in the range [0, 100], over a period of 10000 years, with a temporal autocorrelation length of 600 years.
 
-  #rescaling it between output.min and output.max
-  driver = as.vector(((driver - min(driver)) / 
-                        (max(driver) - min(driver))) *
-                       (output.max - output.min) +
-                       output.min) 
-  
-  return(driver)
-}
+
+```{r , fig.height=3, fig.width=9, fig.cap="Virtual driver and its temporal autocorrelation."}
+
+driver <- simulateDriverS(
+  random.seed = 60,
+  time = 1:10000,
+  autocorrelation.lengths = 600,
+  output.min = 0,
+  output.max = 100,
+  driver.names = "A"
+)
+
 ```
 
-
-With this function we can generate a driver with any arbitrary features. **Figure 5** shows one with annual resolution in the range [0, 100], over a period of 10000 years, with a temporal autocorrelation length of 600 years.
-
-
-```{r , fig.height=2.5, echo=TRUE, cache=TRUE, fig.cap="Virtual driver used for the simulations in the paper."}
-
-#time
-time <- 1:10000
-
-#IMPORTANT NOTE: this code is also available as a function named "simulateDriverS", please, check the help file of the function before to use it!
-
-#autocorrelation length
-autocorrelation.length.list = 600
-# autocorrelation.length.list = c(600, 1800)
-
-#driver names
-driver.list = "A"
-# driver.list = c("A", "B")
-
-#setting the limits for each driver
-data.ranges<-data.frame(driver=driver.list, output.min=0, output.max=100, random.seed=60)
-# data.ranges<-data.frame(driver=driver.list, output.min=c(0, 0), output.max=c(100, 100), random.seed=c(60, 120))
-
-#dataframes to store drivers.10k
-drivers.10k <- drivers.10k.temp <- data.frame(time=numeric(), driver=character(), autocorrelation.length=numeric(), value=numeric())
-
-#dataframe to store acf() results
-autocorrelation.10k <- data.frame(lag=numeric(), acf=numeric(), ci.max=numeric(), ci.min=numeric(), driver=character(), autocorrelation.length=numeric())
-
-#looping through drivers.10k and memory lengths
-for(driver in driver.list){
-  for(autocorrelation.length in autocorrelation.length.list){
-    
-    #FILLING drivers.10k.temp
-    #---------------------------------------
-    #fill drivers.10k.temp with time and grouping
-    drivers.10k.temp[max(time), ] <- NA
-    drivers.10k.temp$time <- time
-    
-    #fill with parameter values
-    drivers.10k.temp$driver <- rep(driver, nrow(drivers.10k.temp))
-    drivers.10k.temp$autocorrelation.length <- rep(autocorrelation.length, nrow(drivers.10k.temp))
-    
-    #fill values of the driver
-    simulated.driver <- simulateDriver(
-      random.seed=data.ranges[data.ranges$driver==driver, "random.seed"], 
-      time=time, 
-      autocorrelation.length=autocorrelation.length, 
-      output.min=data.ranges[data.ranges$driver==driver, "output.min"], 
-      output.max=data.ranges[data.ranges$driver==driver, "output.max"]
-    )
-    
-    #getting the driver values
-    drivers.10k.temp$value <- rescaleVector(x=simulated.driver, new.max = 100, new.min = 0)
-    
-    #FILLING autocorrelation.temp
-    #---------------------------------------
-    #computing acf
-    autocorrelation.temp <- acfToDf(simulated.driver, max(autocorrelation.length.list), 100)
-    autocorrelation.temp$driver <- rep(driver, nrow(autocorrelation.temp))
-    autocorrelation.temp$autocorrelation.length <- rep(autocorrelation.length, nrow(autocorrelation.temp))
-    
-    #merging with main dataframes
-    drivers.10k <- rbind(drivers.10k, drivers.10k.temp)
-    autocorrelation.10k <- rbind(autocorrelation.10k, autocorrelation.temp)
-    
-  }
-}
-
-
-    color.palette<-c("gray40", "gray20")
-    names(color.palette)<-c("A", "B")
-
-p.drivers <- ggplot(data=drivers.10k, aes(x=time, y=value, color=driver)) + 
-  geom_line() + 
-  scale_colour_manual(values=color.palette) + 
-  facet_wrap(driver ~ autocorrelation.length, ncol=1, scales="free_y") + 
-  xlab("Years") + 
-  ylab("") +
-  ggtitle("Virtual drivers") +
-  theme(legend.position="none") +
-  theme(plot.margin = unit(c(0.5, -1, 0.5, 0.5), "cm"))
-
-p.density <- ggplot(data=drivers.10k, aes(value, fill=driver, colour=driver)) + 
-  geom_density(aes(y=..scaled..), alpha=0.5) + 
-  scale_colour_manual(values=color.palette) +
-  scale_fill_manual(values=color.palette) +
-  facet_wrap(driver ~ autocorrelation.length, ncol=1, scales="free") + xlab("Years") + 
-  theme(legend.position="none") +
-  ylab("") +
-  xlab("") +
-  coord_flip() + 
-  theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0), "cm"), axis.line=element_blank(), axis.text=element_blank(), axis.ticks=element_blank(), strip.background = element_blank(), strip.text.x = element_blank())
-
-p.acfs <- ggplot(data=autocorrelation.10k, aes(x=lag, y=acf)) +
-  geom_hline(aes(yintercept = 0)) + 
-  geom_hline(aes(yintercept = ci.max), color="red", linetype="dashed") +
-  geom_hline(aes(yintercept = ci.min), color="red", linetype="dashed") +
-  geom_segment(mapping = aes(xend = lag, yend = 0)) + 
-  ylab("") +
-  facet_wrap(driver ~ autocorrelation.length, ncol=1, scales="free_y") + 
-  ggtitle("Temporal autocorrelation") +
-  theme(legend.position="none", plot.margin = unit(c(0.5, 0.5, 0.5, -1), "cm"))
-
-plot_grid(p.drivers, NULL, p.density, NULL, p.acfs, align="h", ncol = 5, rel_widths = c(1, 0, 0.2, 0, 1))
-```
-
-Another alternative is
 
 #Simulating pollen curves from virtual taxa#
 
@@ -397,7 +281,7 @@ We have designed a simple individual-based population model which input paramete
 
 In order to explain the model dynamics in the most simplified way, the parameters in **Table 1** are considered.
 
-```{r, echo=TRUE, message=FALSE, warning=FALSE, cache=TRUE}
+```{r, message=FALSE, warning=FALSE}
 
 parameters <- parametersDataframe(rows=1)
 parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 10000, 1, 0, 50, 10, 0, 0, 600, 0)
@@ -441,13 +325,13 @@ niche.A <- dnorm(x=0:100, mean=50, sd=10)
 
 We use the code above and a computation on the density of the driver to plot the ecological niche of the virtual taxa against the availability of driver values (**Figure 6**).
 
-```{r , fig.height=2.5, echo=TRUE, fig.cap="Ecological niche of the virtual species (blue) against the density (relative availability of values over time) of the driver (gray). Both densities have been scaled in the range [0, 1]."}
+```{r , fig.height=2.5, fig.width=6, fig.cap="Ecological niche of the virtual species (blue) against the density (relative availability of values over time) of the driver (gray). Both densities have been scaled in the range [0, 1]."}
 
 #scaling suitability between 0 and 1
 niche.A <- niche.A / max(niche.A)
 
 #getting the density of the driver
-driver.A = drivers.10k[drivers.10k$driver=="A", "value"]
+driver.A = driver[driver$driver=="A", "value"]
 density.driver.A = density(driver.A, from=min(driver.A), to=max(driver.A), n=101, bw=max(driver.A)/100)
 density.driver.A.y = (density.driver.A$y - min(density.driver.A$y)) / (max(density.driver.A$y) - min(density.driver.A$y))
 driver.A.range = seq(min(driver.A), max(driver.A), length.out = 101)
@@ -480,10 +364,10 @@ Environmental suitability for the given species over the study period is compute
 
 A **burn-in period** with a length of ten generations of the virtual taxa is added to the environmental suitability computed from the species niche and the driver/drivers. The added segment starts at maximum environmental suitability, stays there for five generations, and decreases linearly for another five generations until meeting the first suitability value of the actual simulation time. The whole burn-in segment has a small amount of white noise added (**Figure 7**). The burn-in period lets the population model to warm-up and go beyond starting conditions before simulation time starts.
 
-```{r , fig.height=5, echo=TRUE, fig.cap="Driver and environmental suitability of the virtual taxa. Burn-in period is highlighted by a gray box in the Environmental suitability panel."}
+```{r , fig.height=5,  fig.width=9, fig.cap="Driver and environmental suitability of the virtual taxa. Burn-in period is highlighted by a gray box in the Environmental suitability panel."}
 
 #computing density
-density.A <- dnorm(drivers.10k$value, mean=50, sd=10)
+density.A <- dnorm(driver$value, mean=50, sd=10)
 
 #scaling to [0, 1]
 suitability <- density.A / max(density.A)
@@ -496,7 +380,7 @@ suitability <- density.A / max(density.A)
 
 plot.df4 <- data.frame(Time=c(-length.burnin.suitability:-1, 1:(length(suitability))), Suitability=burnin.suitability, Period=c(rep("Burn-in", length.burnin.suitability), rep("Simulation", length(suitability))))
 
-p1 <- ggplot(data=drivers.10k, aes(x=time, y=value)) + 
+p1 <- ggplot(data=driver, aes(x=time, y=value)) + 
   geom_line(size=0.5, color="gray40") + 
   ggtitle("Driver and environmental suitability") + 
   xlab("") + 
@@ -532,7 +416,7 @@ Where:
 
 
 
-```{r , fig.height=3, fig.width=6, echo=TRUE, cache=TRUE, fig.cap="Biomass vs. age curves resulting from different growth rates for a 400 years life-span."}
+```{r , fig.height=3, fig.width=6, fig.cap="Biomass vs. age curves resulting from different growth rates for a 400 years life-span."}
 
 #objects to store results
 growth.rate.vector <- biomass.vector <- age.vector <- vector()
@@ -595,7 +479,7 @@ Where:
 
 
 
-```{r , fig.height=3, fig.width=6, echo=TRUE, cache=TRUE, fig.cap="Risk curve defining the probability of removal of a given individual as a function of its fractional age when maximum carrying capacity is reached."}
+```{r , fig.height=3, fig.width=6, fig.cap="Risk curve defining the probability of removal of a given individual as a function of its fractional age when maximum carrying capacity is reached."}
 
 temp.df <- data.frame(Pm=NA, Age=0:100)
 temp.df$Pm <- 1 - sqrt(temp.df$Age/100)
@@ -722,11 +606,11 @@ for(suitability.i in suitability){
 
 The code below executes the simulation, and plots the outcome using the function *plotSimulation*.
 
-```{r , size="small", cache=TRUE, fig.height=6.5, message=FALSE, warning=FALSE, error=FALSE, results="hide", fig.cap="Simulation outcome. Green shades represent different age groups (seedlings, saplings, and adults)."}
+```{r , size="small", fig.height=6.5, fig.width=9, message=FALSE, warning=FALSE, error=FALSE, results="hide", fig.cap="Simulation outcome. Green shades represent different age groups (seedlings, saplings, and adults)."}
 
 #simulate population based on parameters
 simulation <- simulatePopulation(parameters=parameters[1, ], 
-                                 drivers=drivers.10k)
+                                 drivers=driver)
 
 #plotting simulation output
 plotSimulation(simulation.output=simulation, 
@@ -744,7 +628,7 @@ plotSimulation(simulation.output=simulation,
 The simulation outcomes can vary with the traits of the virtual species. **Table 2** shows the parameters of two new taxa named **Species 2** and **Species 3**. These species have a higher niche breadth than **Species 1**, and **Species 3** has a pollen productivity depending more on biomass than suitability (parameter *pollen.control* higher than zero). The comparison of both simulations (**Figure 11**) along with **Species 1** shows that different traits generate different pollen curves in our simulation.
 
 
-```{r, echo=TRUE, message=FALSE, warning=FALSE, cache=TRUE}
+```{r, message=FALSE, warning=FALSE}
 
 parameters[2,] <- c("Species 2", 50, 20, 4, 0.3, 0, 100, 10000, 1, 0, 50, 15, 0, 0, 600, 600)
 parameters[3,] <- c("Species 3", 50, 20, 6, 0.4, 0.5, 100, 10000, 1, 0, 50, 20, 0, 0, 600, 600)
@@ -762,12 +646,12 @@ kable(parameters.t, caption="Parameters of the three virtual species.", booktabs
 ```
 
 
-```{r , warning=FALSE, message=FALSE, comment=FALSE, cache=TRUE, results='hide', echo=TRUE, cache=TRUE, fig.height=5, fig.cap="Comparison of the pollen abundance and environmental suitability (same in all cases) for the three virtual species shown in Table 2 within the period 4000-5000. Species 2 has a higher fecundity than Species 1 (1 vs 10)"}
+```{r , warning=FALSE, message=FALSE, comment=FALSE, results='hide', fig.height=5, fig.width=9, fig.cap="Comparison of the pollen abundance and environmental suitability (same in all cases) for the three virtual species shown in Table 2 within the period 5600-6400. Species 2 has a higher fecundity than Species 1 (1 vs 10)"}
 
 #simulating species 2 and 3 of the dataframe parameters
 simulation.2 <- simulatePopulation(parameters=parameters, 
                                    species=c(2,3), 
-                                   drivers=drivers.10k)
+                                   drivers=driver)
 
 #adding the results to the previous simulation
 simulation <- c(simulation, simulation.2)
@@ -776,8 +660,8 @@ rm(simulation.2)
 #plotting the comparison for the time interval between 4000 and 5000.-
 compareSimulations(simulation.output=simulation, 
                    species = "all",
-                   columns=c("Suitability", "Pollen"), 
-                   time.zoom=c(5600, 6400))
+                   columns = c("Suitability", "Pollen"), 
+                   time.zoom = c(5600, 6400))
 
 ```
 
@@ -785,7 +669,7 @@ compareSimulations(simulation.output=simulation,
 
 We searched for the minimum values of the parameters required to keep a simulated population viable under fully suitable conditions. The taxa *Test 1* and *Test 2* shown below 
 
-```{r, echo=TRUE, message=FALSE, warning=FALSE, results="hide"}
+```{r, message=FALSE, warning=FALSE, results="hide"}
 parameters.test <- parametersDataframe(rows=1)
 parameters.test[1,] <- c("Test 1", 4, 1, 0.55, 2, 0, 1, 30, 0.5, 0.5, 50, 10, 50, 10, 100, 100)
 parameters.test[2,] <- c("Test 2", 3, 1, 0.5, 2, 0, 1, 30, 0.5, 0.5, 50, 10, 50, 10, 100, 100)
@@ -802,7 +686,7 @@ parameters.t <- parameters.t[1:(nrow(parameters.t)-2),]
 kable(parameters.t, caption="Parameters of virtual taxa used to test model limits.")
 rm(parameters.t)
 ```
-```{r, warning=FALSE, message=FALSE, comment=FALSE, cache=TRUE, results='hide'}
+```{r, warning=FALSE, message=FALSE, comment=FALSE, results='hide'}
 simulation.test.1 <- simulatePopulation(
   parameters=parameters.test,
   driver.A=jitter(rep(50, 500), amount=4)
@@ -811,7 +695,7 @@ simulation.test.1 <- simulatePopulation(
 
 The test driver used had an average of 50 (optimum values according the environmental niche of both species) for 500 years, with random noise added through the *jitter* function. The model results (column *Pollen* only) for both virtual taxa are shown below.  
 
-```{r, fig.height=3, echo=TRUE, message=FALSE, results='hide', fig.cap="Pollen output of virtual taxa Test 1 and Test 2 for a 200 years time-window."}
+```{r, fig.height=3, fig.width=9, message=FALSE, results='hide', fig.cap="Pollen output of virtual taxa Test 1 and Test 2 for a 200 years time-window."}
 compareSimulations(simulation.output=simulation.test.1, 
                    columns="Pollen", 
                    time.zoom = c(0, 200))
@@ -821,7 +705,7 @@ The outputs of the test taxa show how a minimal change in the parameters can lea
 
 A similar situation can happen with long lived species when the age of sexual maturity is close to the maximum age. The table below shows three new test species with long life-spans and increasing maturity ages. The driver is again centered in 50, with added white noise, and 2000 years length.
 
-```{r, echo=TRUE, message=FALSE, warning=FALSE, results="hide"}
+```{r, message=FALSE, warning=FALSE, results="hide"}
 parameters.test[3,] <- c("Test 3", 1000, 100, 0.5, 0.05, 0, 100, 10000, 0.5, 0.5, 50, 10, 50, 10, 100, 100)
 parameters.test[4,] <- c("Test 4", 1000, 500, 0.5, 0.05, 0, 100, 10000, 0.5, 0.5, 50, 10, 50, 10, 100, 100)
 parameters.test[5,] <- c("Test 5", 1000, 900, 0.5, 0.05,0, 100, 10000, 0.5, 0.5, 50, 10, 50, 10, 100, 100)
@@ -839,7 +723,7 @@ kable(parameters.t, caption="Parameters of virtual taxa used to test model limit
 rm(parameters.t)
 ```
 
-```{r, echo=TRUE, warning=FALSE, message=FALSE, comment=FALSE, cache=TRUE, results='hide'}
+```{r, warning=FALSE, message=FALSE, comment=FALSE, results='hide'}
 simulation.test.2 <- simulatePopulation(
   parameters=parameters.test,
   species=c(3:5),
@@ -847,7 +731,7 @@ simulation.test.2 <- simulatePopulation(
   )
 ```
 
-```{r, fig.height=4, echo=TRUE, message=FALSE, results='hide', fig.cap="Pollen output of virtual taxa Test 1 and Test 2 for a 200 years time-window."}
+```{r, fig.height=3, fig.width=9, message=FALSE, results='hide', fig.cap="Pollen output of virtual taxa Test 1 and Test 2 for a 200 years time-window."}
 compareSimulations(simulation.output=simulation.test.2, 
                    columns="Pollen", 
                    time.zoom = c(0, 1000))
@@ -863,7 +747,7 @@ Sediments containing pollen grains accumulate at varying rates, generally measur
 
 
 
-```{r , fig.height=3, fig.width=6, echo=TRUE, cache=TRUE, fig.cap="Virtual accumulation rate."}
+```{r , fig.height=3, fig.width=9, fig.cap="Virtual accumulation rate."}
 
 accumulation.rate <- simulateAccumulationRate(seed=140, 
                                               time=1:10000, 
@@ -883,7 +767,7 @@ kable(accumulation.rate[1:20, ], caption="Dataframe resulting from the function 
 Cases of the simulation data belonging to the same group according to the *grouping* column are aggregated together to simulate a *centimeter* of sedimented data. The data are aggregated by the function *aggregateSimulation*, that can additionally sample the resulting data at given depth intervals expressed in centimeters between consecutive samples (2, 6, and 10 cm in the code below).
 
 
-```{r, size="small", cache=TRUE}
+```{r, size="small"}
 
 simulation.aggregated <- aggregateSimulation(
   simulation.output=simulation, 
@@ -895,7 +779,7 @@ simulation.aggregated <- aggregateSimulation(
 
 The function returns a matrix-like list with as many rows as simulations are available in *simulation.output*, a column containing the data of the original simulations, a column with the data aggregated every centimeter, and the sampling intervals requested by the user. The data are accessed individually by list subsetting, as shown below (see **Figure 13**), to allow easy analysis and visualization. 
 
-```{r , fig.height=5, echo=TRUE, cache=TRUE, warning=FALSE, message=FALSE, fig.cap="Effect of applying accumulation rate and different sampling depth intervals to a section of the the annual data produced by the simulation (represented in the Legend by the label Annual). Note that the 10 cm resampling completely misses the whole high-suitability event in the Pollen panel, and barely registers it in the Suitability panel. Inter-decadal variability shown by the Annual data is completely lost even at 1 cm, the higher sampling resolution."}
+```{r , fig.height=5,  fig.width=9, warning=FALSE, message=FALSE, fig.cap="Effect of applying accumulation rate and different sampling depth intervals to a section of the the annual data produced by the simulation (represented in the Legend by the label Annual). Note that the 10 cm resampling completely misses the whole high-suitability event in the Pollen panel, and barely registers it in the Suitability panel. Inter-decadal variability shown by the Annual data is completely lost even at 1 cm, the higher sampling resolution."}
 
 #checking results
 temp.list <- simulation.aggregated[1, 1:5]
@@ -910,7 +794,7 @@ compareSimulations(simulation.output=temp.list, columns = c("Suitability","Polle
 Applying a virtual accumulation rate to the data generated by the population model at given depth intervals simulates to a certain extent how pollen deposition and sampling work in reality, and the outcome of that is data-points separated by regular depth intervals, but not regular time intervals. **Figure 14** shows that time intervals between consecutive samples produced by *aggregateSimulation* are not regular. However, analyzing ecological memory requires to organize the input data in regular time lags, and to do that the data need to have regular time intervals between consecutive cases.
 
 
-```{r , fig.height=4, fig.width=5, echo=TRUE, cache=TRUE, fig.cap="Histogram of the time differences (in years) between consecutive samples for the outcome of aggregateSimulation when resampled at intervals of 6 centimeters on Species 1. It clearly shows how the data are not organized in regular time intervals, and therefore are unsuitable for analyses requiring regular time lags."}
+```{r , fig.height=3, fig.width=6, fig.cap="Histogram of the time differences (in years) between consecutive samples for the outcome of aggregateSimulation when resampled at intervals of 6 centimeters on Species 1. It clearly shows how the data are not organized in regular time intervals, and therefore are unsuitable for analyses requiring regular time lags."}
 
 #getting example data sampled at 2cm intervals
 simulated.data = simulation.aggregated[[1, 3]]
@@ -924,7 +808,7 @@ hist(simulated.data[2:nrow(simulated.data),"Time"] - simulated.data[1:(nrow(simu
 Irregular time series can be interpolated into regular time series by using the *loess* function. This function fits a polynomial surface representing the relationship between two (or more) variables. The smoothness of this polynomial surface is modulated by the *span* parameter, and finding the right value for this parameter is critical to obtain an interpolation result as close as possible to the real data. The following code is able to find the value of *span* that maximizes the correlation between input and interpolated data for any given time series.
 
 
-```{r, warning=FALSE, message=FALSE, error=FALSE, size="small", cache=TRUE, results="hide", eval=FALSE}
+```{r, warning=FALSE, message=FALSE, error=FALSE, size="small", results="hide", eval=FALSE}
         
 #getting example data sampled at 2cm intervals
 simulated.data = simulation.aggregated[[1, 3]]
@@ -965,7 +849,7 @@ Sys.sleep(5)
 
 The function *toRegularTime* (usage shown below), uses the code above to interpolate the data produced by *aggregateSimulation* into a given time interval, expressed in years, returning a list of the same dimensions of the input list.
 
-```{r, message=FALSE, warning=FALSE, error=FALSE, size="small", cache=TRUE}
+```{r, message=FALSE, warning=FALSE, error=FALSE, size="small"}
 
 simulation.interpolated <- toRegularTime(
   x=simulation.aggregated,
@@ -979,7 +863,7 @@ simulation.interpolated <- toRegularTime(
 
 **Figure 15** shows the same data segment shown in **Figure 13**, but with samples re-interpolated into a regular time grid at 10 years intervals.
 
-```{r , fig.height=5, echo=TRUE, cache=TRUE, message=FALSE, error=FALSE, warning=FALSE, fig.cap="Data aggregated using virtual accumulation rate and reinterpolated into a regular time grid of 10 years resolution."}
+```{r , fig.height=5, fig.width=9, message=FALSE, error=FALSE, warning=FALSE, fig.cap="Data aggregated using virtual accumulation rate and reinterpolated into a regular time grid of 10 years resolution."}
 
 #getting the results for Species 1
 temp.list <- simulation.interpolated[1, 1:5]

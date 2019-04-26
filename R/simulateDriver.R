@@ -3,7 +3,7 @@
 #' @description Generates a vector of the same legnth as the \code{time} argument, with a temporal autocorrelation length close to the defined by \code{autocorrelation.length}, and a range within \code{output.min} and \code{output.max}. The output of this function is intended to be used as an input to the function \code{\link{simulatePopulation}}. \strong{Important}: note that the variable \code{time} runs from left to right in \code{\link{simulatePopulation}}, with lower values representing older samples.
 #'
 #' @usage simulateDriver(
-#'   random.seed = 50,
+#'   random.seed = 30,
 #'   time = 1:10000,
 #'   autocorrelation.length = 100,
 #'   output.min = 0,

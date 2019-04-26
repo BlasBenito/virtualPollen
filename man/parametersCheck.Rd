@@ -30,10 +30,10 @@ parametersCheck(
 A \code{\link{ggplot2}} object.
 }
 \description{
-Plots the normal function/s, fecundity, growth curve, and maturity age, of each virtual taxa in \code{parameters}.
+Plots the environmental niche, fecundity, growth curve, and maturity age, of each virtual taxa in a parameters dataframe for \code{\link{simulatePopulation}}, to help the user in making choices while adjusting them.
 }
 \details{
-The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\link[ggplot2]{ggplot2}} object.
+The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\link[ggplot2]{ggplot2}} object. Priority is given to drivers introduced through the \code{drivers} argument.
 }
 \examples{
 #generating driver

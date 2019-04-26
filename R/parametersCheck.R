@@ -84,7 +84,7 @@ parametersCheck <- function(parameters,
     #checking columns
     if(sum(!(colnames(drivers) %in% c("time", "driver", "autocorrelation.length", "value"))) != 0){
 
-      stop(paste("The following column/s of 'drivers' seem to be missing: ", colnames(parameters)[colnames(parameters) %not-in% c("time", "driver", "autocorrelation.length", "value")], sep=""))
+      stop(paste("The following column/s of 'drivers' seem to be missing: ", colnames(parameters)[!(colnames(parameters) %in% c("time", "driver", "autocorrelation.length", "value"))], sep=""))
     }
 
     } else {

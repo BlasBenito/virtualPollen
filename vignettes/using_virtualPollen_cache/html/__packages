@@ -1,0 +1,11 @@
+base
+virtualPollen
+ggplot2
+cowplot
+knitr
+viridisLite
+viridis
+tidyr
+formatR
+kableExtra
+magrittr

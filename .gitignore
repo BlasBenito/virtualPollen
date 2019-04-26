@@ -1,3 +1,5 @@
+Meta
+doc
 .Rproj.user
 .Rhistory
 .RData
@@ -16,14 +18,5 @@ refs.Rmd
 pkg-refs.bib
 github_key.pub
 github_key
-ecological_memory_functions.R
-data.R
-.Rhistory
-.Rbuildignore
-compile.R
-.Rproj.user
-.Rd2pdf30866
-.Rd2pdf22818
-.Rproj.user
 .Rd2pdf18341
 .Rd2pdf1525

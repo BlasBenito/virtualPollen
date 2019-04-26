@@ -12,6 +12,7 @@
 #' }
 #'
 #'
+#'
 #' @usage simulatePopulation(
 #'   parameters=NULL,
 #'   species="all",
