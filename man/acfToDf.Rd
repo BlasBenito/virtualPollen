@@ -2,7 +2,7 @@
 % Please edit documentation in R/acfToDf.R
 \name{acfToDf}
 \alias{acfToDf}
-\title{Applies \code{\link{acf}} to a vector and returns a dataframe for pretty plotting in \code{\link[ggplot2]{ggplot2}}.}
+\title{Computes temporal autocorrelation in a vector, and returns a dataframe for easy plotting.}
 \usage{
 acfToDf(
   x = NULL,
@@ -11,7 +11,7 @@ acfToDf(
   )
 }
 \arguments{
-\item{x}{numeric vector.}
+\item{x}{numeric vector. Must represent a variable sampled at regular times.}
 
 \item{lag.max}{integer, number of lags over which to compute temporal autocorrelation.}
 
@@ -20,36 +20,29 @@ acfToDf(
 \value{
 A dataframe with the columns:
 #' \itemize{
-  \item \code{lag}: numeric, lag in the time units of \code{x} with a maximum determined by \code{lag.max}, and a number of unique values determined by \code{length.out}
-  \item \code{acf}: Pearson correlation index returned by the \code{\link{acf}} for a given number of lags for the given lag.
-  \item \code{ci.max}: Maximum value of the confidence interval of \code{acf}.
-  \item \code{ci.min}: Minimum value of the confidence interval of \code{acf}.
+  \item \emph{lag}: numeric, lag in the time units of \code{x} with a maximum determined by \code{lag.max}, and a number of unique values determined by \code{length.out}
+  \item \emph{acf}: Pearson correlation index returned by the \code{\link{acf}} for a given number of lags for the given lag.
+  \item \emph{ci.max}: Maximum value of the confidence interval of \code{acf}.
+  \item \emph{ci.min}: Minimum value of the confidence interval of \code{acf}.
 }
 }
 \description{
 It reads a vector representing a time series, applies \code{\link{acf}} for a given number of lags
 }
 \details{
-This function computes temporal autocorrelation in a given vector using \code{\link{acf}}, and returns a dataframe ready for easy plotting in \code{\link{ggplot2}}.
+This function computes temporal autocorrelation of a given vector using \code{\link{acf}}, and returns a dataframe ready for easy plotting with \code{\link{plotAcf}}.
 }
 \examples{
 
-#simulating driver
-x <- simulateDriver(
-  random.seed = 10,
-  time = 1:1000,
-  autocorrelation.length = 200,
-  output.min = -10,
-  output.max = 20,
-  rescale = TRUE
-  )
+#getting a driver
+data(driverA)
 
 #computing temporal autocorrelations
 x.df <- acfToDf(
-  x = x,
-  lag.max = 300,
+  x = driverA,
+  lag.max = 1000,
   length.out = 100
-  )
+)
 str(x.df)
 
 #plotting output
@@ -57,7 +50,7 @@ plotAcf(x.df)
 
 }
 \seealso{
-\code{\link{acf}}
+\code{\link{acf}}, \code{\link{plotAcf}}
 }
 \author{
 Blas M. Benito  <blasbenito@gmail.com>

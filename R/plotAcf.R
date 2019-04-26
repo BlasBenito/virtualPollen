@@ -1,6 +1,6 @@
 #' Plots results of \code{\link{acfToDf}}.
 #'
-#' @description Plots a dataframe resulting from \code{\link{acfToDf}} by using \code{\link[ggplot2]{ggplot2}} (and \code{\link[cowplot]{cowplot}})
+#' @description Plots a dataframe resulting from \code{\link{acfToDf}} by using \code{\link[ggplot2]{ggplot2}}.
 #'
 #' @usage plotAcf(
 #'   x = NULL,
@@ -8,7 +8,7 @@
 #'   )
 #'
 #' @param x dataframe, output of \code{\link{acfToDf}}
-#' @param plot.title string, title for the plot.
+#' @param plot.title string, title of the output plot.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
@@ -18,25 +18,19 @@
 #'
 #' @examples
 #'
-#'#simulating driver
-#' x <- simulateDriver(
-#'   random.seed = 10,
-#'   time = 1:1000,
-#'   autocorrelation.length = 200,
-#'   output.min = -10,
-#'   output.max = 20,
-#'   rescale = TRUE
-#'   )
+#'#getting a driver
+#'data(driverA)
 #'
-#'#computing temporal autocorrelation
-#' x.df <- acfToDf(
-#'   x = x,
-#'   lag.max = 300,
+#'#computing temporal autocorrelations
+#'x.df <- acfToDf(
+#'   x = driverA,
+#'   lag.max = 1000,
 #'   length.out = 100
-#'   )
+#')
+#'str(x.df)
 #'
 #'#plotting output
-#' plotAcf(x.df)
+#'plotAcf(x.df)
 #'
 #' @export
 plotAcf <- function(x = NULL,

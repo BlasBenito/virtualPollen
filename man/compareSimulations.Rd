@@ -17,7 +17,7 @@ compareSimulations(
   )
 }
 \arguments{
-\item{simulation.output}{output of \code{\link{simulatePopulation}}.}
+\item{simulation.output}{list, output of \code{\link{simulatePopulation}}.}
 
 \item{species}{a number or vector or numbers representing rows in the parameters dataframe, or a string or vector of strings referencing to the "label" column of the parameters dataframe.}
 
@@ -25,7 +25,7 @@ compareSimulations(
 
 \item{columns}{character string or vector of character strings with these possible values: "Pollen", "Population.mature", "Population.immature", "Population.viable.seeds", "Suitability", "Biomass.total", "Biomass.mature", "Biomass.immature", "Mortality.mature", "Mortality.immature", "Driver.A", "Driver.B".}
 
-\item{time.zoom}{vector of two numbers indicating the beginnign and end of the time interval to be plotted (i.e. "c(5000, 10000)")}
+\item{time.zoom}{vector of two numbers, indicating the beginnign and end of the time interval to be plotted (i.e. "c(5000, 10000)")}
 
 \item{width}{plot width in inches.}
 
@@ -36,36 +36,22 @@ compareSimulations(
 \item{plot.title}{character string to use as plot title.}
 }
 \description{
-Plots together the results of different taxa produced by a single run of \code{\link{simulatePopulation}}.
+Plots together the results of different virtual taxa produced by a single run of \code{\link{simulatePopulation}}.
 }
 \details{
-The user can decide what virtual taxa to plot (argument \code{species}), and what information to show throught the \code{columns} argument. Output is plotted on screen by default, and printed to pdf if the \code{filename} argument is filled.
+The user can decide what virtual taxa to plot through the \code{species} argument, and what information to show throught the \code{columns} argument. Output is plotted on screen by default, and printed to pdf if the \code{filename} argument is filled.
 }
 \examples{
 
-driver <- simulateDriver(
- random.seed = 10,
- time = 1:1000,
- autocorrelation.length = 200,
- output.min = 0,
- output.max = 100,
- rescale = TRUE
- )
+#getting example data
+data(simulations)
 
-#preparing parameters
-parameters <- parametersDataframe(rows = 2)
-parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
-parameters[2,] <- c("Species 1", 500, 100, 10, 0.02, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
-parameters <- fixParametersTypes(x = parameters)
-
-#simulating population dynamics
-sim.output <- simulatePopulation(
- parameters = parameters,
- driver.A = driver
- )
-
-#plot simulation
-compareSimulations(simulation.output = sim.output)
+#compare taxa 1, 2, and 3.
+compareSimulations(simulation.output = simulations,
+ species = c(1, 2, 3),
+ columns = c("Pollen", "Suitability"),
+ time.zoom = c(1000, 2000)
+)
 
 }
 \seealso{

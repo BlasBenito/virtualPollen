@@ -1,11 +1,10 @@
-#' Fix data types in parameters dataframe.
+#' Fix data types in a parameters dataframe.
 #'
-#' @description It converts all columns (but the \code{label} one) of a parameters dataframe created by \code{\link{parametersDataframe}} into type numeric, and checks the coherence of the parameters for each taxon. It provides feedback on the check results on screen for each taxon.
+#' @description It converts all columns (but the \code{label} one) of a parameters dataframe created by \code{\link{parametersDataframe}} and filled by the user into type numeric, and checks the coherence of the parameters for each taxon. It provides feedback on the check results on screen for each taxon.
 #'
 #' @usage fixParametersTypes(x)
 #'
 #' @param x dataframe resulting from \code{\link{parametersDataframe}}.
-#'
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
@@ -16,7 +15,7 @@
 #' @examples
 #'
 #' parameters <- parametersDataframe(rows=1)
-#' parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+#' parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, 600, 600)
 #' parameters <- fixParametersTypes(x=parameters)
 #'
 #' @export

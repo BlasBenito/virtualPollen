@@ -1,6 +1,6 @@
 #' Plots main simulation parameters.
 #'
-#' @description Plots the normal function/s, fecundity, growth curve, and maturity age, of each virtual taxa in \code{parameters}.
+#' @description Plots the environmental niche, fecundity, growth curve, and maturity age, of each virtual taxa in a parameters dataframe for \code{\link{simulatePopulation}}, to help the user in making choices while adjusting them.
 #'
 #' @usage parametersCheck(
 #'   parameters,
@@ -13,12 +13,12 @@
 #'
 #' @param parameters the parameters dataframe.
 #' @param species if "all" or "ALL", all species in "parameters" are plotted. It also accepts a vector of numbers representing the rows of the selected species, or a vector of names of the selected species.
-#' @param driver.A  numeric vector with driver values.
+#' @param driver.A numeric vector with driver values.
 #' @param driver.B numeric vector with driver values.
 #' @param drivers dataframe with drivers
 #' @param filename character string, filename of the output pdf.
 #'
-#' @details The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\link[ggplot2]{ggplot2}} object.
+#' @details The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\link[ggplot2]{ggplot2}} object. Priority is given to drivers introduced through the \code{drivers} argument.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'

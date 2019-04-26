@@ -16,7 +16,7 @@ simulateAccumulationRate(
 \arguments{
 \item{seed}{integer, seed to be used by \code{\link{set.seed}} to configure the state of the pseudo-random number generator. It defines the shape of the curve.}
 
-\item{time}{vector of time values (ideally the same used to generate the simulations).}
+\item{time}{vector of time values (ideally the same used to generate the simulations). \strong{Important}: the \code{time} column goes from "left to right", meaning that oldest samples have the lowest values of age/time, and viceversa.}
 
 \item{output.min}{numeric, in years per centimetre, minimum sediment accumulation rate (10 by default).}
 
@@ -29,13 +29,13 @@ simulateAccumulationRate(
 \value{
 A dataframe like \code{\link{accumulationRate}}, with the following columns:
 \itemize{
-  \item \emph{time} numeric, time or age of the given case.
-  \item \emph{accumulation.rate} numeric, in years per centimetre, simulated accumulation rate.
-  \item \emph{grouping} integer, grouping variable to aggregate together (with \code{\link{aggregateSimulation}}) samples deposited in the same centimetre according \emph{accumulation.rate}.
+  \item \emph{time}: numeric, time or age of the given case.
+  \item \emph{accumulation.rate}: numeric, in years per centimetre, simulated accumulation rate.
+  \item \emph{grouping}: integer, grouping variable to aggregate together (with \code{\link{aggregateSimulation}}) samples deposited in the same centimetre according \emph{accumulation.rate}.
 }
 }
 \description{
-Generates a virtual sediment accumulation rate to be applied to the results of \code{\link{simulatePopulation}}
+Generates a virtual sediment accumulation rate to be applied to the results of \code{\link{simulatePopulation}}.
 }
 \details{
 The accumulation rate curve is generated through a random walk smoothed by a GAM model. The value of the \code{seed} argument changes the shape of the curve, but the user has no more control than trying different values to achieve a curve closer to the desired one. If \code{plot} is set to \code{TRUE}, the accumulation rate curve is printed on screen, but not exported to pdf.
@@ -55,7 +55,7 @@ str(acc.rate)
 
 }
 \seealso{
-\code{\link{accumulationRate}}, \code{\link{aggregateSimulation}}
+\code{\link{simulatePopulation}}, \code{\link{aggregateSimulation}}
 }
 \author{
 Blas M. Benito  <blasbenito@gmail.com>

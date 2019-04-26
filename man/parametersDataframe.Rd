@@ -12,22 +12,22 @@ parametersDataframe(rows=1)
 \value{
 A dataframe filled with \code{NA} values and the columns:
 \itemize{
-  \item label: to store names (character string) of the virtual taxa.
-  \item maximum.age: integer, maximum possible age of the individuals in years.
-  \item reproductive.age: integer, age of sexual maturity in years.
-  \item fecundity: integer, number of maximum viable seeds produced by a mature individual under fully suitable conditions.
-  \item growth.rate: numeric, parameter of the logistic growth function.
-  \item pollen.control: numeric in the interval [0, 1]. If 0, pollen productivity depends on environmental suitability only. The larger the number, biomass takes over environmental suitability in determining pollen productivity.
-  \item maximum.biomass: integer, maximum biomass of the individuals.
-  \item carrying.capacity: integer, maximum sum of biomass of the individuals. Very large carrying capacities plus a low maximum.biomass generates too many individuals for the simulation to remain efficient. Try to set carrying.capacity and maximum.biomass to carrying.capacity divided by biomass returns a number lower than 1000 (and even better if it is closer to 100).
-  \item driver.A.weight: numeric in the interval [0, 1], represents the relative influence of the driver on environmental suitability.
-  \item driver.B.weight: numeric in the interval [0, 1], represents the relative influence of the driver on environmental suitability. The sum of weights of drivers A and B should be 1.
-  \item niche.A.mean: numeric, in the same units as driver A. It is the mean of the normal function defining the response of the virtual taxa to driver A.
-  \item niche.A.sd: numeric, in the same units as driver A. It is the standard deviation of the normal function defining the response of the virtual taxa to driver A.
-  \item niche.B.mean: as above, but for driver B.
-  \item niche.B.sd: as above, but for driver B.
-  \item autocorrelation.length.A: numeric, only useful if several drivers generated with different autocorrelation lengths are available (and identified by the column \code{autocorrelation.length}) in the \code{drivers} argument provided to the \code{\link{simulatePopulation}} function.
-  \item autocorrelation.length.B: same as above.
+  \item \emph{label}: to store names (character string) of the virtual taxa.
+  \item \emph{maximum.age}: integer, maximum possible age of the individuals in years.
+  \item \emph{reproductive.age}: integer, age of sexual maturity in years.
+  \item \emph{fecundity}: integer, number of maximum viable seeds produced by a mature individual under fully suitable conditions.
+  \item \emph{growth.rate}: numeric, parameter of the logistic growth function.
+  \item \emph{pollen.control}: numeric in the interval [0, 1]. If 0, pollen productivity depends on environmental suitability only. The larger the number, biomass takes over environmental suitability in determining pollen productivity.
+  \item \emph{maximum.biomass}: integer, maximum biomass of the individuals.
+  \item \emph{carrying.capacity}: integer, maximum sum of biomass of the individuals. Very large carrying capacities plus a low maximum.biomass generates too many individuals for the simulation to remain efficient. Try to set carrying.capacity and maximum.biomass to carrying.capacity divided by biomass returns a number lower than 1000 (and even better if it is closer to 100).
+  \item \emph{driver.A.weight}: numeric in the interval [0, 1], represents the relative influence of the driver on environmental suitability.
+  \item \emph{driver.B.weight}: numeric in the interval [0, 1], represents the relative influence of the driver on environmental suitability. The sum of weights of drivers A and B should be 1.
+  \item \emph{niche.A.mean}: numeric, in the same units as driver A. It is the mean of the normal function defining the response of the virtual taxa to driver A.
+  \item \emph{niche.A.sd}: numeric, in the same units as driver A. It is the standard deviation of the normal function defining the response of the virtual taxa to driver A.
+  \item \emph{niche.B.mean}: as above, but for driver B.
+  \item \emph{niche.B.sd}: as above, but for driver B.
+  \item \emph{autocorrelation.length.A}: numeric, only useful if several drivers generated with different autocorrelation lengths are available (and identified by the column \code{autocorrelation.length}) in the \code{drivers} argument provided to the \code{\link{simulatePopulation}} function.
+  \item \emph{autocorrelation.length.B}: same as above.
 }
 }
 \description{
@@ -38,8 +38,11 @@ The resulting dataframe can either be filled manually through vectors, as shown 
 }
 \examples{
 
+#generating the template
 parameters <- parametersDataframe(rows=1)
-parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+
+#filling it with a vector
+parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, 600, 600)
 
 }
 \seealso{

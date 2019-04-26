@@ -12,32 +12,26 @@ plotAcf(
 \arguments{
 \item{x}{dataframe, output of \code{\link{acfToDf}}}
 
-\item{plot.title}{string, title for the plot.}
+\item{plot.title}{string, title of the output plot.}
 }
 \value{
 A ggplot object
 }
 \description{
-Plots a dataframe resulting from \code{\link{acfToDf}} by using \code{\link[ggplot2]{ggplot2}} (and \code{\link[cowplot]{cowplot}})
+Plots a dataframe resulting from \code{\link{acfToDf}} by using \code{\link[ggplot2]{ggplot2}}.
 }
 \examples{
 
-#simulating driver
-x <- simulateDriver(
-  random.seed = 10,
-  time = 1:1000,
-  autocorrelation.length = 200,
-  output.min = -10,
-  output.max = 20,
-  rescale = TRUE
-  )
+#getting a driver
+data(driverA)
 
-#computing temporal autocorrelation
+#computing temporal autocorrelations
 x.df <- acfToDf(
-  x = x,
-  lag.max = 300,
+  x = driverA,
+  lag.max = 1000,
   length.out = 100
-  )
+)
+str(x.df)
 
 #plotting output
 plotAcf(x.df)

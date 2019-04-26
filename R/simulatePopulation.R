@@ -1,6 +1,6 @@
 #' Simulates population dynamics for virtual species with different traits.
 #'
-#' @description This function takes as input a dataframe of parameters defining virtual taxa produced by \code{\link{parametersDataframe}} and \code{\link{fixParametersTypes}}, a driver or drivers generated with \code{\link{simulateDriver}}, and simulates population dynamics at yearly resolution for the time-length defined by the driver or drivers. The model relies on the following set of assumptions. Note that the variable \code{time} runs from left to right, with lower values representing older samples.
+#' @description This function takes as input a dataframe of parameters defining virtual taxa produced by \code{\link{parametersDataframe}} and \code{\link{fixParametersTypes}}, a driver or drivers generated with \code{\link{simulateDriver}} or \code{\link{simulateDriverS}}, and simulates population dynamics for the given virtual taxa at yearly resolution for the time-length defined by the driver or drivers. \strong{Important}: note that the variable \code{time} runs from left to right, with lower values representing older samples. The model relies on the following set of assumptions:
 #'
 #' \itemize{
 #'   \item  The spatial structure of the population is not important to explain its pollen productivity. This is an operative assumption, to speed-up model execution.
@@ -10,6 +10,7 @@
 #'   \item  Pollen productivity is a function of the individual's biomass and environmental suitability, so under a hypothetical constant individual's biomass, its pollen production depends linearly on environmental suitability values.
 #'   \item  Effective fecundity is limited by environmental suitability. Low environmental suitability values limit recruitment, acting as an environmental filter. Therefore, even though the fecundity of the individuals is fixed by the fecundity parameter, the overall population fecundity is limited by environmental suitability.
 #' }
+#'
 #'
 #' @usage simulatePopulation(
 #'   parameters=NULL,
@@ -36,15 +37,16 @@
 #' @details The model starts with a population of 100 individuals with random ages, in the range [1, maximum age], taken from a uniform distribution (all ages are equiprobable). For each environmental suitability value, including the burn-in period, the model performs the following operations:
 #'
 #' \itemize{
-#'   \item Aging: adds one year to the age of the individuals.
-#'   \item Mortality due to senescence: individuals reaching the maximum age are removed from the simulation.
-#'   \item Local extinction and immigration If the number of individuals drops to zero, the population is replaced by a "seed bank" of #' 100 individuals with age zero, and the simulation jumps to step 7.. This is intended to simulate the arrival of seeds from nearby regions, and will only lead to population growth if environmental suitability is higher than zero.
-#'   \item Plant growth: Applies a plant growth equation to compute the biomass of every individual.
-#'   \item Carrying capacity: If maximum population biomass is reached, individuals are iteratively selected for removal according to a mortality risk curve computed by the equation \eqn{P_{m} = 1 - sqrt(a/A)}, were \emph{Pm} is the probability of mortality, \emph{a} is the age of the given individual, and \emph{A} is the maximum age reached by the virtual taxa. This curve gives removal preference to younger individuals, matching observed patterns in natural populations.
-#'   \item Pollen productivity: In each time step the model computes the pollen productivity (in relative values) of the population using the equation \eqn{P_{t} = \sum x_{it} \times max(S_{t}, B)}, where \emph{t} is time (a given simulation time step), \emph{P} is the pollen productivity of the population at a given time, \emph{x_{i}} represents the biomass of every adult individual, \emph{S} is the environmental suitability at the given time, \emph{B} is the contribution of biomass to pollen productivity regardless of environmental suitability (\emph{pollen.control} parameter in the simulation, 0 by default). If \emph{B} equals 1, \emph{P} is equal to the total biomass sum of the adult population, regardless of the environmental suitability. If \emph{B} equals 0, pollen productivity depends entirely on environmental suitability values.
-#'   \item Reproduction: Generates as many seeds as reproductive individuals are available multiplied by the maximum fecundity and the environmental suitability of the given time.
+#'   \item \strong{Aging}: adds one year to the age of the individuals.
+#'   \item \strong{Mortality due to senescence}: individuals reaching the maximum age are removed from the simulation.
+#'   \item \strong{Local extinction and immigration}: If the number of individuals drops to zero, the population is replaced by a "seed bank" of #' 100 individuals with age zero, and the simulation jumps to step 7.. This is intended to simulate the arrival of seeds from nearby regions, and will only lead to population growth if environmental suitability is higher than zero.
+#'   \item \strong{Plant growth}: Applies a plant growth equation to compute the biomass of every individual.
+#'   \item \strong{Carrying capacity}: If maximum population biomass is reached, individuals are iteratively selected for removal according to a mortality risk curve computed by the equation \eqn{P_{m} = 1 - sqrt(a/A)}, were \emph{Pm} is the probability of mortality, \emph{a} is the age of the given individual, and \emph{A} is the maximum age reached by the virtual taxa. This curve gives removal preference to younger individuals, matching observed patterns in natural populations.
+#'   \item \strong{Pollen productivity}: In each time step the model computes the pollen productivity (in relative values) of the population using the equation \eqn{P_{t} = \sum x_{it} \times max(S_{t}, B)}, where \emph{t} is time (a given simulation time step), \emph{P} is the pollen productivity of the population at a given time, \emph{x_{i}} represents the biomass of every adult individual, \emph{S} is the environmental suitability at the given time, \emph{B} is the contribution of biomass to pollen productivity regardless of environmental suitability (\emph{pollen.control} parameter in the simulation, 0 by default). If \emph{B} equals 1, \emph{P} is equal to the total biomass sum of the adult population, regardless of the environmental suitability. If \emph{B} equals 0, pollen productivity depends entirely on environmental suitability values.
+#'   \item \strong{Reproduction}: Generates as many seeds as reproductive individuals are available multiplied by the maximum fecundity and the environmental suitability of the given time.
 #' }
 #'The model returns a table with climatic suitability, pollen production, and population size (reproductive individuals only) per simulation year. Figure 10 shows the results of the population model when applied to the example virtual species.
+#'
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
@@ -70,6 +72,7 @@
 #'
 #' @examples
 #'
+#'#getting data
 #'data(parameters)
 #'data(driverA)
 #'
@@ -81,7 +84,7 @@
 #'  driver.A=driverA[1:500]
 #'  )
 #'
-#'#checking output for Species 1
+#'#checking output
 #'str(sim.output)
 #'
 #' @export

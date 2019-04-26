@@ -2,7 +2,7 @@
 % Please edit documentation in R/fixParametersTypes.R
 \name{fixParametersTypes}
 \alias{fixParametersTypes}
-\title{Fix data types in parameters dataframe.}
+\title{Fix data types in a parameters dataframe.}
 \usage{
 fixParametersTypes(x)
 }
@@ -13,12 +13,12 @@ fixParametersTypes(x)
 Same dataframe provided in argument \code{x} but with fixed data types.
 }
 \description{
-It converts all columns (but the \code{label} one) of a parameters dataframe created by \code{\link{parametersDataframe}} into type numeric, and checks the coherence of the parameters for each taxon. It provides feedback on the check results on screen for each taxon.
+It converts all columns (but the \code{label} one) of a parameters dataframe created by \code{\link{parametersDataframe}} and filled by the user into type numeric, and checks the coherence of the parameters for each taxon. It provides feedback on the check results on screen for each taxon.
 }
 \examples{
 
 parameters <- parametersDataframe(rows=1)
-parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
+parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, 600, 600)
 parameters <- fixParametersTypes(x=parameters)
 
 }

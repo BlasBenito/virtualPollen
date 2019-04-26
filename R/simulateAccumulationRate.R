@@ -1,6 +1,6 @@
 #' Simulates a virtual sediment accumulation rate.
 #'
-#' @description Generates a virtual sediment accumulation rate to be applied to the results of \code{\link{simulatePopulation}}
+#' @description Generates a virtual sediment accumulation rate to be applied to the results of \code{\link{simulatePopulation}}.
 #'
 #'
 #' @usage simulateAccumulationRate(
@@ -13,7 +13,7 @@
 #'   )
 #'
 #' @param seed integer, seed to be used by \code{\link{set.seed}} to configure the state of the pseudo-random number generator. It defines the shape of the curve.
-#' @param time vector of time values (ideally the same used to generate the simulations).
+#' @param time vector of time values (ideally the same used to generate the simulations). \strong{Important}: the \code{time} column goes from "left to right", meaning that oldest samples have the lowest values of age/time, and viceversa.
 #' @param output.min numeric, in years per centimetre, minimum sediment accumulation rate (10 by default).
 #' @param output.max numeric, in years per centimetre, maximum sediment accumulation rate (40 bu default).
 #' @param direction integer, values 1 or -1, to invert the resulting accumulation rate.
@@ -25,12 +25,12 @@
 #'
 #' @return A dataframe like \code{\link{accumulationRate}}, with the following columns:
 #' \itemize{
-#'   \item \emph{time} numeric, time or age of the given case.
-#'   \item \emph{accumulation.rate} numeric, in years per centimetre, simulated accumulation rate.
-#'   \item \emph{grouping} integer, grouping variable to aggregate together (with \code{\link{aggregateSimulation}}) samples deposited in the same centimetre according \emph{accumulation.rate}.
+#'   \item \emph{time}: numeric, time or age of the given case.
+#'   \item \emph{accumulation.rate}: numeric, in years per centimetre, simulated accumulation rate.
+#'   \item \emph{grouping}: integer, grouping variable to aggregate together (with \code{\link{aggregateSimulation}}) samples deposited in the same centimetre according \emph{accumulation.rate}.
 #' }
 #'
-#' @seealso \code{\link{accumulationRate}}, \code{\link{aggregateSimulation}}
+#' @seealso \code{\link{simulatePopulation}}, \code{\link{aggregateSimulation}}
 #'
 #' @examples
 #'

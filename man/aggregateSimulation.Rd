@@ -15,55 +15,28 @@ aggregateSimulation(
 
 \item{accumulation.rate}{dataframe, output of \code{\link{simulateAccumulationRate}}.}
 
-\item{sampling.intervals}{numeric or numeric vector, in centimetres, depth interval or intervals between consecutive samples. If 1, all samples are returned, if 2, returned samples are separated by 1 cm.}
+\item{sampling.intervals}{integer, numeric vector, depth interval or intervals between consecutive samples in centimetres. If 1, all samples are returned, if 2, returned samples are separated by 1 cm.}
 }
 \value{
-A list of dataframes with as many rows as virtual taxa were produced by \code{\link{simulatePopulation}}, and several columns. First column is the original data. Second column is the data aggregated into centimetres according to the result of \code{\link{simulateAccumulationRate}}. Each additional column is the data of the second column resampled as given by the \code{sampling.intervals} argument. See example below for more clarity.
+A list of dataframes with as many rows as virtual taxa were produced by \code{\link{simulatePopulation}}, and as many columns as number of \code{sampling.intervals} defined by the user.
 }
 \description{
-Takes the output of \code{\link{simulatePopulation}} and aggregates it into centimetres
+Takes the output of \code{\link{simulatePopulation}} and aggregates it into centimetres by following a sediment accumulation rate produced by \code{\link{simulateAccumulationRate}}. It further samples it at given depth intervals. It intends to simulate a pseudo-realistic sedimentation of the pollen produced by the simulation, and to apply a pollen-sampling pattern to a virtual pollen core.
 }
 \details{
 The function uses the values in the \code{grouping} column of the \code{\link{simulateAccumulationRate}} output to aggregate together (by computing the \code{mean}) as many samples as cases in \code{grouping} have the same identificator. Output samples are identified by the average age of the samples within the given centimetre.
 }
 \examples{
-#generating driver
-driver <- simulateDriver(
- random.seed = 10,
- time = 1:1000,
- autocorrelation.length = 200,
- output.min = 0,
- output.max = 100,
- rescale = TRUE
- )
 
-#preparing parameters
-parameters <- parametersDataframe(rows = 2)
-parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
-parameters <- fixParametersTypes(x = parameters)
+#getting example data
+data(simulation)
+data(accumulationRate)
 
-#simulating population dynamics
-sim.output <- simulatePopulation(
- parameters = parameters,
- driver.A = driver,
- driver.B = NULL
- )
-
-#generating accumulation rate
-acc.rate <- simulateAccumulationRate(
- seed = 50,
- time = 1:1000,
- output.min = 10,
- output.max = 40,
- direction = 1,
- plot = TRUE
- )
-
-#aggregating simulated data
+#aggregating first simulation outcome
 sim.output.aggregated <- aggregateSimulation(
- simulation.output = sim.output,
- accumulation.rate = acc.rate,
- sampling.intervals = 3)
+ simulation.output = simulation[1],
+ accumulation.rate = accumulationRate,
+ sampling.intervals = c(2,6))
 
 #comparing simulations
 par(mfrow = c(3,1))
@@ -71,26 +44,26 @@ par(mfrow = c(3,1))
 plot(sim.output.aggregated[[1,1]]$Time,
  sim.output.aggregated[[1,1]]$Pollen,
  type = "l",
- xlim = c(0, 1000),
+ xlim = c(500, 1000),
  main = "Annual"
  )
 plot(sim.output.aggregated[[1,2]]$Time,
  sim.output.aggregated[[1,2]]$Pollen,
  type = "l",
- xlim = c(0, 1000),
- main = "1cm"
+ xlim = c(500, 1000),
+ main = "2cm"
  )
 plot(sim.output.aggregated[[1,3]]$Time,
  sim.output.aggregated[[1,3]]$Pollen,
  type = "l",
- xlim = c(0, 1000),
- main = "3cm"
+ xlim = c(500, 1000),
+ main = "6cm"
  )
 
 #check differences in nrow
 nrow(sim.output.aggregated[[1,1]]) #original data
-nrow(sim.output.aggregated[[1,2]]) #1cm
-nrow(sim.output.aggregated[[1,3]]) #3cm intervals
+nrow(sim.output.aggregated[[1,2]]) #2cm
+nrow(sim.output.aggregated[[1,3]]) #6cm intervals
 
 }
 \seealso{

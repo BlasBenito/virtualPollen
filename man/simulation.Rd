@@ -9,24 +9,24 @@
 data(simulation)
 }
 \description{
-A list of dataframes with 16 slots, output of \code{\link{simulatePopulation}}, taking \code{\link{parameters}} and \code{\link{drivers}} as input. Each dataframe has the following columns:
+A list of dataframes with 16 slots, output of \code{\link{simulatePopulation}}, taking \code{\link{parameters}} and \code{\link{drivers}} as inputs. Each dataframe has the following columns:
 }
 \details{
 \itemize{
-  \item \emph{Time} integer, ages in years. Negative ages indicate the burn-in period.
-  \item \emph{Pollen} numeric, pollen counts
-  \item \emph{Population.mature} numeric, number of mature individuals.
-  \item \emph{Population.immatre} numeric, number of immature individuals.
-  \item \emph{Population.viable.seeds} numeric, number of viable seeds generated each year.
-  \item \emph{Suitability} numeric, environmental suitability computed from the driver by the normal function/s defining the taxon niche.
-  \item \emph{Biomass.total} numeric, overall biomass of the population.
-  \item \emph{Biomass.mature} numeric, sum of biomass of mature individuals.
-  \item \emph{Biomass.immature} numeric, sum of biomass of immature individuals.
-  \item \emph{Mortality.mature} numeric, number of mature individuals dead each year.
-  \item \emph{Mortality.immature} numeric, same as above for immature individuals.
-  \item \emph{Driver.A} numeric, values of driver A.
-  \item \emph{Driver.B} numeric, values of driver B, if available, and NA otherwise.
-  \item \emph{Period} qualitative, with value "Burn-in" for burn-in period, and "Simulation" otherwise.
+  \item \emph{Time}: integer, ages in years. Negative ages indicate the burn-in period.
+  \item \emph{Pollen}: numeric, pollen counts
+  \item \emph{Population.mature}: numeric, number of mature individuals.
+  \item \emph{Population.immatre}: numeric, number of immature individuals.
+  \item \emph{Population.viable.seeds}: numeric, number of viable seeds generated each year.
+  \item \emph{Suitability}: numeric, environmental suitability computed from the driver by the normal function/s defining the taxon niche.
+  \item \emph{Biomass.total}: numeric, overall biomass of the population.
+  \item \emph{Biomass.mature}: numeric, sum of biomass of mature individuals.
+  \item \emph{Biomass.immature}: numeric, sum of biomass of immature individuals.
+  \item \emph{Mortality.mature}: numeric, number of mature individuals dead each year.
+  \item \emph{Mortality.immature}: numeric, same as above for immature individuals.
+  \item \emph{Driver.A}: numeric, values of driver A.
+  \item \emph{Driver.B}: numeric, values of driver B, if available, and NA otherwise.
+  \item \emph{Period}: qualitative, with value "Burn-in" for burn-in period, and "Simulation" otherwise.
 }
 }
 \seealso{

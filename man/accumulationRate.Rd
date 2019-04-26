@@ -7,15 +7,15 @@
 \format{dataframe with 10000 rows and the following columns:
 #' @return A dataframe with the following columns.
 \itemize{
-  \item \emph{time} numeric, time or age of the given case.
-  \item \emph{accumulation.rate} numeric, in years per centimetre, simulated accumulation rate.
-  \item \emph{grouping} integer, grouping variable to aggregate together (with \code{\link{aggregateSimulation}}) samples deposited in the same centimetre according \emph{accumulation.rate}.
+  \item \emph{time}: numeric, time or age of the given case.  \strong{Important}: the \code{time} column goes from "left to right", meaning that oldest samples have the lowest values of age/time, and viceversa.
+  \item \emph{accumulation.rate}: numeric, in years per centimetre, simulated accumulation rate.
+  \item \emph{grouping}: integer, grouping variable to aggregate together (with \code{\link{aggregateSimulation}}) samples deposited in the same centimetre according \emph{accumulation.rate}.
 }}
 \usage{
 data(accumulationRate)
 }
 \description{
-Dataframe, output of \code{\link{simulateAccumulationRate}}
+Dataframe, output of \code{\link{simulateAccumulationRate}}.
 }
 \seealso{
 \code{\link{simulateAccumulationRate}}, \code{\link{aggregateSimulation}}

@@ -4,10 +4,12 @@
 #'
 #'
 #' @usage toRegularTime(
-#'   x,
-#'   time.column="Time",
-#'   interpolation.interval,
-#'   columns.to.interpolate=c("Suitability", "Driver.A", "Pollen")
+#'   x = Null,
+#'   time.column = "Time",
+#'   interpolation.interval = NULL,
+#'   columns.to.interpolate = c("Suitability",
+#'                              "Driver.A",
+#'                              "Pollen")
 #'   )
 #'
 #' @param x list of dataframes (generally the output of \code{\link{aggregateSimulation}}) or single dataframe  with irregular time series.
@@ -19,12 +21,58 @@
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
-#' @return If \code{x} is a list of dataframes, the function returns a list with the same structure as the input list. If \code{x} is a dataframe, the function returns a dataframe. In any case, output dataframes have the columns "Time" (now regular), and any column listed in \code{columns.to.interpolate}.
+#' @return If \code{x} is a list of dataframes, the function returns a list with the same structure as the input list. If \code{x} is a dataframe, the function returns a dataframe. In any case, output dataframes have the columns "Time" (now regular), and any column listed in \code{columns.to.interpolate}. \strong{Important}: as in the input data, the \code{time} column of the output data has lower time for oldest samples and higher time for newest samples.
 #'
 #' @seealso \code{\link{simulateAccumulationRate}}, \code{\link{aggregateSimulation}}
 #'
 #' @examples
 #'
+#'\dontrun{
+#'#getting example data
+#'data(simulation)
+#'data(accumulationRate)
+#'
+#'#aggregating first simulation outcome
+#'sim.output.aggregated <- aggregateSimulation(
+#'  simulation.output = simulation[1],
+#'  accumulation.rate = accumulationRate,
+#'  sampling.intervals = c(2,6))
+#'
+#'#to regular time
+#'sim.output.aggregated <- toRegularTime(
+#'  x=sim.output.aggregated,
+#'  time.column ="Time",
+#'  interpolation.interval = 10,
+#'  columns.to.interpolate = c("Suitability", "Pollen")
+#')
+#'
+#'#comparing simulations
+#'par(mfrow = c(3,1))
+#'#notice the subsetting of the given column of the input list
+#'plot(sim.output.aggregated[[1,1]]$Time,
+#'     sim.output.aggregated[[1,1]]$Pollen,
+#'     type = "l",
+#'     xlim = c(500, 1000),
+#'     main = "Annual"
+#')
+#'plot(sim.output.aggregated[[1,2]]$Time,
+#'     sim.output.aggregated[[1,2]]$Pollen,
+#'     type = "l",
+#'     xlim = c(500, 1000),
+#'     main = "2cm"
+#')
+#'plot(sim.output.aggregated[[1,3]]$Time,
+#'     sim.output.aggregated[[1,3]]$Pollen,
+#'     type = "l",
+#'     xlim = c(500, 1000),
+#'     main = "6cm"
+#')
+#'
+#'#check differences in nrow
+#'nrow(sim.output.aggregated[[1,1]]) #original data
+#'nrow(sim.output.aggregated[[1,2]]) #2cm
+#'nrow(sim.output.aggregated[[1,3]]) #6cm intervals
+#'}
 #'
 #' @export
 toRegularTime <- function(x,
@@ -34,12 +82,12 @@ toRegularTime <- function(x,
                           ){
 
   #list dimensions if x is list
-  if(inherits(x , "list")==TRUE){
+  if(is.list(x) == TRUE){
     x.rows <- 1:dim(x)[1]
     x.columns <- 1:dim(x)[2]
   }
 
-  if(inherits(x , "dataframe")==TRUE){
+  if(is.data.frame(x) == TRUE){
     x.rows <- 1
     x.columns <- 1
   }
@@ -102,11 +150,11 @@ toRegularTime <- function(x,
 
       temp.interpolated$Period <- "Simulation"
 
-      if(inherits(x , "list")==TRUE){
+      if(is.list(x) == TRUE){
         x[[x.row, x.column]] <- temp.interpolated
       }
 
-      if(inherits(x , "data.frame")==TRUE){
+      if(is.data.frame(x) == TRUE){
         x <- temp.interpolated
       }
     }

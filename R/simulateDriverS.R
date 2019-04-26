@@ -1,6 +1,6 @@
-#' Generates a long table with several drivers for \code{\link{simulatePopulation}}.
+#' Generates drivers for \code{\link{simulatePopulation}}.
 #'
-#' @description Wrapper of \code{simulateDriver} to generate several drivers with different autocorrelation lengths, and return a long format table to be used as input for \code{\link{simulatePopulation}}. Note that the variable \code{time} runs from left to right, with lower values representing older samples.
+#' @description Wrapper of \code{simulateDriver} to generate several drivers with different autocorrelation lengths, and return a long format dataframe to be used as input for \code{\link{simulatePopulation}}. It also produces a plot of the generated drivers. \strong{Important}: note that the variable \code{time} runs from left to right, with lower values representing older samples.
 #'
 #'@usage simulateDriverS(
 #'  random.seeds=c(60, 120),
@@ -26,24 +26,27 @@
 #' @return A long format dataframe (see dataset \code{\link{drivers}}) with the following columns:
 #'
 #' \itemize{
-#'   \item \emph{time} integer.
-#'   \item \emph{driver} character, values are \code{A} and \code{B}
-#'   \item \emph{autocorrelation.length} numeric, values are 200, 600, and 1800.
-#'   \item \emph{value} numeric, value of the driver for the given \emph{time}.
+#'   \item \emph{time}: integer.
+#'   \item \emph{driver}: character, values are \code{A} and \code{B}
+#'   \item \emph{autocorrelation.length}: numeric, default values are 200, 600, and 1800.
+#'   \item \emph{value}: numeric, value of the driver for the given \emph{time}.
 #' }
 #'
 #' @seealso \code{\link{drivers}}, \code{\link{simulateDriver}}, \code{\link{simulatePopulation}}, \code{\link{drivers}}
 #'
 #' @examples
 #'
-#' drivers <- simulateDriverS(
+#'drivers <- simulateDriverS(
 #'  random.seeds=c(60, 120),
 #'  time=1:10000,
 #'  autocorrelation.lengths=c(200, 600, 1800),
 #'  output.min=c(0,0),
 #'  output.max=c(100, 100),
 #'  driver.names=c("A", "B"),
-#'  filename=NULL)
+#'  filename=NULL
+#')
+#'
+#'str(drivers)
 #'
 #' @export
 simulateDriverS <- function(random.seeds=c(60, 120),

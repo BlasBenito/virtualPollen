@@ -28,7 +28,7 @@ plotSimulation(
 \arguments{
 \item{simulation.output}{output of \code{\link{simulatePopulation}}.}
 
-\item{species}{a number or vector or numbers representing rows in the parameters dataframe, or a string or vector of strings referencing to the "label" column of the parameters dataframe.}
+\item{species}{a number or vector of numbers representing rows in the parameters dataframe, or a string or vector of strings referencing to the "label" column of the parameters dataframe.}
 
 \item{burnin}{if \code{FALSE}, burn-in period is not considered in the model.}
 
@@ -49,36 +49,18 @@ plotSimulation(
 \item{line.size}{size of lines in plots.}
 }
 \description{
-This function takes as input a list of dataframes or a single dataframe resulting from the execution of \code{\link{simulatePopulation}}, and plots the resulting time series of pollen abundance, number of individuals, biomass, driver, and environmnetal suitability.
+This function takes as input the output of \code{\link{simulatePopulation}}, and plots the pollen abundance, number of individuals, biomass, driver, and environmnetal suitability of each simulation outcome.
 }
 \details{
 The user can decide what virtual taxa to plot (argument \code{species}), and what information to show throught the \code{panels} argument. Output is plotted on screen by default, and printed to pdf if the \code{filename} argument is filled.
 }
 \examples{
 
-driver <- simulateDriver(
- random.seed = 10,
- time = 1:1000,
- autocorrelation.length = 200,
- output.min = 0,
- output.max = 100,
- rescale = TRUE
- )
+#getting example data
+data(simulation)
 
-#preparing parameters
-parameters <- parametersDataframe(rows = 2)
-parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
-parameters[2,] <- c("Species 1", 500, 100, 10, 0.02, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
-parameters <- fixParametersTypes(x = parameters)
-
-#simulating population dynamics
-sim.output <- simulatePopulation(
- parameters = parameters,
- driver.A = driver
- )
-
-#plot simulation
-plotSimulation(simulation.output = sim.output)
+#plot first simulation
+plotSimulation(simulation.output = simulation[[1]])
 
 }
 \seealso{
