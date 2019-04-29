@@ -27,27 +27,14 @@
 #' @seealso \code{\link{parametersDataframe}}, \code{\link{fixParametersTypes}}
 #'
 #' @examples
-#'#generating driver
-#'driver <- simulateDriver(
-#'  random.seed = 10,
-#'  time = 1:1000,
-#'  autocorrelation.length = 200,
-#'  output.min = 0,
-#'  output.max = 100,
-#'  rescale = TRUE
-#'  )
-#'
-#'#preparing parameters
-#'parameters <- parametersDataframe(rows = 2)
-#'parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
-#'parameters[2,] <- c("Species 1", 500, 100, 10, 0.02, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
-#'parameters <- fixParametersTypes(x = parameters)
+#'#getting data
+#'data(parameters)
+#'data(drivers)
 #'
 #'#plotting parameters
 #'parametersCheck(
 #'  parameters = parameters,
-#'  driver.A = driver,
-#'  filename = "Parameters.pdf"
+#'  drivers = drivers
 #'  )
 #'
 #' @export
@@ -58,7 +45,6 @@ parametersCheck <- function(parameters,
                            drivers = NULL,
                            filename = NULL){
 
-  library(cowplot)
 
   #CHECKING INPUT DATA
   #-------------------
@@ -271,12 +257,12 @@ parametersCheck <- function(parameters,
     ylab("Biomass (relative)") +
     theme(text = element_text(size = 12), panel.spacing  =  unit(1, "lines"))
 
-  joint.plot <- plot_grid(niche.plot ,fecundity.plot, growth.plot, ncol = 3, rel_widths  =  c(1 ,0.2, 1), align = "h", axis = "tb")
+  joint.plot <- cowplot::plot_grid(niche.plot ,fecundity.plot, growth.plot, ncol = 3, rel_widths  =  c(1 ,0.2, 1), align = "h", axis = "tb")
 
-  title <- ggdraw() + draw_label("Features of virtual species", fontface = 'bold')
+  title <- cowplot::ggdraw() + cowplot::draw_label("Features of virtual species", fontface = 'bold')
 
 
-  print(plot_grid(title, joint.plot, ncol = 1, rel_heights = c(0.1, 1)))
+  print(cowplot::plot_grid(title, joint.plot, ncol = 1, rel_heights = c(0.1, 1)))
 
   #saving to file
   # cowplot::plot_grid(niche.plot, growth.plot, ncol=2)

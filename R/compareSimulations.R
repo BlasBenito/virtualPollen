@@ -56,9 +56,6 @@ compareSimulations <- function(
   title.size = 25,
   plot.title = ""){
 
-  library(cowplot)
-  library(viridis)
-
   #SELECTING SPECIES
   #----------------
   #creating dictionary of species names and indexes

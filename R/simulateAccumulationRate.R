@@ -54,8 +54,6 @@ simulateAccumulationRate <- function(seed = 50,
                                      plot = TRUE
                                      ){
 
-  library(cowplot)
-
 #setting random seed for repeatibility
 set.seed(seed)
 

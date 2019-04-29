@@ -75,7 +75,7 @@
 #'}
 #'
 #' @export
-toRegularTime <- function(x,
+toRegularTime <- function(x = NULL,
                           time.column = "Time",
                           interpolation.interval = NULL,
                           columns.to.interpolate=c("Suitability", "Driver.A", "Pollen")

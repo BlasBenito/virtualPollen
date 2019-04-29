@@ -36,27 +36,14 @@ Plots the environmental niche, fecundity, growth curve, and maturity age, of eac
 The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\link[ggplot2]{ggplot2}} object. Priority is given to drivers introduced through the \code{drivers} argument.
 }
 \examples{
-#generating driver
-driver <- simulateDriver(
- random.seed = 10,
- time = 1:1000,
- autocorrelation.length = 200,
- output.min = 0,
- output.max = 100,
- rescale = TRUE
- )
-
-#preparing parameters
-parameters <- parametersDataframe(rows = 2)
-parameters[1,] <- c("Species 1", 50, 20, 2, 0.2, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
-parameters[2,] <- c("Species 1", 500, 100, 10, 0.02, 0, 100, 1000, 1, 0, 50, 10, 0, 0, NA, NA)
-parameters <- fixParametersTypes(x = parameters)
+#getting data
+data(parameters)
+data(drivers)
 
 #plotting parameters
 parametersCheck(
  parameters = parameters,
- driver.A = driver,
- filename = "Parameters.pdf"
+ drivers = drivers
  )
 
 }

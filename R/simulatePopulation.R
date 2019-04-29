@@ -108,7 +108,7 @@ simulatePopulation <- function(parameters=NULL,
   } else {
 
     if(sum(!(colnames(parameters) %in% c("label", "maximum.age", "reproductive.age", "fecundity", "growth.rate", "pollen.control", "maximum.biomass", "carrying.capacity", "driver.A.weight", "driver.B.weight", "niche.A.mean", "niche.A.sd", "niche.B.mean", "niche.B.sd", "autocorrelation.length.A", "autocorrelation.length.B"))) != 0){
-      stop(paste("The following column/s of 'parameters' seem to be missing: ", colnames(parameters)[colnames(parameters) %not-in% c("label", "maximum.age", "reproductive.age", "fecundity", "growth.rate", "pollen.control", "maximum.biomass", "carrying.capacity", "driver.A.weight", "driver.B.weight", "niche.A.mean", "niche.A.sd", "niche.B.mean", "niche.B.sd", "autocorrelation.length.A", "autocorrelation.length.B")], sep=""))
+      stop(paste("The following column/s of 'parameters' seem to be missing: ", colnames(parameters)[!(colnames(parameters) %in% c("label", "maximum.age", "reproductive.age", "fecundity", "growth.rate", "pollen.control", "maximum.biomass", "carrying.capacity", "driver.A.weight", "driver.B.weight", "niche.A.mean", "niche.A.sd", "niche.B.mean", "niche.B.sd", "autocorrelation.length.A", "autocorrelation.length.B"))], sep=""))
 
     }
   }
@@ -153,7 +153,7 @@ simulatePopulation <- function(parameters=NULL,
 
       #checking columns
       if(sum(!(colnames(drivers) %in% c("time", "driver", "autocorrelation.length", "value"))) != 0){
-        stop(paste("The following column/s of 'drivers' seem to be missing: ", colnames(parameters)[colnames(parameters) %not-in% c("time", "driver", "autocorrelation.length", "value")], sep=""))
+        stop(paste("The following column/s of 'drivers' seem to be missing: ", colnames(parameters)[!(colnames(parameters) %in% c("time", "driver", "autocorrelation.length", "value"))], sep=""))
       } else {
 
           #switch to dataframe input

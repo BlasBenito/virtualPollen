@@ -127,10 +127,16 @@
 #' @seealso \code{\link{simulateAccumulationRate}}, \code{\link{aggregateSimulation}}
 "accumulationRate"
 
-#' @import ggplot2 viridis tidyr plyr
+#' @import ggplot2 viridis tidyr plyr stats
 NULL
 
 #' @importFrom mgcv gam
 NULL
+
+#' @importFrom grDevices dev.off pdf
+NULL
+
+#' @import utils
+utils::globalVariables(c("Variable", "Value", "Time", "Species", "Suitability", "Driver.density.y", "Driver.weights", "Fecundity", "Age", "Biomass", "Reproductive.age", "ci.max", "ci.min", "Time", "Color", "error", "value", "..scaled..", "driver.A.weight", "maximum.biomass", "growthrate", "carrying.capacity", "fecundity", "pollen.control", "growth.rate"))
 
 

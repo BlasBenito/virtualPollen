@@ -186,7 +186,7 @@ p.acfs <- ggplot(data = autocorrelation, aes(x = lag, y = acf, color = driver)) 
   ggtitle("Temporal autocorrelation") +
   theme(legend.position = "none", plot.margin = unit(c(0.5, 0.5, 0.5, -1), "cm"))
 
-print(plot_grid(p.drivers, NULL, p.density, NULL, p.acfs, align = "h", ncol = 5, rel_widths = c(1, 0, 0.3, 0, 1)))
+print(cowplot::plot_grid(p.drivers, NULL, p.density, NULL, p.acfs, align = "h", ncol = 5, rel_widths = c(1, 0, 0.3, 0, 1)))
 
 if(!is.null(filename) & is.character(filename)){
 ggsave(width = 12, height = (1.5*(length(driver.names) * length(autocorrelation.lengths))), filename = paste(filename, ".pdf", sep = ""))

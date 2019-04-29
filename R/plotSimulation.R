@@ -71,8 +71,6 @@ plotSimulation <- function(
   title.size = 25,
   line.size = 1){
 
-  library(cowplot)
-
   #checking and setting panels
   if(length(panels) == 1){
     if(panels == "all" | panels == "ALL" | panels == "All" | is.null(panels) | length(panels) == 0 | !is.character(panels)){
