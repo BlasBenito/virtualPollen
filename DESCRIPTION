@@ -1,6 +1,6 @@
 Package: virtualPollen
 Type: Package
-Title: Simulating pollen curves from virtual taxa with different life and niche traits.
+Title: Simulating pollen curves from virtual taxa with different life and niche traits
 Version: 1.0.0
 Author: Blas M. Benito
 Maintainer: Blas M. Benito <blasbenito@gmail.com>
