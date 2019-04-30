@@ -1,5 +1,17 @@
+---
+output: github_document
+---
 
-[![DOI](https://zenodo.org/badge/177762046.svg)](https://zenodo.org/badge/latestdoi/177762046)
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
 
 virtualPollen
 ============
@@ -14,4 +26,4 @@ This package is part of an upcoming paper. It provides a set of functions to:
 +   Interpolate virtual pollen curves sampled at different depth intervals into regular time to allow direct comparison between pollen curves generated at different resolutions.
 
 
-If you want to fully understand how it works, please, check the vignette, which is available both as a pdf file and as an interactive Rmarkdown file.
+

@@ -4,12 +4,12 @@
 \name{simulation}
 \alias{simulation}
 \title{List with simulation outputs for all virtual taxa in \code{\link{parameters}}.}
-\format{List with 16 dataframes with outputs of \code{\link{simulatePopulation}}.}
+\format{List with 4 dataframes with outputs of \code{\link{simulatePopulation}}.}
 \usage{
 data(simulation)
 }
 \description{
-A list of dataframes with 16 slots, output of \code{\link{simulatePopulation}}, taking \code{\link{parameters}} and \code{\link{drivers}} as inputs. Each dataframe has the following columns:
+A list of dataframes with 4 slots, output of \code{\link{simulatePopulation}}, taking \code{\link{parameters}} and \code{\link{drivers}} as inputs. Each dataframe in the list has the following columns:
 }
 \details{
 \itemize{

@@ -4,7 +4,7 @@
 \name{accumulationRate}
 \alias{accumulationRate}
 \title{Accumulation rate}
-\format{dataframe with 10000 rows and the following columns:
+\format{Dataframe with 5000 rows and the following columns:
 #' @return A dataframe with the following columns.
 \itemize{
   \item \emph{time}: numeric, time or age of the given case.  \strong{Important}: the \code{time} column goes from "left to right", meaning that oldest samples have the lowest values of age/time, and viceversa.
