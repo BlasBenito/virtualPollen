@@ -136,7 +136,7 @@ plotSimulation <- function(
 
     #to long format
     if("Period" %in% colnames(output)){
-      output.long = gather(data=output, Variable, Value, 2:(ncol(output)-1))
+      output.long = tidyr::gather(data=output, Variable, Value, 2:(ncol(output)-1))
 
       #removing burn-in period if burnin == FALSE
       if(burnin == FALSE){output.long = output.long[output.long$Period == "Simulation",]}
@@ -219,10 +219,17 @@ plotSimulation <- function(
       ylab("") +
       geom_vline(xintercept = seq(0, max(output.long$Time), by = 200), color = "gray") +
       scale_x_continuous(breaks = seq(age.min, age.max, by = age.max/10)) +
-      theme(text  =  element_text(size = text.size), axis.text  =  element_text(size = text.size), axis.title  =  element_text(size = text.size), legend.position = "bottom", plot.title  =  element_text(size  =  title.size)) +
+      theme(text  =  element_text(size = text.size),
+            axis.text  =  element_text(size = text.size),
+            axis.title  =  element_text(size = text.size),
+            plot.title  =  element_text(size  =  title.size),
+            plot.margin = unit(c(0.5, 1, 0.5, -0.5), "cm"),
+            panel.spacing = unit(0, "lines")) +
       labs(color = 'Legend') +
       guides(color = guide_legend(override.aes = list(size = 2))) +
-      coord_cartesian(xlim = c(age.min, age.max))
+      coord_cartesian(xlim = c(age.min, age.max)) +
+      cowplot::theme_cowplot() +
+      theme(legend.position = "bottom")
     # guides(linetype = guide_legend(override.aes = list(size = 4)))
     # + theme(plot.margin=unit(c(1,3,1,1),"cm"))
 

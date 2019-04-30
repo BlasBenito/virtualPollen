@@ -42,7 +42,9 @@ plotAcf <- function(x = NULL,
     geom_hline(aes(yintercept = ci.min), color="red", linetype="dashed") +
     geom_segment(mapping = aes(xend = lag, yend = 0)) +
     ggtitle(plot.title) +
-    theme(plot.margin = unit(c(0,0,0,0), "cm"))
+    theme(plot.margin = unit(c(0,0,0,0), "cm")) +
+    cowplot::theme_cowplot() +
+    theme(legend.position = "none")
 
 return(acf.plot)
 

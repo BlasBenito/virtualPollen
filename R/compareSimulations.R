@@ -142,10 +142,15 @@ compareSimulations <- function(
     ylab("") +
     geom_vline(xintercept = seq(age.min, age.max, by = 200), color = "gray") +
     scale_x_continuous(breaks = seq(age.min, age.max, by = (age.max-age.min)/10)) +
-    theme(text = element_text(size = text.size), legend.position = "bottom", plot.title = element_text(size = title.size)) +
     labs(color = 'Legend') +
     guides(color = guide_legend(override.aes = list(size = 2))) +
-    coord_cartesian(xlim = c(age.min, age.max))
+    coord_cartesian(xlim = c(age.min, age.max)) +
+    cowplot::theme_cowplot() +
+    theme(text = element_text(size = text.size),
+          plot.title = element_text(size = title.size),
+          legend.position = "bottom",
+          panel.background = element_blank())
+
 
   invisible(print(p1))
 

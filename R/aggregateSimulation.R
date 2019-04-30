@@ -17,7 +17,7 @@
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
-#' @return A list of dataframes with as many rows as virtual taxa were produced by \code{\link{simulatePopulation}}, and as many columns as number of \code{sampling.intervals} defined by the user.
+#' @return A list of dataframes with as many rows as virtual taxa were produced by \code{\link{simulatePopulation}}, and the following columns: column 1 is the original data, column 2 is the original data aggregated by the accumulation rate, columns 3 to n are the different sampling intervals defined by the user.
 #'
 #' @seealso \code{\link{simulateAccumulationRate}}, \code{\link{simulatePopulation}}
 #'
@@ -102,9 +102,12 @@ aggregateSimulation <- function(simulation.output = NULL,
 
     #adding lists together
     output.list <- cbind(simulation.output, accrate.list, intervals.list)
+
   } else {
+
     #adding lists together
     output.list <- cbind(simulation.output, accrate.list)
+
   }
 
   names(output.list) <- NULL

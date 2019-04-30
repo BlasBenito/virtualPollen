@@ -158,22 +158,32 @@ p.drivers <- ggplot(data = drivers, aes(x = time, y = value, color = driver)) +
   geom_line() +
   scale_color_viridis(discrete = TRUE, begin = 0, end = 0.6) +
   facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free_y") +
-  xlab("Years") +
+  xlab("Time (years)") +
   ylab("") +
   ggtitle("Virtual drivers") +
-  theme(legend.position = "none") +
-  theme(plot.margin = unit(c(0.5, -1, 0.5, 0.5), "cm"))
+  theme(plot.margin = unit(c(0.5, -1, 0.5, 0.5), "cm"),
+        legend.position = "none",
+        panel.background = element_blank()) +
+  cowplot::background_grid(major = "none", minor = "none")
 
 p.density <- ggplot(data = drivers, aes(value, fill = driver, colour = driver)) +
   geom_density(aes(y = ..scaled..), alpha = 0.5) +
   scale_color_viridis(discrete = TRUE, begin = 0, end = 0.6) +
   scale_fill_viridis(discrete = TRUE, begin = 0, end = 0.6) +
-  facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free") + xlab("Years") +
-  theme(legend.position = "none") +
+  facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free") +
+  xlab("Years") +
   ylab("") +
   xlab("") +
   coord_flip() +
-  theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0), "cm"), axis.line = element_blank(), axis.text = element_blank(), axis.ticks = element_blank(), strip.background = element_blank(), strip.text.x = element_blank())
+  theme(plot.margin = unit(c(0.5, 0.5, 0.5, -0.5), "cm"),
+        axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        strip.background = element_blank(),
+        strip.text.x = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+  cowplot::background_grid(major = "none", minor = "none")
 
 p.acfs <- ggplot(data = autocorrelation, aes(x = lag, y = acf, color = driver)) +
   scale_color_viridis(discrete = TRUE, begin = 0, end = 0.6) +
@@ -182,9 +192,13 @@ p.acfs <- ggplot(data = autocorrelation, aes(x = lag, y = acf, color = driver)) 
   geom_hline(aes(yintercept = ci.min), color = "red", linetype = "dashed") +
   geom_segment(mapping = aes(xend = lag, yend = 0)) +
   ylab("") +
+  xlab("Lag (years)") +
   facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free_y") +
   ggtitle("Temporal autocorrelation") +
-  theme(legend.position = "none", plot.margin = unit(c(0.5, 0.5, 0.5, -1), "cm"))
+  theme(plot.margin = unit(c(0.5, 0.5, 0.5, -1), "cm"),
+        legend.position = "none",
+        panel.background = element_blank()) +
+  cowplot::background_grid(major = "none", minor = "none")
 
 print(cowplot::plot_grid(p.drivers, NULL, p.density, NULL, p.acfs, align = "h", ncol = 5, rel_widths = c(1, 0, 0.3, 0, 1)))
 

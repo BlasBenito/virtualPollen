@@ -233,33 +233,49 @@ parametersCheck <- function(parameters,
 
   niche.plot <- ggplot(data = plot.df, aes(x = Value, y = Suitability, group = Species)) +
     geom_ribbon(data = plot.df, aes(ymin = 0, ymax = Driver.density.y), color = "gray80", fill = "gray80", alpha = 0.5) +
-    geom_ribbon(data = plot.df, aes(ymin = 0, ymax = Suitability, alpha = Driver.weights), colour = NA, fill = color.palette[3]) +
+    geom_ribbon(data = plot.df, aes(ymin = 0, ymax = Suitability, alpha = Driver.weights), colour = NA, fill = color.palette[1]) +
     geom_line(data = plot.df, aes(x = Value, y = Driver.density.y), color = "gray80", alpha = 0.5) +
     facet_grid(Species~Driver) +
     scale_alpha_continuous(range = c(0, 1)) +
     xlab("Driver values") +
     ylab("Environmental suitability") +
-    theme(strip.background.y = element_blank(), strip.text.y = element_blank(), legend.position = "none", text = element_text(size = 12), strip.background = element_rect(fill = NA), panel.spacing = unit(1, "lines"))
+    theme(strip.background.y = element_blank(),
+          strip.text.y = element_blank(),
+          text = element_text(size = 12),
+          strip.background = element_rect(fill = NA),
+          panel.spacing = unit(1, "lines"),
+          legend.position = "none",
+          panel.background = element_blank()) +
+    cowplot::background_grid(major = "none", minor = "none")
 
   fecundity.plot <- ggplot(data = plot.df, aes(x = Species, y = Fecundity, group = Species)) +
     geom_hline(aes(yintercept = Fecundity), size = 10, color = "gray80", alpha = 0.5) +
-    geom_hline(aes(yintercept = Fecundity), size = 2, color = color.palette[3]) +
+    geom_hline(aes(yintercept = Fecundity), size = 2, color = color.palette[1]) +
     facet_wrap(facets = "Species", ncol = 1, strip.position = "right") +
-    theme(strip.background.y = element_blank(), strip.text.y = element_blank(), text = element_text(size = 12), panel.spacing = unit(1, "lines")) +
+    theme(strip.background.y = element_blank(),
+          strip.text.y = element_blank(),
+          text = element_text(size = 12),
+          panel.spacing = unit(1, "lines")) +
     scale_y_continuous(limits = c(0, max(plot.df$Fecundity))) +
-    xlab("")
+    xlab("") +
+    theme(legend.position = "none",
+          panel.background = element_blank()) +
+    cowplot::background_grid(major = "none", minor = "none")
 
   growth.plot <- ggplot(data = plot.df, aes(x = Age, y = Biomass, group = Species)) +
     geom_ribbon(ymin = 0, ymax = plot.df$Biomass, color = "gray80", fill = "gray80", alpha = 0.5) +
-    geom_line(aes(x = Reproductive.age, y = Biomass), color = color.palette[3], size = 2, alpha = 0.8) +
+    geom_line(aes(x = Reproductive.age, y = Biomass), color = color.palette[1], size = 2, alpha = 0.8) +
     facet_wrap(facets = "Species", ncol = 1, strip.position = "right", scales = "free_x") +
     xlab("Age (years)") +
     ylab("Biomass (relative)") +
-    theme(text = element_text(size = 12), panel.spacing  =  unit(1, "lines"))
+    theme(text = element_text(size = 12), panel.spacing  =  unit(1, "lines")) +
+    theme(legend.position = "bottom",
+          panel.background = element_blank()) +
+    cowplot::background_grid(major = "none", minor = "none")
 
   joint.plot <- cowplot::plot_grid(niche.plot ,fecundity.plot, growth.plot, ncol = 3, rel_widths  =  c(1 ,0.2, 1), align = "h", axis = "tb")
 
-  title <- cowplot::ggdraw() + cowplot::draw_label("Features of virtual species", fontface = 'bold')
+  title <- cowplot::ggdraw() + cowplot::draw_label("Main parameters of virtual taxa", fontface = 'bold')
 
 
   print(cowplot::plot_grid(title, joint.plot, ncol = 1, rel_heights = c(0.1, 1)))

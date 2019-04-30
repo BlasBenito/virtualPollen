@@ -74,14 +74,21 @@ accumulation.rate <- as.vector(accumulation.rate)
 
 #plotting data
 temp.df  <-  data.frame(time, accumulation.rate)
+
 if(plot == TRUE){
   temp.plot  <-  ggplot(data = temp.df, aes(x = time, y = accumulation.rate)) +
     geom_line(color = viridis(10)[3], size = 0.5) +
-    geom_ribbon(aes(ymin = 0, ymax = accumulation.rate), fill = viridis(10)[3], alpha = 0.3) +
+    geom_ribbon(aes(ymin = 0, ymax = accumulation.rate), fill = viridis(10)[1], alpha = 0.3) +
     xlab("Time") +
     ylab("Acc. rate") +
     scale_y_continuous(breaks = seq(0, output.max, by = 10)) +
-    scale_x_continuous(breaks = seq(0, max(time), by = max(time)/5))
+    scale_x_continuous(breaks = seq(0, max(time), by = max(time)/5)) +
+    cowplot::theme_cowplot() +
+    theme(legend.position = "none",
+          panel.background = element_blank())
+
+
+
   print(temp.plot)
 }
 
