@@ -10,3 +10,8 @@
 ^manual.pdf
 ^cran-comments.md
 ^.travis.yml
+^cran-comments.md
+^NEWS.md
+^README.md
+^README.Rmd
+^virtualPollen.Rproj
