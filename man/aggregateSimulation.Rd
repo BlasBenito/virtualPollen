@@ -18,7 +18,7 @@ aggregateSimulation(
 \item{sampling.intervals}{integer, numeric vector, depth interval or intervals between consecutive samples in centimetres. If 1, all samples are returned, if 2, returned samples are separated by 1 cm.}
 }
 \value{
-A list of dataframes with as many rows as virtual taxa were produced by \code{\link{simulatePopulation}}, and as many columns as number of \code{sampling.intervals} defined by the user.
+A list of dataframes with as many rows as virtual taxa were produced by \code{\link{simulatePopulation}}, and the following columns: column 1 is the original data, column 2 is the original data aggregated by the accumulation rate, columns 3 to n are the different sampling intervals defined by the user.
 }
 \description{
 Takes the output of \code{\link{simulatePopulation}} and aggregates it into centimetres by following a sediment accumulation rate produced by \code{\link{simulateAccumulationRate}}. It further samples it at given depth intervals. It intends to simulate a pseudo-realistic sedimentation of the pollen produced by the simulation, and to apply a pollen-sampling pattern to a virtual pollen core.
