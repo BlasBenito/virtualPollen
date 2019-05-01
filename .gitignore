@@ -4,7 +4,6 @@ doc
 .Rhistory
 .RData
 .Ruserdata
-.Rbuildignore
 compile.R
 data.R
 ecological_memory_functions.R
