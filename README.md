@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis build status](https://travis-ci.org/blasbenito/virtualPollen.svg?branch=master)](https://travis-ci.org/blasbenito/virtualPollen)
+[![Build Status](https://travis-ci.org/BlasBenito/virtualPollen.svg?branch=master)](https://travis-ci.org/BlasBenito/virtualPollen)
 
 virtualPollen
 =============
