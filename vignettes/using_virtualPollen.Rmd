@@ -1,33 +1,18 @@
-
 ---
 title: 'virtualPollen'
 subtitle: 'Generation of virtual pollen curves'
 author: "Blas M. Benito"
-output:
-  pdf_document:
-    fig_caption: yes
-    fig_width: 9
-    highlight: tango
-    includes:
-      in_header: header.tex
-    keep_tex: yes
-    latex_engine: xelatex
-    number_sections: yes
-    toc: yes
-    toc_depth: 2
-    df_print: kable
-  html_notebook:
-    fig_caption: yes
-    highlight: haddock
-    toc: yes
-    toc_depth: 3
-code_folding: show
-citation_package: natbib
+fig_width: 6
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using virtualPollen}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r setup, warning=FALSE, message=FALSE, echo=FALSE}
 #checking if required packages are installed, and installing them if not
-list.of.packages <- c("ggplot2", "cowplot", "knitr", "viridis", "tidyr", "formatR", "grid", "devtools")
+list.of.packages <- c("ggplot2", "cowplot", "knitr", "viridis", "tidyr", "formatR", "grid", "devtools", "magrittr", "kableExtra", "viridis")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, dep=TRUE)
 
