@@ -5,12 +5,12 @@
 \title{Plots results of \code{\link{simulatePopulation}}.}
 \usage{
 plotSimulation(
-  simulation.output=NULL,
-  species="all",
-  burnin=FALSE,
-  filename=NULL,
-  time.zoom=NULL,
-  panels=c("Driver A",
+  simulation.output = NULL,
+  species = "all",
+  burnin = FALSE,
+  filename = NULL,
+  time.zoom = NULL,
+  panels = c("Driver A",
            "Driver B",
            "Suitability",
            "Population",
@@ -18,11 +18,11 @@ plotSimulation(
            "Biomass",
            "Pollen"
            ),
- plot.title=NULL,
- width=12,
- text.size=20,
- title.size=25,
- line.size=1
+ plot.title = NULL,
+ width = 12,
+ text.size = 20,
+ title.size = 25,
+ line.size = 1
  )
 }
 \arguments{

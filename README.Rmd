@@ -43,7 +43,7 @@ library(viridis)
 
 The basic workflow consists of the following steps:
 
-**1.** **Generate virtual drivers** with *simulateDriverS*. The user can define a random seed, a time vector, length of the autocorrelation structure of the driver, minimum and maximum values, and names of the drivers. Note that the final length of the temporal autocorrelation is only approximate.
+**1.** **Generate virtual drivers** with *simulateDriverS*. The user can define a random seed, a time vector, length of the autocorrelation structure of the driver, minimum and maximum values, and names of the drivers. Note that the final length of the temporal autocorrelation is only approximate, and that **time** runs from left to right, meaning that older samples have lower time values.
 
 ```{r, fig.width=9, fig.height=7}
 #generating two drivers with different autocorrelation lengths
@@ -180,7 +180,7 @@ lines(mySimulation.aggregated[[1,4]]$Time,
 
 **6.** Optional: **re-interpolate the data into a regular time grid**. Comparing the different pollen curves through methods such as regression requires them to be in the same temporal grid (a.k.a, have the same number of cases). The function *toRegularTime* handles that seamlessly.
 
-```{r}
+```{r, message=FALSE}
 #interpolating at 50 years resolution.
 mySimulation.regular <- toRegularTime(
   x = mySimulation.aggregated,

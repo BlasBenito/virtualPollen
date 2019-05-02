@@ -7,7 +7,7 @@
 simulateDriverS(
  random.seeds=c(60, 120),
  time=1:10000,
- autocorrelation.lengths=c(200, 600, 1800),
+ autocorrelation.lengths=c(200, 600),
  output.min=c(0,0),
  output.max=c(100, 100),
  driver.names=c("A", "B"),
@@ -49,7 +49,7 @@ It is recommended to use \code{time} vectors with a time step of 1 between conse
 drivers <- simulateDriverS(
  random.seeds=c(60, 120),
  time=1:10000,
- autocorrelation.lengths=c(200, 600, 1800),
+ autocorrelation.lengths=c(200, 600),
  output.min=c(0,0),
  output.max=c(100, 100),
  driver.names=c("A", "B"),

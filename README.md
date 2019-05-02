@@ -32,7 +32,7 @@ Workflow
 
 The basic workflow consists of the following steps:
 
-**1.** **Generate virtual drivers** with *simulateDriverS*. The user can define a random seed, a time vector, length of the autocorrelation structure of the driver, minimum and maximum values, and names of the drivers. Note that the final length of the temporal autocorrelation is only approximate.
+**1.** **Generate virtual drivers** with *simulateDriverS*. The user can define a random seed, a time vector, length of the autocorrelation structure of the driver, minimum and maximum values, and names of the drivers. Note that the final length of the temporal autocorrelation is only approximate, and that **time** runs from left to right, meaning that older samples have lower time values.
 
 ``` r
 #generating two drivers with different autocorrelation lengths

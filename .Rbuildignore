@@ -15,3 +15,6 @@
 ^README.md
 ^README.Rmd
 ^virtualPollen.Rproj
+^header.tex
+^using_virtualPollen.log
+^using_virtualPollen.nb.html

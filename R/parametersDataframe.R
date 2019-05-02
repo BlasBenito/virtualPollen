@@ -6,7 +6,7 @@
 #'
 #' @param rows integer, number of rows in the output dataframe.
 #'
-#' @details The resulting dataframe can either be filled manually through vectors, as shown in the example (but this requires to use the function \code{\link{fixParametersTypes}} once the dataframe is completed), or can be edited manually in Rstudio by installing the \href{https://cran.r-project.org/web/packages/editData/README.html}{editData} package.
+#' @details The resulting dataframe can either be filled manually through vectors, as shown in the example (but this requires to use the function \code{\link{fixParametersTypes}} once the dataframe is completed), or can be edited manually in Rstudio by installing the \href{https://CRAN.R-project.org/package=editData}{editData} package.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'

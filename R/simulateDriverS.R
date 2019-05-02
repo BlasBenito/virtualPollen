@@ -51,7 +51,7 @@
 #' @export
 simulateDriverS <- function(random.seeds=c(60, 120),
                             time=1:10000,
-                            autocorrelation.lengths=c(200, 600, 1800),
+                            autocorrelation.lengths=c(200, 600),
                             output.min=c(0,0),
                             output.max=c(100, 100),
                             driver.names=c("A", "B"),
