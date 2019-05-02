@@ -5,7 +5,7 @@
 #'@usage simulateDriverS(
 #'  random.seeds=c(60, 120),
 #'  time=1:10000,
-#'  autocorrelation.lengths=c(200, 600, 1800),
+#'  autocorrelation.lengths=c(200, 600),
 #'  output.min=c(0,0),
 #'  output.max=c(100, 100),
 #'  driver.names=c("A", "B"),
@@ -39,7 +39,7 @@
 #'drivers <- simulateDriverS(
 #'  random.seeds=c(60, 120),
 #'  time=1:10000,
-#'  autocorrelation.lengths=c(200, 600, 1800),
+#'  autocorrelation.lengths=c(200, 600),
 #'  output.min=c(0,0),
 #'  output.max=c(100, 100),
 #'  driver.names=c("A", "B"),
@@ -156,7 +156,7 @@ for(driver in driver.names){
 #PLOTTING OUTPUT
 p.drivers <- ggplot(data = drivers, aes(x = time, y = value, color = driver)) +
   geom_line() +
-  scale_color_viridis(discrete = TRUE, begin = 0, end = 0.6) +
+  scale_color_viridis(discrete = TRUE, begin = 0.2, end = 0.6) +
   facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free_y") +
   xlab("Time (years)") +
   ylab("") +
@@ -168,14 +168,14 @@ p.drivers <- ggplot(data = drivers, aes(x = time, y = value, color = driver)) +
 
 p.density <- ggplot(data = drivers, aes(value, fill = driver, colour = driver)) +
   geom_density(aes(y = ..scaled..), alpha = 0.5) +
-  scale_color_viridis(discrete = TRUE, begin = 0, end = 0.6) +
-  scale_fill_viridis(discrete = TRUE, begin = 0, end = 0.6) +
+  scale_color_viridis(discrete = TRUE, begin = 0.2, end = 0.6) +
+  scale_fill_viridis(discrete = TRUE, begin = 0.2, end = 0.6) +
   facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free") +
   xlab("Years") +
   ylab("") +
   xlab("") +
   coord_flip() +
-  theme(plot.margin = unit(c(0.5, 0.5, 0.5, -0.5), "cm"),
+  theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0), "cm"),
         axis.line = element_blank(),
         axis.text = element_blank(),
         axis.ticks = element_blank(),
@@ -186,7 +186,7 @@ p.density <- ggplot(data = drivers, aes(value, fill = driver, colour = driver)) 
   cowplot::background_grid(major = "none", minor = "none")
 
 p.acfs <- ggplot(data = autocorrelation, aes(x = lag, y = acf, color = driver)) +
-  scale_color_viridis(discrete = TRUE, begin = 0, end = 0.6) +
+  scale_color_viridis(discrete = TRUE, begin = 0.2, end = 0.6) +
   geom_hline(aes(yintercept = 0)) +
   geom_hline(aes(yintercept = ci.max), color = "red", linetype = "dashed") +
   geom_hline(aes(yintercept = ci.min), color = "red", linetype = "dashed") +

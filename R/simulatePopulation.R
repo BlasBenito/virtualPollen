@@ -116,7 +116,7 @@ simulatePopulation <- function(parameters=NULL,
 
   #function to check if driver B is available
   is.driver.B.available <- function(driver.B){
-    if(is.null(driver.B)==TRUE  | is.vector(driver.B)==FALSE){
+    if(is.null(driver.B) == TRUE  | is.vector(driver.B) == FALSE){
       return(FALSE)
     } else {
       return(TRUE)
@@ -125,15 +125,15 @@ simulatePopulation <- function(parameters=NULL,
 
 
   #CHECKING drivers, driver.A, driver.B
-  if(is.null(drivers)==TRUE | is.data.frame(drivers)==FALSE){
+  if(is.null(drivers) == TRUE | is.data.frame(drivers) == FALSE){
 
     #checking driver B
     driver.B.available <- is.driver.B.available(driver.B)
 
     #checking driver.A
-    if(is.null(driver.A)==TRUE | is.vector(driver.A)==FALSE){
+    if(is.null(driver.A) == TRUE | is.vector(driver.A) == FALSE){
 
-        if(driver.B.available==FALSE){
+        if(driver.B.available == FALSE){
           stop("No drivers have been provided.")
         }
 
@@ -142,7 +142,7 @@ simulatePopulation <- function(parameters=NULL,
         drivers.input<-"vector"
 
         #create fake driver.B if absent
-        if(driver.B.available==FALSE){
+        if(driver.B.available == FALSE){
           driver.B <- rep(1, length(driver.A))
         }
 
@@ -157,7 +157,7 @@ simulatePopulation <- function(parameters=NULL,
       } else {
 
           #switch to dataframe input
-          drivers.input<-"data.frame"
+          drivers.input <- "data.frame"
 
           #giving preference to dataframe format
           driver.A <- NULL
@@ -172,25 +172,21 @@ simulatePopulation <- function(parameters=NULL,
   #creating dictionary of species names and indexes
   names.dictionary <- data.frame(name=parameters$label, index=1:nrow(parameters))
 
-  #if null or "all", selects all species
-  if(is.null(species) | species %in% c("all", "All", "ALL")){
-
-    selected.species <- names.dictionary$index
-
-  } else {
-
-    #wrong names or indexes
-    if(!(species %in% names.dictionary$name) & !(species %in% names.dictionary$index)){
-      stop("You have selected species that are not available in the parameters table.")
+  if(is.character(species)){
+    if(species == "all" | species == "ALL" | species == "All"){
+      selected.species <- names.dictionary$index
+    } else {
+      if(sum(species %in% names.dictionary$name) != length(species)){
+        stop("You have selected species that are not available in the parameters table.")
+      } else {
+        selected.species <- names.dictionary[names.dictionary$name %in% species, "index"]
       }
-
-    #correct species names or indexes
-    if(species %in% names.dictionary$names){
-      selected.species <- names.dictionary[names.dictionary$name %in% species, "index"]
     }
-    if(species %in% names.dictionary$index){
-      selected.species <- species
+  }
 
+  if(is.numeric(species)){
+    if(sum(species %in% names.dictionary$index) != 0){
+      selected.species <- species
     }
   }
 
@@ -232,7 +228,7 @@ simulatePopulation <- function(parameters=NULL,
 
     #GETTING DRIVER VALUES
     #IF DRIVERS PROVIDED AS DATAFRAME
-    if(drivers.input=="data.frame"){
+    if(drivers.input == "data.frame"){
 
       #if the autocorrelation.lengt available in parameters for species i is not in drivers, the first autocorrelation length available in drivers is assigned
       if(!(autocorrelation.length.A %in% unique(drivers$autocorrelation.length)) & !(autocorrelation.length.B %in% unique(drivers$autocorrelation.length))){
@@ -242,32 +238,35 @@ simulatePopulation <- function(parameters=NULL,
       }
 
       #getting driver values
-      driver.A.ready <- drivers[drivers$driver=="A" & drivers$autocorrelation.length==autocorrelation.length.A, "value"]
-      driver.B.ready = drivers[drivers$driver=="B" & drivers$autocorrelation.length==autocorrelation.length.B, "value"]
+      driver.A.ready <- drivers[drivers$driver == "A" & drivers$autocorrelation.length == autocorrelation.length.A, "value"]
+      driver.B.ready = drivers[drivers$driver == "B" & drivers$autocorrelation.length == autocorrelation.length.B, "value"]
 
       #checking if drivers are NA
-      if(sum(is.na(driver.A.ready))==length(driver.A.ready)){
+      if(sum(is.na(driver.A.ready)) == length(driver.A.ready)){
         stop("Driver A is made of NA, something is wrong with the drivers argument.")
       }
 
-      if(sum(is.na(driver.B.ready))==length(driver.B.ready)){
+      #driver.B is empty
+      if(sum(is.na(driver.B.ready)) == length(driver.B.ready)){
         driver.B.ready <- rep(1, length(driver.A.ready))
+        if(driver.B.weight > 0){
         driver.B.weight <- 0
-        message("Driver B is missing, setting driver.B.weight to 0.")
+        driver.A.weight <- 1
+        }
       }
-
     }
 
-
     #if input drivers are vectors
-    if(drivers.input=="vector"){
+    if(drivers.input == "vector"){
       driver.A.ready <- driver.A
 
       #setting driver.B.weight to 0 if driver.B was missing
-      if(driver.B.available==FALSE){
+      if(driver.B.available == FALSE){
         driver.B.ready <- rep(1, length(driver.A.ready))
-        driver.B.weight <- 0
-        message("Driver B is missing, setting driver.B.weight to 0.")
+        if(driver.B.weight > 0){
+          driver.B.weight <- 0
+          driver.A.weight <- 1
+        }
       } else {
         driver.B.ready <- driver.B
       }
@@ -275,10 +274,10 @@ simulatePopulation <- function(parameters=NULL,
 
 
     #checking niche parameters
-    if(is.na(niche.A.sd)==TRUE | niche.A.sd == 0){niche.A.sd <- 1}
-    if(is.na(niche.B.sd)==TRUE | niche.B.sd == 0){niche.B.sd <- 1}
-    if(is.na(niche.A.mean)==TRUE){niche.A.mean <- 0}
-    if(is.na(niche.B.mean)==TRUE){niche.B.mean <- 0}
+    if(is.na(niche.A.sd) == TRUE | niche.A.sd == 0){niche.A.sd <- 1}
+    if(is.na(niche.B.sd) == TRUE | niche.B.sd == 0){niche.B.sd <- 1}
+    if(is.na(niche.A.mean) == TRUE){niche.A.mean <- 0}
+    if(is.na(niche.B.mean) == TRUE){niche.B.mean <- 0}
 
 
     #COMPUTING MAXIMUM DENSITY (output of normal function) OF EACH DRIVER
@@ -300,7 +299,7 @@ simulatePopulation <- function(parameters=NULL,
 
 
     #BURN-IN PERIOD ADDED TO SUITABILITY
-    if(burnin==TRUE){
+    if(burnin == TRUE){
 
       burnin.suitability <- jitter(c(rep(1, maximum.age*5), seq(1, suitability[1], length.out = maximum.age*5)), amount=0.01)
       burnin.suitability[burnin.suitability < 0]<-0

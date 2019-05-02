@@ -4,12 +4,12 @@
 #'
 #'
 #' @usage plotSimulation(
-#'   simulation.output=NULL,
-#'   species="all",
-#'   burnin=FALSE,
-#'   filename=NULL,
-#'   time.zoom=NULL,
-#'   panels=c("Driver A",
+#'   simulation.output = NULL,
+#'   species = "all",
+#'   burnin = FALSE,
+#'   filename = NULL,
+#'   time.zoom = NULL,
+#'   panels = c("Driver A",
 #'            "Driver B",
 #'            "Suitability",
 #'            "Population",
@@ -17,11 +17,11 @@
 #'            "Biomass",
 #'            "Pollen"
 #'            ),
-#'  plot.title=NULL,
-#'  width=12,
-#'  text.size=20,
-#'  title.size=25,
-#'  line.size=1
+#'  plot.title = NULL,
+#'  width = 12,
+#'  text.size = 20,
+#'  title.size = 25,
+#'  line.size = 1
 #'  )
 #'
 #' @param simulation.output output of \code{\link{simulatePopulation}}.
@@ -148,7 +148,7 @@ plotSimulation <- function(
 
     #age limits of the plot
     if(is.null(time.zoom)){
-      age.min = 0
+      age.min = 1
       age.max = max(output.long$Time)
     } else {
       age.min = time.zoom[1]

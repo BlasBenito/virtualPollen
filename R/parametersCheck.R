@@ -92,27 +92,24 @@ parametersCheck <- function(parameters,
   #creating dictionary of species names and indexes
   names.dictionary <- data.frame(name=parameters$label, index=1:nrow(parameters))
 
-  #if null or "all", selects all species
-  if(is.null(species) | species %in% c("all", "All", "ALL")){
-
-    selected.species <- names.dictionary$index
-
-  } else {
-
-    #wrong names or indexes
-    if(!(species %in% names.dictionary$name) & !(species %in% names.dictionary$index)){
-      stop("You have selected species that are not available in the parameters table.")
-    }
-
-    #correct species names or indexes
-    if(species %in% names.dictionary$names){
-      selected.species <- names.dictionary[names.dictionary$name %in% species, "index"]
-    }
-    if(species %in% names.dictionary$index){
-      selected.species <- species
-
+  if(is.character(species)){
+    if(species == "all" | species == "ALL" | species == "All"){
+      selected.species <- names.dictionary$index
+    } else {
+      if(sum(species %in% names.dictionary$name) != length(species)){
+        stop("You have selected species that are not available in the parameters table.")
+      } else {
+        selected.species <- names.dictionary[names.dictionary$name %in% species, "index"]
+      }
     }
   }
+
+  if(is.numeric(species)){
+    if(sum(species %in% names.dictionary$index) != 0){
+      selected.species <- species
+    }
+  }
+
 
   #dataframe to store data
   plot.df <- data.frame(Species = character(),
