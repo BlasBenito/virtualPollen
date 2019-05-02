@@ -1,10 +1,10 @@
 Package: virtualPollen
 Type: Package
-Title: Simulating pollen curves from virtual taxa with different life and niche traits
+Title: Simulating Pollen Curves from Virtual Taxa with Different Life and Niche Traits
 Version: 1.0.0
 Author: Blas M. Benito
 Maintainer: Blas M. Benito <blasbenito@gmail.com>
-Description: Tools to generate virtual environmental drivers with a given temporal autocorrelation, and to simulate pollen curves at annual resolution over millennial time-scales based on these drivers and virtual taxa with different life traits and niche features. It also provides the means to simulate cuasi-realistic pollen-data conditions by applying simulated accumulation rates and given depth intervals between consecutive samples.
+Description: Tools to generate virtual environmental drivers with a given temporal autocorrelation, and to simulate pollen curves at annual resolution over millennial time-scales based on these drivers and virtual taxa with different life traits and niche features. It also provides the means to simulate quasi-realistic pollen-data conditions by applying simulated accumulation rates and given depth intervals between consecutive samples.
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true

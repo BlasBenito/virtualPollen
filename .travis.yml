@@ -8,3 +8,5 @@ r:
 sudo: false
 cache: packages
 os: osx
+before_install:
+  - tlmgr install inconsolata
