@@ -27,6 +27,7 @@
 #' @seealso \code{\link{parametersDataframe}}, \code{\link{fixParametersTypes}}
 #'
 #' @examples
+#'\donttest{
 #'#getting data
 #'data(parameters)
 #'data(drivers)
@@ -36,6 +37,7 @@
 #'  parameters = parameters,
 #'  drivers = drivers
 #'  )
+#'}
 #'
 #' @export
 parametersCheck <- function(parameters,

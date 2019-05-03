@@ -36,6 +36,7 @@ Plots the environmental niche, fecundity, growth curve, and maturity age, of eac
 The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\link[ggplot2]{ggplot2}} object. Priority is given to drivers introduced through the \code{drivers} argument.
 }
 \examples{
+\donttest{
 #getting data
 data(parameters)
 data(drivers)
@@ -45,6 +46,7 @@ parametersCheck(
  parameters = parameters,
  drivers = drivers
  )
+}
 
 }
 \seealso{
