@@ -62,7 +62,7 @@ str(myDrivers)
 #with the function simulateDriver as well
 ```
 
-**2.** **Define the traits of the virtual taxa**. Note that the dataframe with the parameters can be either filled with numeric vectors, or manually, by using the function  [editData](https://CRAN.R-project.org/package=editData). Please, check the help of the function *parametersDataframe* and the vignette to better understand the meaning of the traits.
+**2.** **Define the traits of the virtual taxa**. Note that the dataframe with the parameters can be either filled with numeric vectors, or manually, by using the function [editData](https://CRAN.R-project.org/package=editData). Please, check the help of the function *parametersDataframe* and the vignette to better understand the meaning of the traits.
 
 ```{r, fig.width=9, fig.height=4}
 #generating template of the dataframe

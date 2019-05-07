@@ -1,3 +1,16 @@
+## Resubmission
+This is a resubmission. The previous submission was rejected with the comment:
+
+"Thanks, if there are references describing the methods in your package,
+please add these in the Description field of your DESCRIPTION file in
+the form
+authors (year) <doi:...>
+authors (year) <arXiv:...>
+authors (year, ISBN:...)
+with no space after 'doi:', 'arXiv:' and angle brackets for auto-linking."
+
+However, there are no references that must be in the Description field of the DESCRIPTION file, this is an original work, not a reimplementation of someone else's algorithms.
+
 ## Test environments
 * Local: Ubuntu 18.04.2 LTS, R 3.6.0
 * Rhub
