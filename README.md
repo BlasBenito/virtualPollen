@@ -1,6 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+[![DOI](https://zenodo.org/badge/177762046.svg)](https://zenodo.org/badge/latestdoi/177762046)
 
 # virtualPollen
 
