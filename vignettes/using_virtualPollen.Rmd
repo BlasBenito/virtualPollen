@@ -2,6 +2,7 @@
 title: 'virtualPollen'
 subtitle: 'Generation of virtual pollen curves'
 author: "Blas M. Benito"
+date: "`r Sys.Date()`"
 fig_width: 6
 output: rmarkdown::html_vignette
 vignette: >

@@ -1,7 +1,9 @@
 ^README\.Rmd$
 ^\.travis\.yml$
+^\_config\.yml$
 ^Meta$
 ^doc$
+^docs$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^virtualPollen.Rproj
