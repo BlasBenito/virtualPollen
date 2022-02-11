@@ -4,7 +4,9 @@
 \name{parameters}
 \alias{parameters}
 \title{Parameters of 4 virtual taxa.}
-\format{Dataframe with 16 columns and 4 rows.}
+\format{
+Dataframe with 16 columns and 4 rows.
+}
 \usage{
 data(parameters)
 }

@@ -4,7 +4,9 @@
 \name{simulation}
 \alias{simulation}
 \title{List with simulation outputs for all virtual taxa in \code{\link{parameters}}.}
-\format{List with 4 dataframes with outputs of \code{\link{simulatePopulation}}.}
+\format{
+List with 4 dataframes with outputs of \code{\link{simulatePopulation}}.
+}
 \usage{
 data(simulation)
 }

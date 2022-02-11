@@ -4,7 +4,9 @@
 \name{driverB}
 \alias{driverB}
 \title{Driver B}
-\format{Numeric vector of length 5000.}
+\format{
+Numeric vector of length 5000.
+}
 \usage{
 data(driverB)
 }

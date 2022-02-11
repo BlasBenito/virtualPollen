@@ -4,7 +4,9 @@
 \name{drivers}
 \alias{drivers}
 \title{Drivers with different temporal autocorrelation.}
-\format{Dataframe with 4 columns and 20000 rows.}
+\format{
+Dataframe with 4 columns and 20000 rows.
+}
 \usage{
 data(drivers)
 }

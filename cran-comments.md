@@ -1,15 +1,24 @@
-## Resubmission
-This is a resubmission. The previous submission was rejected with the comment:
+## New version
+This is a new version of the package (1.0.1) submitted as a response to an email by Prof Brian Ripley:
 
-"Thanks, if there are references describing the methods in your package,
-please add these in the Description field of your DESCRIPTION file in
-the form
-authors (year) <doi:...>
-authors (year) <arXiv:...>
-authors (year, ISBN:...)
-with no space after 'doi:', 'arXiv:' and angle brackets for auto-linking."
+ Dear maintainer,
 
-However, there are no references that must be in the Description field of the DESCRIPTION file, this is an original work, not a reimplementation of someone else's algorithms.
+ Please see the problems shown on
+<https://cran.r-project.org/web/checks/check_results_virtualPollen.html>.
+
+ Please correct before 2022-02-25 to safely retain your package on CRAN.
+
+ Do remember to look at the 'Additional issues'.
+
+ The CRAN Team
+ 
+From these issues, I only fixed the one appearing in the "donttest" section:
+
+ "Error in `f()`:
+! Either ymin or ymax must be given as an aesthetic."
+
+It happens in a ggplot generated within the function parametersCheck(), where the syntax for the function ggplot2::geom_ribbon() was wrong. This issue is fixed now.
+
 
 ## Test environments
 * Local: Ubuntu 18.04.2 LTS, R 3.6.0
@@ -24,9 +33,4 @@ However, there are no references that must be in the Description field of the DE
 
 
 ## R CMD check results
-0 ERRORs | 0 WARNINGs | 1 NOTE.
-
-"* checking CRAN incoming feasibility ... NOTE
-Maintainer: 'Blas M. Benito <blasbenito@gmail.com>'
-
-New submission"
+0 errors ✓ | 0 warnings ✓ | 0 notes ✓
