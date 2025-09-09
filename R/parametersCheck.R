@@ -18,11 +18,15 @@
 #' @param drivers dataframe with drivers
 #' @param filename character string, filename of the output pdf.
 #'
-#' @details The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\link[ggplot2]{ggplot2}} object. Priority is given to drivers introduced through the \code{drivers} argument.
+#' @details
+#'
+#' Priority is given to drivers introduced through the \code{drivers} argument.
+#'
+#' The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a ggplot object.
 #'
 #' @author Blas M. Benito  <blasbenito@gmail.com>
 #'
-#' @return A \code{\link{ggplot2}} object.
+#' @return ggplot object.
 #'
 #' @seealso \code{\link{parametersDataframe}}, \code{\link{fixParametersTypes}}
 #'
@@ -40,12 +44,14 @@
 #'}
 #'
 #' @export
-parametersCheck <- function(parameters,
-                           species = "all",
-                           driver.A = NULL,
-                           driver.B = NULL,
-                           drivers = NULL,
-                           filename = NULL){
+parametersCheck <- function(
+    parameters = NULL,
+    species = "all",
+    driver.A = NULL,
+    driver.B = NULL,
+    drivers = NULL,
+    filename = NULL
+    ){
 
 
   #CHECKING INPUT DATA
@@ -114,17 +120,19 @@ parametersCheck <- function(parameters,
 
 
   #dataframe to store data
-  plot.df <- data.frame(Species = character(),
-                        Driver = character(),
-                        Driver.density.x = numeric(),
-                        Driver.density.y = numeric(),
-                        Driver.weights = numeric(),
-                        Value = numeric(),
-                        Suitability = numeric(),
-                        Age = numeric(),
-                        Biomass = numeric(),
-                        Reproductive.age = numeric(),
-                        Fecundity = numeric())
+  plot.df <- data.frame(
+    Species = character(),
+    Driver = character(),
+    Driver.density.x = numeric(),
+    Driver.density.y = numeric(),
+    Driver.weights = numeric(),
+    Value = numeric(),
+    Suitability = numeric(),
+    Age = numeric(),
+    Biomass = numeric(),
+    Reproductive.age = numeric(),
+    Fecundity = numeric()
+    )
 
 
   #ITERATING THROUGH SPECIES
@@ -193,29 +201,32 @@ parametersCheck <- function(parameters,
 
     #preparing data for plotting
     if(is.null(driver.B.ready) == FALSE){
-      plot.df.temp <- data.frame(Species = rep(paste(parameters[i, "label"], sep = ""), 100),
-                                Driver = c(rep("Driver A", 100), rep("Driver B", 100)),
-                                Driver.density.x = c(density.driver.A$x, density.driver.B$x),
-                                Driver.density.y = c(density.driver.A.y, density.driver.B.y),
-                                Driver.weights  =  c(rep(driver.A.weight, 100), rep(driver.B.weight, 100)),
-                                Value = c(driver.A.range, driver.B.range),
-                                Suitability = c(niche.A, niche.B),
-                                Age = age,
-                                Biomass = biomass,
-                                Reproductive.age = rep(parameters[i, "reproductive.age"], 100),
-                                Fecundity = rep(parameters[i, "fecundity"], 100))
+      plot.df.temp <- data.frame(
+        Species = rep(paste(parameters[i, "label"], sep = ""), 100),
+        Driver = c(rep("Driver A", 100), rep("Driver B", 100)),
+        Driver.density.x = c(density.driver.A$x, density.driver.B$x),
+        Driver.density.y = c(density.driver.A.y, density.driver.B.y),
+        Driver.weights  =  c(rep(driver.A.weight, 100), rep(driver.B.weight, 100)),
+        Value = c(driver.A.range, driver.B.range),
+        Suitability = c(niche.A, niche.B),
+        Age = age,
+        Biomass = biomass,
+        Reproductive.age = rep(parameters[i, "reproductive.age"], 100),
+        Fecundity = rep(parameters[i, "fecundity"], 100))
     } else {
-      plot.df.temp <- data.frame(Species = rep(paste(parameters[i, "label"], sep = ""), 100),
-                                Driver = c(rep("Driver A", 100)),
-                                Driver.density.x = c(density.driver.A$x),
-                                Driver.density.y = c(density.driver.A.y),
-                                Driver.weights = c(rep(driver.A.weight, 100)),
-                                Value = driver.A.range,
-                                Suitability = niche.A,
-                                Age = age,
-                                Biomass = biomass,
-                                Reproductive.age = rep(parameters[i, "reproductive.age"], 100),
-                                Fecundity = rep(parameters[i, "fecundity"], 100))
+      plot.df.temp <- data.frame(
+        Species = rep(paste(parameters[i, "label"], sep = ""), 100),
+        Driver = c(rep("Driver A", 100)),
+        Driver.density.x = c(density.driver.A$x),
+        Driver.density.y = c(density.driver.A.y),
+        Driver.weights = c(rep(driver.A.weight, 100)),
+        Value = driver.A.range,
+        Suitability = niche.A,
+        Age = age,
+        Biomass = biomass,
+        Reproductive.age = rep(parameters[i, "reproductive.age"], 100),
+        Fecundity = rep(parameters[i, "fecundity"], 100)
+        )
     }
 
 
@@ -228,125 +239,144 @@ parametersCheck <- function(parameters,
   plot.df <- na.omit(plot.df)
   plot.df[plot.df$Suitability == 0, "Suitability"] <- NA
 
-  color.palette <- viridis(10)
+  color.palette <- viridis::viridis(10)
 
-  niche.plot <- ggplot(
+  niche.plot <- ggplot2::ggplot(
     data = plot.df,
-    aes(x = Value, y = Suitability, group = Species)
+    ggplot2::aes(x = Value, y = Suitability, group = Species)
     ) +
-    geom_ribbon(
+    ggplot2::geom_ribbon(
       data = plot.df,
-      aes(ymin = 0, ymax = Driver.density.y),
+      ggplot2::aes(ymin = 0, ymax = Driver.density.y),
       color = "gray80",
       fill = "gray80",
       alpha = 0.5
       ) +
-    geom_ribbon(
+    ggplot2::geom_ribbon(
       data = plot.df,
-      aes(ymin = 0, ymax = Suitability, alpha = Driver.weights),
+      ggplot2::aes(ymin = 0, ymax = Suitability, alpha = Driver.weights),
       colour = NA, fill = color.palette[1]
       ) +
-    geom_line(
+    ggplot2::geom_line(
       data = plot.df,
-      aes(x = Value, y = Driver.density.y),
+      ggplot2::aes(x = Value, y = Driver.density.y),
       color = "gray80",
       alpha = 0.5
       ) +
-    facet_grid(Species~Driver) +
-    scale_alpha_continuous(range = c(0, 1)) +
-    xlab("Driver values") +
-    ylab("Environmental suitability") +
-    theme(strip.background.y = element_blank(),
-          strip.text.y = element_blank(),
-          text = element_text(size = 12),
-          strip.background = element_rect(fill = NA),
-          panel.spacing = unit(1, "lines"),
+    ggplot2::facet_grid(Species~Driver) +
+    ggplot2::scale_alpha_continuous(range = c(0, 1)) +
+    ggplot2::xlab("Driver values") +
+    ggplot2::ylab("Environmental suitability") +
+    ggplot2::theme(strip.background.y = ggplot2::element_blank(),
+          strip.text.y = ggplot2::element_blank(),
+          text = ggplot2::element_text(size = 12),
+          strip.background = ggplot2::element_rect(fill = NA),
+          panel.spacing = ggplot2::unit(1, "lines"),
           legend.position = "none",
-          panel.background = element_blank()) +
+          panel.background = ggplot2::element_blank()) +
     cowplot::background_grid(major = "none", minor = "none")
 
-  fecundity.plot <- ggplot(
-    data = plot.df, aes(x = Species, y = Fecundity, group = Species)
+  fecundity.plot <- ggplot2::ggplot(
+    data = plot.df,
+    ggplot2::aes(x = Species, y = Fecundity, group = Species)
     ) +
-    geom_hline(
-      aes(yintercept = Fecundity),
+    ggplot2::geom_hline(
+      ggplot2::aes(yintercept = Fecundity),
       size = 10,
       color = "gray80",
       alpha = 0.5
       ) +
-    geom_hline(
-      aes(yintercept = Fecundity),
+    ggplot2::geom_hline(
+      ggplot2::aes(yintercept = Fecundity),
       size = 2,
       color = color.palette[1]
       ) +
-    facet_wrap(
+    ggplot2::facet_wrap(
       facets = "Species",
       ncol = 1,
       strip.position = "right"
       ) +
-    theme(strip.background.y = element_blank(),
-          strip.text.y = element_blank(),
-          text = element_text(size = 12),
-          panel.spacing = unit(1, "lines")) +
-    scale_y_continuous(limits = c(0, max(plot.df$Fecundity))) +
-    xlab("") +
-    theme(legend.position = "none",
-          panel.background = element_blank()) +
+    ggplot2::theme(strip.background.y = ggplot2::element_blank(),
+          strip.text.y = ggplot2::element_blank(),
+          text = ggplot2::element_text(size = 12),
+          panel.spacing = ggplot2::unit(1, "lines")) +
+    ggplot2::scale_y_continuous(limits = c(0, max(plot.df$Fecundity))) +
+    ggplot2::xlab("") +
+    ggplot2::theme(legend.position = "none",
+          panel.background = ggplot2::element_blank()) +
     cowplot::background_grid(
       major = "none",
       minor = "none"
       )
 
-  growth.plot <- ggplot(
+
+  growth.plot <- ggplot2::ggplot(
     data = plot.df,
-    aes(x = Age, y = Biomass, group = Species)
-    ) +
-    geom_ribbon(
-      aes(
-        ymin = 0,
-        ymax = max(Biomass)
-        ),
-      color = "gray80",
-      fill = "gray80",
-      alpha = 0.5
-      ) +
-    geom_line(
-      aes(x = Reproductive.age, y = Biomass),
-      color = color.palette[1],
-      size = 2,
-      alpha = 0.8
-      ) +
-    facet_wrap(
+    ggplot2::aes(
+      x = Age,
+      y = Biomass,
+      group = Species
+      )
+  ) +
+    ggplot2::facet_wrap(
       facets = "Species",
       ncol = 1,
       strip.position = "right",
       scales = "free_x"
-      ) +
-    xlab("Age (years)") +
-    ylab("Biomass (relative)") +
-    theme(
-      text = element_text(size = 12),
-      panel.spacing  =  unit(1, "lines")
-      ) +
-    theme(legend.position = "bottom",
-          panel.background = element_blank()) +
+    ) +
+    ggplot2::geom_line(color = color.palette[1]) +
+    ggplot2::geom_line(
+      ggplot2::aes(x = Reproductive.age, y = Biomass),
+      size = 0.5,
+      alpha = 0.8,
+      linetype = "dotted",
+      color = color.palette[1]
+    ) +
+    ggplot2::xlab("Age (years)") +
+    ggplot2::ylab("Biomass (relative)") +
+    ggplot2::theme(
+      text = ggplot2::element_text(size = 12),
+      panel.spacing = ggplot2::unit(1, "lines")
+    ) +
+    ggplot2::theme(legend.position = "bottom",
+                   panel.background = ggplot2::element_blank()) +
     cowplot::background_grid(
       major = "none",
       minor = "none"
+    )
+
+  joint.plot <- cowplot::plot_grid(
+    niche.plot,
+    fecundity.plot,
+    growth.plot,
+    ncol = 3,
+    rel_widths  =  c(0.95 ,0.3, 0.95),
+    align = "h",
+    axis = "tb"
+    )
+
+  title <- cowplot::ggdraw() +
+    cowplot::draw_label(
+      "Main parameters of virtual taxa",
+      fontface = 'bold'
       )
 
-  joint.plot <- cowplot::plot_grid(niche.plot ,fecundity.plot, growth.plot, ncol = 3, rel_widths  =  c(1 ,0.2, 1), align = "h", axis = "tb")
 
-  title <- cowplot::ggdraw() + cowplot::draw_label("Main parameters of virtual taxa", fontface = 'bold')
-
-
-  print(cowplot::plot_grid(title, joint.plot, ncol = 1, rel_heights = c(0.1, 1)))
+  print(
+    cowplot::plot_grid(title, joint.plot, ncol = 1, rel_heights = c(0.1, 1))
+    )
 
   #saving to file
   # cowplot::plot_grid(niche.plot, growth.plot, ncol=2)
 
   if(!is.null(filename) & is.character(filename)){
-    ggsave(filename = paste(filename, ".pdf", sep = ""), width = 12, height = 2*nrow(parameters))
+    ggplot2::ggsave(
+      filename = paste(
+        filename, ".pdf",
+        sep = ""),
+      width = 12,
+      height = 2*nrow(parameters)
+      )
   }
 
 }

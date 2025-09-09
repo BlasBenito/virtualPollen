@@ -1,36 +1,35 @@
 ## New version
-This is a new version of the package (1.0.1) submitted as a response to an email by Prof Brian Ripley:
 
- Dear maintainer,
+This is a new version of the package (1.0.2) submitted as a response to an email by the CRAN Team:
 
- Please see the problems shown on
+------------------------------------------------------
+Dear maintainer,
+
+Please see the problems shown on
 <https://cran.r-project.org/web/checks/check_results_virtualPollen.html>.
 
- Please correct before 2022-02-25 to safely retain your package on CRAN.
+Specifically, please see the NOTEs about Rd file(s) with Rd \link{}
+targets missing package anchors in the "Rd cross-references" check.
 
- Do remember to look at the 'Additional issues'.
+CRAN is currently changing its package web pages to providing (static)
+HTML refmans in addition to PDF refmans, which needs Rd cross-references
+to Rd \link{} targets not in the package itself nor in the base packages
+to use package anchors, i.e., use \link[PKG]{FOO} (see section
+"Cross-references" in "Writing R Extensions"): otherwise these links
+will not work.
 
- The CRAN Team
- 
-From these issues, I only fixed the one appearing in the "donttest" section:
+Adding the missing package anchors should take very little time, so we
+would really appreciate if you would do so in the next few weeks.
 
- "Error in `f()`:
-! Either ymin or ymax must be given as an aesthetic."
+Please correct before 2025-09-01 to safely retain your package on CRAN.
 
-It happens in a ggplot generated within the function parametersCheck(), where the syntax for the function ggplot2::geom_ribbon() was wrong. This issue is fixed now.
+Best wishes,
+The CRAN Team
+------------------------------------------------
 
-
-## Test environments
-* Local: Ubuntu 18.04.2 LTS, R 3.6.0
-* Rhub
-  * macOS 10.11 El Capitan, R-release
-  * Ubuntu Linux 16.04 LTS, R-devel
-  * Ubuntu Linux 16.04 LTS, R-release
-  * Windows Server 2008 R2 SP1, R-release, 32/64 bit
-  * Windows Server 2008 R2 SP1, R-oldrel, 32/64 bit
-  * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
-* win-builder (devel, release, oldrelease)
+I have fixed the conflicting links. All checks are clear now.
 
 
-## R CMD check results
+── R CMD check results ─────────── virtualPollen 1.0.2 ────
+Duration: 1m 30s
 0 errors ✓ | 0 warnings ✓ | 0 notes ✓

@@ -49,164 +49,196 @@
 #'str(drivers)
 #'
 #' @export
-simulateDriverS <- function(random.seeds=c(60, 120),
-                            time=1:10000,
-                            autocorrelation.lengths=c(200, 600),
-                            output.min=c(0,0),
-                            output.max=c(100, 100),
-                            driver.names=c("A", "B"),
-                            filename=NULL){
+simulateDriverS <- function(
+    random.seeds = c(60, 120),
+    time = 1:10000,
+    autocorrelation.lengths = c(200, 600),
+    output.min = c(0,0),
+    output.max = c(100, 100),
+    driver.names = c("A", "B"),
+    filename = NULL
+){
 
+  scaled <- NULL
 
-#TESTING INPUT DATA
-#number of driver names
-n.names <- length(driver.names)
+  #TESTING INPUT DATA
+  #number of driver names
+  n.names <- length(driver.names)
 
-#driver.names
-if(!is.character(driver.names)){stop("The argument driver.names should be a character vector.")}
+  #driver.names
+  if(!is.character(driver.names)){stop("The argument driver.names should be a character vector.")}
 
-#random.seeds
-if(!is.numeric(random.seeds)){
-  random.seeds  <-  1:n.names
-} else {
-  random.seeds <- as.integer(random.seeds)
-}
-if(length(random.seeds) < n.names){
-  random.seeds <- random.seeds[1]:(random.seeds[1]+n.names)
-}
-
-#output.min and output.max
-if(length(output.min) < n.names){
-  output.min <- rep(output.min[1], n.names)
-}
-if(length(output.min) > n.names){
-  output.min <- output.min[1:n.names]
-}
-if(length(output.max) < n.names){
-  output.max <- rep(output.min[1], n.names)
-}
-if(length(output.max) > n.names){
-  output.max <- output.max[1:n.names]
-}
-for(i in 1:n.names){
-  if(output.max[i] < output.min[i]){
-    temp.min <- output.max[i]
-    output.max[i]  <-  output.min[i]
-    output.min[i]  <-  temp.min
+  #random.seeds
+  if(!is.numeric(random.seeds)){
+    random.seeds  <-  1:n.names
+  } else {
+    random.seeds <- as.integer(random.seeds)
   }
-}
+  if(length(random.seeds) < n.names){
+    random.seeds <- random.seeds[1]:(random.seeds[1]+n.names)
+  }
 
-#time
-if(!is.numeric(time)){stop("time should be a numeric vector, try 1:1000.")}
-if(length(time)==1){time <- 1:floor(time)}
+  #output.min and output.max
+  if(length(output.min) < n.names){
+    output.min <- rep(output.min[1], n.names)
+  }
+  if(length(output.min) > n.names){
+    output.min <- output.min[1:n.names]
+  }
+  if(length(output.max) < n.names){
+    output.max <- rep(output.min[1], n.names)
+  }
+  if(length(output.max) > n.names){
+    output.max <- output.max[1:n.names]
+  }
+  for(i in 1:n.names){
+    if(output.max[i] < output.min[i]){
+      temp.min <- output.max[i]
+      output.max[i]  <-  output.min[i]
+      output.min[i]  <-  temp.min
+    }
+  }
 
-#autocorrelation.length
-if(!is.numeric(autocorrelation.lengths)){stop("autocorrelation.length should be a numeric vector.")}
+  #time
+  if(!is.numeric(time)){stop("Argument 'time' should be a numeric vector, try 1:1000.")}
+  if(length(time)==1){time <- 1:floor(time)}
+
+  #autocorrelation.length
+  if(!is.numeric(autocorrelation.lengths)){stop("Argument 'autocorrelation.length' should be a numeric vector.")}
 
 
 
-#data ranges and random seed for each drivers.2k
-data.ranges <- data.frame(driver=driver.names, output.min, output.max, random.seeds)
+  #data ranges and random seed for each drivers.2k
+  data.ranges <- data.frame(driver=driver.names, output.min, output.max, random.seeds)
 
-#dataframes to store drivers
-drivers <- drivers.temp <- data.frame(time=numeric(), driver=character(), autocorrelation.length=numeric(), value=numeric())
-
-autocorrelation <- data.frame(lag=numeric(), acf=numeric(), ci.max=numeric(), ci.min=numeric(), driver=character(), autocorrelation.length=numeric())
-
-#looping through drivers and memory lengths
-for(driver in driver.names){
-  for(autocorrelation.length in autocorrelation.lengths){
-
-    #FILLING drivers.temp
-    #---------------------------------------
-    #fill drivers.temp with time and grouping
-    drivers.temp[max(time), ]  <-  NA
-    drivers.temp$time <- time
-
-    #fill with parameter values
-    drivers.temp$driver <- rep(driver, nrow(drivers.temp))
-    drivers.temp$autocorrelation.length <- rep(autocorrelation.length, nrow(drivers.temp))
-
-    #fill values of the driver
-    simulated.driver <- simulateDriver(
-      random.seed = data.ranges[data.ranges$driver==driver, "random.seeds"],
-      time = time,
-      autocorrelation.length = autocorrelation.length,
-      output.min = data.ranges[data.ranges$driver==driver, "output.min"],
-      output.max = data.ranges[data.ranges$driver==driver, "output.max"]
+  #dataframes to store drivers
+  drivers <- drivers.temp <- data.frame(
+    time=numeric(),
+    driver=character(),
+    autocorrelation.length=numeric(),
+    value=numeric()
     )
 
-    #getting the driver values
-    drivers.temp$value <- rescaleVector(x = simulated.driver, new.max = 100, new.min = 0)
+  autocorrelation <- data.frame(
+    lag=numeric(),
+    acf=numeric(),
+    ci.max=numeric(),
+    ci.min=numeric(),
+    driver=character(),
+    autocorrelation.length=numeric()
+    )
 
-    #FILLING autocorrelation.temp
-    #---------------------------------------
-    #computing acf
-    autocorrelation.temp <- acfToDf(x = simulated.driver, lag.max = max(max(autocorrelation.lengths)), length.out = 100)
-    autocorrelation.temp$driver <- rep(driver, nrow(autocorrelation.temp))
-    autocorrelation.temp$autocorrelation.length <- rep(autocorrelation.length, nrow(autocorrelation.temp))
+  #looping through drivers and memory lengths
+  for(driver in driver.names){
+    for(autocorrelation.length in autocorrelation.lengths){
 
-    #merging with main dataframes
-    drivers <- rbind(drivers, drivers.temp)
-    autocorrelation <- rbind(autocorrelation, autocorrelation.temp)
+      #FILLING drivers.temp
+      #---------------------------------------
+      #fill drivers.temp with time and grouping
+      drivers.temp[max(time), ]  <-  NA
+      drivers.temp$time <- time
 
+      #fill with parameter values
+      drivers.temp$driver <- rep(driver, nrow(drivers.temp))
+      drivers.temp$autocorrelation.length <- rep(autocorrelation.length, nrow(drivers.temp))
+
+      #fill values of the driver
+      simulated.driver <- simulateDriver(
+        random.seed = data.ranges[data.ranges$driver==driver, "random.seeds"],
+        time = time,
+        autocorrelation.length = autocorrelation.length,
+        output.min = data.ranges[data.ranges$driver==driver, "output.min"],
+        output.max = data.ranges[data.ranges$driver==driver, "output.max"]
+      )
+
+      #getting the driver values
+      drivers.temp$value <- rescaleVector(x = simulated.driver, new.max = 100, new.min = 0)
+
+      #FILLING autocorrelation.temp
+      #---------------------------------------
+      #computing acf
+      autocorrelation.temp <- acfToDf(
+        x = simulated.driver,
+        lag.max = max(max(autocorrelation.lengths)),
+        length.out = 100
+        )
+
+      autocorrelation.temp$driver <- rep(driver, nrow(autocorrelation.temp))
+
+      autocorrelation.temp$autocorrelation.length <- rep(autocorrelation.length, nrow(autocorrelation.temp))
+
+      #merging with main dataframes
+      drivers <- rbind(drivers, drivers.temp)
+      autocorrelation <- rbind(autocorrelation, autocorrelation.temp)
+
+    }
   }
-}
 
-#PLOTTING OUTPUT
-p.drivers <- ggplot(data = drivers, aes(x = time, y = value, color = driver)) +
-  geom_line() +
-  scale_color_viridis(discrete = TRUE, begin = 0.2, end = 0.6) +
-  facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free_y") +
-  xlab("Time (years)") +
-  ylab("") +
-  ggtitle("Virtual drivers") +
-  theme(plot.margin = unit(c(0.5, -1, 0.5, 0.5), "cm"),
-        legend.position = "none",
-        panel.background = element_blank()) +
-  cowplot::background_grid(major = "none", minor = "none")
+  #PLOTTING OUTPUT
+  p.drivers <- ggplot2::ggplot(
+    data = drivers,
+    ggplot2::aes(x = time, y = value, color = driver)
+    ) +
+    ggplot2::geom_line() +
+    ggplot2::scale_color_viridis_d(begin = 0.2, end = 0.6) +
+    ggplot2::facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free_y") +
+    ggplot2::xlab("Time (years)") +
+    ggplot2::ylab("") +
+    ggplot2::ggtitle("Virtual drivers") +
+    ggplot2::theme(
+      plot.margin = ggplot2::unit(c(0.5, -1, 0.5, 0.5), "cm"),
+      legend.position = "none",
+      panel.background = ggplot2::element_blank()
+      ) +
+    cowplot::background_grid(major = "none", minor = "none")
 
-p.density <- ggplot(data = drivers, aes(value, fill = driver, colour = driver)) +
-  geom_density(aes(y = ..scaled..), alpha = 0.5) +
-  scale_color_viridis(discrete = TRUE, begin = 0.2, end = 0.6) +
-  scale_fill_viridis(discrete = TRUE, begin = 0.2, end = 0.6) +
-  facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free") +
-  xlab("Years") +
-  ylab("") +
-  xlab("") +
-  coord_flip() +
-  theme(plot.margin = unit(c(0.5, 0.5, 0.5, 0), "cm"),
-        axis.line = element_blank(),
-        axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        strip.background = element_blank(),
-        strip.text.x = element_blank(),
-        legend.position = "none",
-        panel.background = element_blank()) +
-  cowplot::background_grid(major = "none", minor = "none")
+  p.density <- ggplot2::ggplot(
+    data = drivers,
+    ggplot2::aes(value, fill = driver, colour = driver)
+    ) +
+    ggplot2::geom_density(ggplot2::aes(y = ggplot2::after_stat(scaled)), alpha = 0.5) +
+    ggplot2::scale_color_viridis_d(begin = 0.2, end = 0.6) +
+    ggplot2::scale_fill_viridis_d(begin = 0.2, end = 0.6) +
+    ggplot2::facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free") +
+    ggplot2::xlab("Years") +
+    ggplot2::ylab("") +
+    ggplot2::xlab("") +
+    ggplot2::coord_flip() +
+    ggplot2::theme(plot.margin = ggplot2::unit(c(0.5, 0.5, 0.5, 0), "cm"),
+          axis.line = ggplot2::element_blank(),
+          axis.text = ggplot2::element_blank(),
+          axis.ticks = ggplot2::element_blank(),
+          strip.background = ggplot2::element_blank(),
+          strip.text.x = ggplot2::element_blank(),
+          legend.position = "none",
+          panel.background = ggplot2::element_blank()) +
+    cowplot::background_grid(major = "none", minor = "none")
 
-p.acfs <- ggplot(data = autocorrelation, aes(x = lag, y = acf, color = driver)) +
-  scale_color_viridis(discrete = TRUE, begin = 0.2, end = 0.6) +
-  geom_hline(aes(yintercept = 0)) +
-  geom_hline(aes(yintercept = ci.max), color = "red", linetype = "dashed") +
-  geom_hline(aes(yintercept = ci.min), color = "red", linetype = "dashed") +
-  geom_segment(mapping = aes(xend = lag, yend = 0)) +
-  ylab("") +
-  xlab("Lag (years)") +
-  facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free_y") +
-  ggtitle("Temporal autocorrelation") +
-  theme(plot.margin = unit(c(0.5, 0.5, 0.5, -1), "cm"),
-        legend.position = "none",
-        panel.background = element_blank()) +
-  cowplot::background_grid(major = "none", minor = "none")
+  p.acfs <- ggplot2::ggplot(
+    data = autocorrelation,
+    ggplot2::aes(x = lag, y = acf, color = driver)
+    ) +
+    ggplot2::scale_color_viridis_d(begin = 0.2, end = 0.6) +
+    ggplot2::geom_hline(ggplot2::aes(yintercept = 0)) +
+    ggplot2::geom_hline(ggplot2::aes(yintercept = ci.max), color = "red", linetype = "dashed") +
+    ggplot2::geom_hline(ggplot2::aes(yintercept = ci.min), color = "red", linetype = "dashed") +
+    ggplot2::geom_segment(mapping = ggplot2::aes(xend = lag, yend = 0)) +
+    ggplot2::ylab("") +
+    ggplot2::xlab("Lag (years)") +
+    ggplot2::facet_wrap(driver ~ autocorrelation.length, ncol = 1, scales = "free_y") +
+    ggplot2::ggtitle("Temporal autocorrelation") +
+    ggplot2::theme(plot.margin = ggplot2::unit(c(0.5, 0.5, 0.5, -1), "cm"),
+          legend.position = "none",
+          panel.background = ggplot2::element_blank()) +
+    cowplot::background_grid(major = "none", minor = "none")
 
-print(cowplot::plot_grid(p.drivers, NULL, p.density, NULL, p.acfs, align = "h", ncol = 5, rel_widths = c(1, 0, 0.3, 0, 1)))
+  print(cowplot::plot_grid(p.drivers, NULL, p.density, NULL, p.acfs, align = "h", ncol = 5, rel_widths = c(1, 0, 0.3, 0, 1)))
 
-if(!is.null(filename) & is.character(filename)){
-ggsave(width = 12, height = (1.5*(length(driver.names) * length(autocorrelation.lengths))), filename = paste(filename, ".pdf", sep = ""))
-}
+  if(!is.null(filename) & is.character(filename)){
+    ggplot2::ggsave(width = 12, height = (1.5*(length(driver.names) * length(autocorrelation.lengths))), filename = paste(filename, ".pdf", sep = ""))
+  }
 
 
-return(drivers)
+  return(drivers)
 
 }

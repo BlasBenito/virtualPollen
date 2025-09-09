@@ -204,7 +204,7 @@ plotSimulation <- function(
 
     #setting up plot title
     if(is.null(plot.title)){
-      plot.title <- paste("Taxon: ", names(simulation.output)[i], sep = "")
+      plot.title <- paste(names(simulation.output)[i], sep = "")
       }
 
 

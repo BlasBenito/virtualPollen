@@ -27,13 +27,15 @@ parametersCheck(
 \item{filename}{character string, filename of the output pdf.}
 }
 \value{
-A \code{\link{ggplot2}} object.
+ggplot object.
 }
 \description{
 Plots the environmental niche, fecundity, growth curve, and maturity age, of each virtual taxa in a parameters dataframe for \code{\link{simulatePopulation}}, to help the user in making choices while adjusting them.
 }
 \details{
-The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a \code{\link[ggplot2]{ggplot2}} object. Priority is given to drivers introduced through the \code{drivers} argument.
+Priority is given to drivers introduced through the \code{drivers} argument.
+
+The function prints the plot, can save it to a pdf file if \code{filename} is provided, and returns a ggplot object.
 }
 \examples{
 \donttest{

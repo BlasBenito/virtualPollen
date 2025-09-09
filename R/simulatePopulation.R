@@ -43,7 +43,7 @@
 #'   \item \strong{Local extinction and immigration}: If the number of individuals drops to zero, the population is replaced by a "seed bank" of #' 100 individuals with age zero, and the simulation jumps to step 7.. This is intended to simulate the arrival of seeds from nearby regions, and will only lead to population growth if environmental suitability is higher than zero.
 #'   \item \strong{Plant growth}: Applies a plant growth equation to compute the biomass of every individual.
 #'   \item \strong{Carrying capacity}: If maximum population biomass is reached, individuals are iteratively selected for removal according to a mortality risk curve computed by the equation \eqn{P_{m} = 1 - sqrt(a/A)}, were \emph{Pm} is the probability of mortality, \emph{a} is the age of the given individual, and \emph{A} is the maximum age reached by the virtual taxa. This curve gives removal preference to younger individuals, matching observed patterns in natural populations.
-#'   \item \strong{Pollen productivity}: In each time step the model computes the pollen productivity (in relative values) of the population using the equation \eqn{P_{t} = \sum x_{it} \times max(S_{t}, B)}, where \emph{t} is time (a given simulation time step), \emph{P} is the pollen productivity of the population at a given time, \emph{x_{i}} represents the biomass of every adult individual, \emph{S} is the environmental suitability at the given time, \emph{B} is the contribution of biomass to pollen productivity regardless of environmental suitability (\emph{pollen.control} parameter in the simulation, 0 by default). If \emph{B} equals 1, \emph{P} is equal to the total biomass sum of the adult population, regardless of the environmental suitability. If \emph{B} equals 0, pollen productivity depends entirely on environmental suitability values.
+#'   \item \strong{Pollen productivity}: In each time step the model computes the pollen productivity (in relative values) of the population using the equation \eqn{P_{t} = \sum x_{it} \times \max(S_{t}, B)}, where \eqn{t} is time (a given simulation time step), \eqn{P} is the pollen productivity of the population at a given time, \eqn{x_{i}} represents the biomass of every adult individual, \eqn{S} is the environmental suitability at the given time, \eqn{B} is the contribution of biomass to pollen productivity regardless of environmental suitability (\emph{pollen.control} parameter in the simulation, 0 by default). If \eqn{B} equals 1, \eqn{P} is equal to the total biomass sum of the adult population, regardless of the environmental suitability. If \eqn{B} equals 0, pollen productivity depends entirely on environmental suitability values.
 #'   \item \strong{Reproduction}: Generates as many seeds as reproductive individuals are available multiplied by the maximum fecundity and the environmental suitability of the given time.
 #' }
 #'The model returns a table with climatic suitability, pollen production, and population size (reproductive individuals only) per simulation year. Figure 10 shows the results of the population model when applied to the example virtual species.
@@ -58,7 +58,7 @@
 #'   \item \emph{Population.mature} numeric, number of mature individuals.
 #'   \item \emph{Population.immatre} numeric, number of immature individuals.
 #'   \item \emph{Population.viable.seeds} numeric, number of viable seeds generated each year.
-#'   \item \emph{Suitability} numeric, environmental suitability computed from the driver by the normal function/s defining the taxon niche.
+#'   \item \emph{Suitability} numeric, environmental suitability computed from the driver by the normal function/s defining the taxa's niche.
 #'   \item \emph{Biomass.total} numeric, overall biomass of the population.
 #'   \item \emph{Biomass.mature} numeric, sum of biomass of mature individuals.
 #'   \item \emph{Biomass.immature} numeric, sum of biomass of immature individuals.
@@ -89,12 +89,14 @@
 #'str(sim.output)
 #'
 #' @export
-simulatePopulation <- function(parameters=NULL,
-                              species="all",
-                              driver.A=NULL,
-                              driver.B=NULL,
-                              drivers=NULL,
-                              burnin=TRUE){
+simulatePopulation <- function(
+    parameters = NULL,
+    species = "all",
+    driver.A = NULL,
+    driver.B = NULL,
+    drivers = NULL,
+    burnin = TRUE
+    ){
 
 
   #CHECKING INPUT DATA
@@ -170,7 +172,10 @@ simulatePopulation <- function(parameters=NULL,
   #CHECKING AND SELECTING species
   #----------------
   #creating dictionary of species names and indexes
-  names.dictionary <- data.frame(name=parameters$label, index=1:nrow(parameters))
+  names.dictionary <- data.frame(
+    name = parameters$label,
+    index = 1:nrow(parameters)
+    )
 
   if(is.character(species)){
     if(species == "all" | species == "ALL" | species == "All"){
@@ -203,7 +208,7 @@ simulatePopulation <- function(parameters=NULL,
     new.max <- 1
     old.min <- 0
     old.max <- max.observed.density
-    scaled.density<-((predicted.density - old.min) / (old.max - old.min)) * (new.max - new.min) + new.min
+    scaled.density <- ((predicted.density - old.min) / (old.max - old.min)) * (new.max - new.min) + new.min
     return(scaled.density)
   }
 
@@ -212,7 +217,7 @@ simulatePopulation <- function(parameters=NULL,
   #----------------
   for(i in selected.species){
 
-    message(paste("Simulating taxon: ", parameters[i, "label"], sep=""), "\n")
+    message(paste("Simulation in progress: ", parameters[i, "label"], sep=""), "\n")
 
 
     #dataframe rows into list

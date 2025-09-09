@@ -128,7 +128,8 @@ toRegularTime <- function(x = NULL,
         span.values <- seq(50/nrow(temp), 5/nrow(temp), by = -0.0005)
         for(span in span.values){
 
-          interpolation.function <- loess(interpolation.formula, data = temp, span = span, control = loess.control(surface = "direct"))
+          interpolation.function <- loess(interpolation.formula, data = temp, span = span, control = loess.control(surface = "direct")) |>
+            suppressWarnings()
 
           #check fit
           if(cor(interpolation.function$fitted, temp[, column.to.interpolate]) >=  0.9985){break}

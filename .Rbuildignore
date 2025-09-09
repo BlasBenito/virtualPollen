@@ -3,6 +3,9 @@
 ^\_config\.yml$
 ^Meta$
 ^doc$
+^inst$
+^Meta
+^vignettes$
 ^docs$
 ^.*\.Rproj$
 ^\.Rproj\.user$
