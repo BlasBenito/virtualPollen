@@ -1,5 +1,5 @@
 install.packages("rhub")
-Sys.setenv(GITHUB_PAT = "my_pat")
+Sys.setenv(GITHUB_PAT = "xxxx")
 rhub::rhub_setup()
 rhub::rhub_doctor()
 

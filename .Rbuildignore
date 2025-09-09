@@ -16,3 +16,4 @@
 ^\virtualPollen\.Rcheck
 ^CRAN-RELEASE$
 ^dev_scripts$
+^CRAN-SUBMISSION$

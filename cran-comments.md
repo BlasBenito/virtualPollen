@@ -29,6 +29,10 @@ The CRAN Team
 
 I have fixed the conflicting links. All checks are clear now.
 
+## Checks
+
+Rhub checks for all platforms are clear: https://github.com/BlasBenito/virtualPollen/actions/runs/17576936567
+
 
 ── R CMD check results ─────────── virtualPollen 1.0.2 ────
 Duration: 1m 30s
